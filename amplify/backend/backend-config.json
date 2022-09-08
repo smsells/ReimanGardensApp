@@ -42,5 +42,12 @@
         }
       }
     }
+  },
+  "storage": {
+    "Butterfly": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    }
   }
 }
