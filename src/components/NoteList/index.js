@@ -57,7 +57,7 @@ const NoteList = () =>{
   }
     
     return(
-        <div classname="NoteList">
+        <div className="NoteList">
               <input
                 onChange={e => setFormData({ ...formData, 'name': e.target.value })}
                 placeholder="Note name"
