@@ -3,7 +3,7 @@ import './App.css';
 import { API } from 'aws-amplify';
 import "@aws-amplify/ui-react/styles.css";
 import { Authenticator } from '@aws-amplify/ui-react';
-import { Storage } from 'aws-amplify';
+import { Storage, Auth } from 'aws-amplify';
 import { listNotes } from './graphql/queries';
 import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
 
@@ -57,9 +57,19 @@ function App() {
     await API.graphql({ query: deleteNoteMutation, variables: { input: { id } }});
   }
 
+  const signOut = async() =>{
+    try{
+      await Auth.signOut();
+
+    }catch (error){
+      console.log('error signing out ', error);
+    }
+
+  }
+
   return (
     <Authenticator>
-      {({ signOut, user }) => (
+      {({ user }) => (
         <div className="App">
              <h1>My Notes App</h1>
              <input
@@ -91,7 +101,7 @@ function App() {
   ))
 }
           </div>
-       <button onClick={signOut}>Sign out</button>
+       <button variant="contained" color= "primary" onClick={signOut}>Sign out</button>
 
         </div>
       )}
