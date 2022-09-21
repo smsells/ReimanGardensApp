@@ -3,8 +3,10 @@ import {React, useState}  from 'react';
 import {  Auth } from 'aws-amplify';
 import {useNavigate} from 'react-router-dom';
 import { Authenticator } from '@aws-amplify/ui-react';
+import "../../css/Sign-In/sign-in.css";
 const SignIn = () => {
     const navigate = useNavigate();
+
 
     function pullUserAndNavigate(){
         Auth.currentAuthenticatedUser({
@@ -17,10 +19,16 @@ const SignIn = () => {
 
    
 
+   
+
     return (
     <Authenticator>
+        
         <div className = 'signin'>
-           <button onClick={pullUserAndNavigate}>Return Home</button>
+            
+
+            <button onClick={pullUserAndNavigate}>Return Home</button>
+          
 
         </div>
      </Authenticator>
