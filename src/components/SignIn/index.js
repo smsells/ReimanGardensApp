@@ -4,18 +4,35 @@ import {  Auth } from 'aws-amplify';
 import {useNavigate} from 'react-router-dom';
 import { Authenticator } from '@aws-amplify/ui-react';
 import "../../css/Sign-In/sign-in.css";
-const SignIn = () => {
+const SignIn = ({onSignIn}) => {
     const navigate = useNavigate();
 
 
-    function pullUserAndNavigate(){
-        Auth.currentAuthenticatedUser({
-            bypassCache: false
-        }).then(user=> console.log(user)).catch(err=> console.log(err));
+    function navigateHome(){
+       
         navigate('/');
-        window.location.reload(false);
+        //window.location.reload(false);
+        onSignIn();
 
     }
+    function pullUser(){
+
+        Auth.currentAuthenticatedUser({
+            bypassCache: false
+        }).then(user=> {
+            console.log(user);
+            console.log(user.pool);
+            if(user.pool.userPoolId=="us-east-2_tyNlmQmJu"){
+                 console.log("success");
+                 //can redirect in here
+            }
+        }).catch(err=> console.log(err));
+        
+    }
+
+   // function testOnload(){
+   //     console.log("Hey I loaded");
+   // }
 
    
 
@@ -25,9 +42,23 @@ const SignIn = () => {
     <Authenticator>
         
         <div className = 'signin'>
+
+        <div>
+             <button className='homeButton' onClick={navigateHome}>Home</button>
+             <button className='adminButton' onClick={navigateHome}>Admin</button>
+
+         </div>
+
+         <div>
+             <button className='statsButton' onClick={navigateHome}>Stats</button>
+             <button className='galleryButton' onClick={navigateHome}>Gallery</button>
+
+        </div>
+            
             
 
-            <button onClick={pullUserAndNavigate}>Return Home</button>
+            
+            <button onClick={pullUser}>Who am I?</button>
           
 
         </div>
@@ -72,3 +103,4 @@ const [user, setUser] = useState('');
               />
             <button  onClick={signIn}>Sign in</button> 
 */
+//might be easiest t ojust have a navigation page kinda thing after sign in and the normal page just loads the reiman gardens thing

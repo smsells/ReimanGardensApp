@@ -71,7 +71,7 @@ function App() {
 
             <Routes>
               <Route exact path = "/" element = { <Home/ >}/>
-              <Route exact path = "/signin" element = { <SignIn onSignIn={onSignIn} />}/>
+              <Route exact path = "/signin" element = { <SignIn onSignIn={isLoggedIn} />}/>
               <Route exact path = '/notes' element = { <NoteList/ >}/>
 
 
