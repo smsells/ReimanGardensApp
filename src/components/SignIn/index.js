@@ -45,15 +45,8 @@ const SignIn = ({onSignIn}) => {
 
         <div>
              <button className='homeButton' onClick={navigateHome}>Home</button>
-             <button className='adminButton' onClick={navigateHome}>Admin</button>
-
-         </div>
-
-         <div>
-             <button className='statsButton' onClick={navigateHome}>Stats</button>
-             <button className='galleryButton' onClick={navigateHome}>Gallery</button>
-
         </div>
+
             
             
 
