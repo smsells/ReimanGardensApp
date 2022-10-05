@@ -1,0 +1,14 @@
+{
+  "resourceName": "Butterfly",
+  "policyUUID": "a9eeb821",
+  "bucketName": "butterflyphoto-bucket",
+  "storageAccess": "auth",
+  "guestAccess": [],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
