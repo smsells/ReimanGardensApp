@@ -1,9 +1,10 @@
 import {React, useState}  from 'react';
-
 import {  Auth } from 'aws-amplify';
 import {useNavigate} from 'react-router-dom';
 import { Authenticator } from '@aws-amplify/ui-react';
 import "../../css/Sign-In/sign-in.css";
+import { AdminButton } from '../AdminButton/AdminButton';
+
 const SignIn = ({onSignIn}) => {
     const navigate = useNavigate();
 
@@ -43,11 +44,19 @@ const SignIn = ({onSignIn}) => {
         
         <div className = 'signin'>
 
-        <div>
-             <button className='homeButton' onClick={navigateHome}>Home</button>
+        <button className='admin-button' onClick={navigateHome}>Home</button>
+
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <AdminButton>View Shipments</AdminButton>
+            <AdminButton>Add Shipment</AdminButton> 
+            <AdminButton>Import/Export Shipments</AdminButton> 
+        </div>
+        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+            <AdminButton>Add Butterfly</AdminButton>
+            <AdminButton>Edit Butterfly</AdminButton> 
+            <AdminButton>Add/Edit Notes</AdminButton> 
         </div>
 
-            
             
 
             
@@ -96,4 +105,4 @@ const [user, setUser] = useState('');
               />
             <button  onClick={signIn}>Sign in</button> 
 */
-//might be easiest t ojust have a navigation page kinda thing after sign in and the normal page just loads the reiman gardens thing
+//might be easiest to just have a navigation page kinda thing after sign in and the normal page just loads the reiman gardens thing

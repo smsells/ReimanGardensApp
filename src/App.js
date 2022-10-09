@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react';
+import { React, useEffect, useState} from 'react';
 import './App.css';
 //import { API } from 'aws-amplify';
 import "@aws-amplify/ui-react/styles.css";
@@ -6,7 +6,7 @@ import "@aws-amplify/ui-react/styles.css";
 import { Auth } from 'aws-amplify';
 //import { listNotes } from './graphql/queries';
 //import { createNote as createNoteMutation, deleteNote as deleteNoteMutation } from './graphql/mutations';
-import { Routes, Route, BrowserRouter, Link } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import NoteList from './components/NoteList';
 import SignIn from './components/SignIn';
 import Home from './components/Home';
@@ -15,11 +15,12 @@ import Gallery from './components/Gallery';
 import Parks from './components/Parks';
 import { useNavigate } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import './components/Fonts/CustomFonts';
+import logo from './rg_logo.png';
+import sidebarStyle from './components/Sidebar/Sidebar.css';
+import { stack as Menu } from 'react-burger-menu';
 
 
 
@@ -66,45 +67,44 @@ function App() {
 
 
   }
+  
+  //used for closing hamburger menu
+  const [isMenuOpen, handleMenu] = useState(false);
+
+  const handleCloseMenu = () => {
+    handleMenu(false);
+  };
+
+  const handleStateChange = (state) => {
+    handleMenu(state.isOpen);
+  };
+  
 
   return (
 
+    <div className="App" style={{backgroundColor: "#BC6C25", height: "100%"}}>
+      <Menu disableAutoFocus right style={sidebarStyle} isOpen={isMenuOpen} onStateChange={handleStateChange}>
+          <Link className='menu-link' to = {"/"} onClick={() => handleCloseMenu()} >Home</Link>
+          <Link className='menu-link' to = {"/notes"} onClick={() => handleCloseMenu()} >NoteList</Link>
+          <Link className='menu-link' to = {"/stats"} onClick={() => handleCloseMenu()} >Stats</Link>
+          <Link className='menu-link' to = {"/gallery"} onClick={() => handleCloseMenu()} >Gallery</Link>
+          <Link className='menu-link' to = {"/parks"} onClick={() => handleCloseMenu()} >Parks Around the World</Link>
+          {loggedIn ? (<Link className='menu-link' onClick={() => {signOut(); handleCloseMenu()}}>Sign out</Link>) :
+            (<Link className='menu-link' to="/signin" onClick={() => handleCloseMenu()} >Sign In </Link>
+          )}
+      </Menu>
 
-
-    <div className="App">
-      <Navbar bg="light" expand="lg">
+      <Navbar style={{backgroundColor: "#2C678E"}} expand="lg" > 
         <Container>
-          <Navbar.Brand href="#home">Reiman Gardens</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <Nav.Link as ={Link} to = {"/"}>Home</Nav.Link>
-              <Nav.Link as ={Link} to = {"/notes"}>NoteList</Nav.Link>
-              <Nav.Link as ={Link} to = {"/stats"}>Stats</Nav.Link>
-              <Nav.Link as ={Link} to = {"/gallery"}>Gallery</Nav.Link>
-              <Nav.Link as ={Link} to = {"/parks"}>Parks Around the World</Nav.Link>
-              
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-          </Navbar.Collapse>
+          <Navbar.Brand href="#home" style={{color: "#FEFAE0"}} >
+            <img src={logo}/>
+          </Navbar.Brand>
         </Container>
       </Navbar>
 
       <header className="header">
         <h1>Welcome to Reiman Gardens</h1>
-
       </header>
-
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route exact path="/signin" element={<SignIn onSignIn={isLoggedIn} />} />
@@ -112,18 +112,7 @@ function App() {
         <Route exact path='/stats' element={<Stats />} />
         <Route exact path='/gallery' element={<Gallery />} />
         <Route exact path='/parks' element={<Parks />} />
-
-
       </Routes>
-
-
-
-
-      {loggedIn ? (<button onClick={signOut}>Sign out</button>) :
-        (<Link to="/signin"><button> Sign in</button> </Link>
-        )}
-
-
     </div>
 
 

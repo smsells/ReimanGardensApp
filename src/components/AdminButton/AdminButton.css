@@ -1,0 +1,17 @@
+.admin-button{
+    background-color: #DDA15E;
+    color: white;
+    height: fit-content;
+    width: 30%;
+    font-size: 30px;
+    padding: 10px ;
+    border-radius: 5px;
+    margin: 10px 5%;
+    border: white;
+    /* display: inline-block;
+    word-wrap: break-word; */
+}
+.admin-button:hover {
+    color:#BC6C25;
+    background-color: #FEFAE0;
+}
