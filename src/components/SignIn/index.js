@@ -42,21 +42,41 @@ const SignIn = ({onSignIn}) => {
     return (
     <Authenticator>
         
-        <div className = 'signin'>
+        <div className = 'SignIn' slot= "sign-in" style={{
 
-        <button className='admin-button' onClick={navigateHome}>Home</button>
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100vh',
+            backgroundImage: 'url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)',
+            backgroundSize: '1800px 1800px'
 
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <AdminButton>View Shipments</AdminButton>
-            <AdminButton>Add Shipment</AdminButton> 
-            <AdminButton>Import/Export Shipments</AdminButton> 
+
+        
+        }}>
+
+        <div>
+             <button className='homeButton' onClick={navigateHome}>Home</button>
         </div>
-        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-            <AdminButton>Add Butterfly</AdminButton>
-            <AdminButton>Edit Butterfly</AdminButton> 
-            <AdminButton>Add/Edit Notes</AdminButton> 
+        <div>
+            <button className='addButterfly'>Add Butterfly</button>
+            <button className='editButterfly'>Edit Butterfly</button>
+            <button className='adedNotes'>Add/Edit Notes</button>
+
+        <div>
+            <button className='viewShipments'>View Shipments</button>
+            <button className='addShipments'>Add Shipments</button>
+            <button className='imexShipments'>Import/Export Shipments</button>
+
+        </div>
+        <div>
+            <button className='addButterfly'>Add Butterfly</button>
+            <button className='editButterfly'>Edit Butterfly</button>
+            <button className='adedNotes'>Add/Edit Notes</button>
+
         </div>
 
+            
             
 
             
@@ -106,3 +126,4 @@ const [user, setUser] = useState('');
             <button  onClick={signIn}>Sign in</button> 
 */
 //might be easiest to just have a navigation page kinda thing after sign in and the normal page just loads the reiman gardens thing
+//Navigating from the navbar to home currently doesn't auto refresh the page so the signout button switch is broken. 
