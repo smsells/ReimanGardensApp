@@ -8,3 +8,75 @@ type Note @model {
   description: String
   image: String
 }
+
+type Butterfly @model{
+  id: ID!
+  scientificName: String
+  commonName: String
+  image: String
+  family: String
+  subfamily: String
+  lifespan: String
+  range: String
+  hosts: String
+  food: String
+  habitat: String
+  flights: String
+  history: String
+  funFact: String
+}
+
+type Organization @model{
+  name: String
+  locationCity: String
+  locationState: String
+  Shipments: [Order]
+  commonNameList: [replacementCommonName]
+  headerColor: String
+  sectionHeaderColor: String
+  menuColor: String
+  linkFontColor: String
+  adminIconColor: String
+  homepageBackground: String
+  font: String
+  logo: String
+  coverMedia: String
+  activeModules: [Module]
+  inactiveModules: [Module]
+  speciesInfoList: [SpeciesInfo]
+
+
+
+}
+type replacementCommonName @model{
+  buttery: Butterfly
+  newName: String
+}
+
+type Order @model {
+  orderNumber: Int
+  shipmentDate: String
+  arrivalDate: String
+  supplier: String
+  packingList: [OrderItem]
+}
+
+type OrderItem @model {
+  species: String
+  numReceived: Int
+  emergedInTransit: Int
+  damagedInTransit: Int
+  diseased: Int
+  parasites: Int
+}
+type Module @model{
+  title: String
+  content: String
+}
+type SpeciesInfo @model{
+  name: String
+  numInFlight: Int
+  totalReceived: Int
+  firstFlown: String
+  lastFlown: String
+}
