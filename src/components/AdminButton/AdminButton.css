@@ -1,15 +1,12 @@
 .admin-button{
     background-color: #DDA15E;
-    color: white;
-    height: fit-content;
-    width: 30%;
+    color: #FEFAE0;
+    width: 20%;
     font-size: 30px;
-    padding: 10px ;
-    border-radius: 5px;
+    padding: 5% ;
+    border-radius: 12px;
     margin: 10px 5%;
     border: white;
-    /* display: inline-block;
-    word-wrap: break-word; */
 }
 .admin-button:hover {
     color:#BC6C25;

@@ -1,9 +1,11 @@
 import { React, useState } from 'react';
 import { Auth } from 'aws-amplify';
-import { useNavigate } from 'react-router-dom';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import { Authenticator} from '@aws-amplify/ui-react';
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from '../AdminButton/AdminButton';
+import AddButterfly from '../AddButterfly/AddButterfly';
+// import Grid from '@mui/material/Grid';
 
 const SignIn = ({ onSignIn }) => {
     const navigate = useNavigate();
@@ -54,22 +56,31 @@ const SignIn = ({ onSignIn }) => {
                 maxWidth: 'width'}}>
 
                 <div style={{
-                    backgroundColor: 'rgba(222, 184, 135, 0.75)', 
-                    height: '100%', 
-                    width: '100%'
+                    height:"100%",
+                    width:"100%",
+                    display: "grid",
+                    gap: "5%",
+                    backgroundColor: "rgba(222, 184, 135, 0.5)",
+                    padding: "10px",
+                    gridAutoColumns: "30%"
                     }}>
-                        
-                    <AdminButton onClick={navigateHome}>Home</AdminButton>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <AdminButton>View Shipments</AdminButton>
-                        <AdminButton>Add Shipment</AdminButton>
-                        <AdminButton>Import/Export Shipments</AdminButton>
+                    <div style={{gridArea: "2 / 1 / span 1 / span 3"}}>
+                        <div className='grid-item'>
+                            <Link to={'/'}><AdminButton>View Shipments</AdminButton></Link>
+                            <Link to={'/'}><AdminButton>Add Shipment</AdminButton></Link>
+                            <Link to={'/'}><AdminButton>Import/Export Shipments</AdminButton></Link>
+                        </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <AdminButton>Add Butterfly</AdminButton>
-                        <AdminButton>Edit Butterfly</AdminButton>
-                        <AdminButton>Add/Edit Notes</AdminButton>
+                    <div style={{gridArea: "3 / 1 / span 1 / span 3"}}>
+                        <div className='grid-item'>
+                            <AdminButton link="/addButterfly">Add Butterfly</AdminButton>
+                            <Link to={'/'}><AdminButton>Edit Butterfly</AdminButton></Link>
+                            <Link to={'/'}><AdminButton>Add/Edit Notes</AdminButton></Link>
+                        </div>
+                    </div>
+
+                    <div style={{ display:'-ms-inline-grid', alignItems: 'center', justifyContent: 'center' }}>
+                            
                     </div>
                 </div>
             </div>
