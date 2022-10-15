@@ -1,43 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import '../../App.css';
+import {useSearchParams} from 'react-router-dom';
 import { API } from 'aws-amplify';
-import { listOrganizations } from '../../graphql/queries';
+import { getOrder } from '../../graphql/queries';
 //import { Storage} from 'aws-amplify';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Navigate, useNavigate, createSearchParams, Link} from 'react-router-dom';
-//import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
-const DisplayShipments = () =>{
 
-const navigate = useNavigate();
-  var handleEdit = (id) =>{
-    console.log(id);
-    navigate({
-      pathname: "/editShipment",
-      search: createSearchParams({
-        id: id
-      }).toString()
-
-    });
-   
-
-  }
-
-   var handlePackingList = (id) =>{
-    console.log(id);
-    navigate({
-      pathname: "/packingList",
-      search: createSearchParams({
-        id: id
-      }).toString()
-
-    });
-
-   
-
-  }
-
+const PackingList = () =>{
+    //Doing something similar to before except with the PackingList Object
+    const[searchparams]=useSearchParams();
+    console.log(searchparams.get("id")+" in packingList");
     const [shipments, setShipments] = useState([[]]); //not sure I need the typing thing
     //Idea is that it will be an array of objects to populate a 2d array
     //Will need Query Schema for all of this
@@ -52,22 +26,26 @@ const navigate = useNavigate();
       }, []);
 
     async function fetchShipments() {
-        const apiData = await API.graphql({ query: listOrganizations });
+        const apiData = await API.graphql({
+             query: getOrder,
+             variables: {id: searchparams.get("id") }
+            });
         //check what theyre called lol
-        const organizationsFromAPI = apiData.data.listOrganizations.items;
+        const packingListFromAPI = apiData.PackingList;
         //There should be only 1 organization so 
-        const shipmentsFromAPI = organizationsFromAPI.Shipments;
+        
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
 
-         tableRows = shipmentsFromAPI.map(element =>{
+         tableRows = packingListFromAPI.map(element =>{
           return(
             <tr>
-              <td>{element.orderNumber}</td>
-              <td>{element.shipmentDate}</td>
-              <td>{element.arrivalDate}</td>
-              <td>{element.supplier}</td>
-              <td> <button  onClick={ handleEdit(element.ID)}> Edit </button></td>
-              <td> <button  onClick={ handlePackingList(element.ID)}> Packing List </button></td>
+              <td>{element.species}</td>
+              <td>{element.numReceived}</td>
+              <td>{element.emergedInTransit}</td>
+              <td>{element.damagedInTransit}</td>
+              <td>{element.diseased}</td>
+              <td>{element.parasites}</td>
+             
             </tr>
           )
         })
@@ -78,7 +56,6 @@ const navigate = useNavigate();
               For loop to iterate over all the 
         */
         
-        console.log(organizationsFromAPI);
       }
       
 
@@ -96,13 +73,13 @@ const navigate = useNavigate();
          <Table hover>
             <thead>
               <tr>    
-                <th> Order Number</th>
-                <th>Shipment Date</th>
-                <th>Arrival Date</th>
-                <th>Supplier</th>
-                <th>Edit</th>
+                <th> Species</th>
+                <th>Number Received</th>
+                <th>Emerged in Transit</th>
+                <th>Damaged in Transit</th>
+                <th>Diseased </th>
                  
-                <th>View More</th>
+                <th>Parasites</th>
                 
               </tr>
             </thead>
@@ -110,17 +87,12 @@ const navigate = useNavigate();
               {tableRows}
             </tbody>
           </Table>  
-          <button  onClick={() => handleEdit(12)}>Go To Edit </button>
-          <button  onClick={() => handlePackingList(13)}> Packing List </button>
+          
 
 
         </div>
 
       )
-
-
-
-
-
+    
 }
-export default DisplayShipments;
+export default PackingList;
