@@ -1,0 +1,28 @@
+[type=radio] { 
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* IMAGE STYLES */
+  [type=radio] + img {
+    cursor: pointer;
+    margin-left: 10%;
+  }
+  
+  /* CHECKED STYLES */
+  [type=radio]:checked + img {
+    outline: 2px solid #7C98B3;
+  }
+
+  input, textarea {
+    width: 75%;
+    
+  }
+
+  .customImage {
+    width: 75%;
+    height: auto;
+    border: 5px solid #fff;
+  }
