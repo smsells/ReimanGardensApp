@@ -32,3 +32,433 @@ export const listNotes = /* GraphQL */ `
     }
   }
 `;
+export const getButterfly = /* GraphQL */ `
+  query GetButterfly($id: ID!) {
+    getButterfly(id: $id) {
+      id
+      scientificName
+      commonName
+      image
+      family
+      subfamily
+      lifespan
+      range
+      hosts
+      food
+      habitat
+      flights
+      history
+      funFact
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listButterflies = /* GraphQL */ `
+  query ListButterflies(
+    $filter: ModelButterflyFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listButterflies(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        scientificName
+        commonName
+        image
+        family
+        subfamily
+        lifespan
+        range
+        hosts
+        food
+        habitat
+        flights
+        history
+        funFact
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrganization = /* GraphQL */ `
+  query GetOrganization($id: ID!) {
+    getOrganization(id: $id) {
+      name
+      locationCity
+      locationState
+      Shipments {
+        orderNumber
+        shipmentDate
+        arrivalDate
+        supplier
+        packingList {
+          species
+          numReceived
+          emergedInTransit
+          damagedInTransit
+          diseased
+          parasites
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+      }
+      commonNameList {
+        buttery {
+          id
+          scientificName
+          commonName
+          image
+          family
+          subfamily
+          lifespan
+          range
+          hosts
+          food
+          habitat
+          flights
+          history
+          funFact
+          createdAt
+          updatedAt
+        }
+        newName
+        id
+        createdAt
+        updatedAt
+      }
+      headerColor
+      sectionHeaderColor
+      menuColor
+      linkFontColor
+      adminIconColor
+      homepageBackground
+      font
+      logo
+      coverMedia
+      activeModules {
+        title
+        content
+        id
+        createdAt
+        updatedAt
+      }
+      inactiveModules {
+        title
+        content
+        id
+        createdAt
+        updatedAt
+      }
+      speciesInfoList {
+        name
+        numInFlight
+        totalReceived
+        firstFlown
+        lastFlown
+        id
+        createdAt
+        updatedAt
+      }
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrganizations = /* GraphQL */ `
+  query ListOrganizations(
+    $filter: ModelOrganizationFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrganizations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        name
+        locationCity
+        locationState
+        Shipments {
+          orderNumber
+          shipmentDate
+          arrivalDate
+          supplier
+          id
+          createdAt
+          updatedAt
+        }
+        commonNameList {
+          newName
+          id
+          createdAt
+          updatedAt
+        }
+        headerColor
+        sectionHeaderColor
+        menuColor
+        linkFontColor
+        adminIconColor
+        homepageBackground
+        font
+        logo
+        coverMedia
+        activeModules {
+          title
+          content
+          id
+          createdAt
+          updatedAt
+        }
+        inactiveModules {
+          title
+          content
+          id
+          createdAt
+          updatedAt
+        }
+        speciesInfoList {
+          name
+          numInFlight
+          totalReceived
+          firstFlown
+          lastFlown
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getReplacementCommonName = /* GraphQL */ `
+  query GetReplacementCommonName($id: ID!) {
+    getReplacementCommonName(id: $id) {
+      buttery {
+        id
+        scientificName
+        commonName
+        image
+        family
+        subfamily
+        lifespan
+        range
+        hosts
+        food
+        habitat
+        flights
+        history
+        funFact
+        createdAt
+        updatedAt
+      }
+      newName
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listReplacementCommonNames = /* GraphQL */ `
+  query ListReplacementCommonNames(
+    $filter: ModelReplacementCommonNameFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listReplacementCommonNames(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        buttery {
+          id
+          scientificName
+          commonName
+          image
+          family
+          subfamily
+          lifespan
+          range
+          hosts
+          food
+          habitat
+          flights
+          history
+          funFact
+          createdAt
+          updatedAt
+        }
+        newName
+        id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrder = /* GraphQL */ `
+  query GetOrder($id: ID!) {
+    getOrder(id: $id) {
+      orderNumber
+      shipmentDate
+      arrivalDate
+      supplier
+      packingList {
+        species
+        numReceived
+        emergedInTransit
+        damagedInTransit
+        diseased
+        parasites
+        id
+        createdAt
+        updatedAt
+      }
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrders = /* GraphQL */ `
+  query ListOrders(
+    $filter: ModelOrderFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrders(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        orderNumber
+        shipmentDate
+        arrivalDate
+        supplier
+        packingList {
+          species
+          numReceived
+          emergedInTransit
+          damagedInTransit
+          diseased
+          parasites
+          id
+          createdAt
+          updatedAt
+        }
+        id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getOrderItem = /* GraphQL */ `
+  query GetOrderItem($id: ID!) {
+    getOrderItem(id: $id) {
+      species
+      numReceived
+      emergedInTransit
+      damagedInTransit
+      diseased
+      parasites
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listOrderItems = /* GraphQL */ `
+  query ListOrderItems(
+    $filter: ModelOrderItemFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listOrderItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        species
+        numReceived
+        emergedInTransit
+        damagedInTransit
+        diseased
+        parasites
+        id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getModule = /* GraphQL */ `
+  query GetModule($id: ID!) {
+    getModule(id: $id) {
+      title
+      content
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listModules = /* GraphQL */ `
+  query ListModules(
+    $filter: ModelModuleFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listModules(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        title
+        content
+        id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getSpeciesInfo = /* GraphQL */ `
+  query GetSpeciesInfo($id: ID!) {
+    getSpeciesInfo(id: $id) {
+      name
+      numInFlight
+      totalReceived
+      firstFlown
+      lastFlown
+      id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSpeciesInfos = /* GraphQL */ `
+  query ListSpeciesInfos(
+    $filter: ModelSpeciesInfoFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSpeciesInfos(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        name
+        numInFlight
+        totalReceived
+        firstFlown
+        lastFlown
+        id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;

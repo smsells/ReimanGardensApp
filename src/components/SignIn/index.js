@@ -5,6 +5,7 @@ import { Authenticator} from '@aws-amplify/ui-react';
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from '../AdminButton/AdminButton';
 import AddButterfly from '../AddButterfly/AddButterfly';
+import DisplayShipments from '../DisplayShipments';
 // import Grid from '@mui/material/Grid';
 
 const SignIn = ({ onSignIn }) => {
@@ -66,7 +67,7 @@ const SignIn = ({ onSignIn }) => {
                     }}>
                     <div style={{gridArea: "2 / 1 / span 1 / span 3"}}>
                         <div className='grid-item'>
-                            <Link to={'/'}><AdminButton>View Shipments</AdminButton></Link>
+                            <Link to={'/displayShipments'}><AdminButton>View Shipments</AdminButton></Link>
                             <Link to={'/'}><AdminButton>Add Shipment</AdminButton></Link>
                             <Link to={'/'}><AdminButton>Import/Export Shipments</AdminButton></Link>
                         </div>
