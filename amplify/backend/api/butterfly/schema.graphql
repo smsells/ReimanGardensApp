@@ -1,15 +1,16 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
-type Note @model {
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
+type Note @model @auth(rules: [{ allow: public }]) {
   id: ID!
   name: String!
   description: String
   image: String
 }
 
-type Butterfly @model{
+type Butterfly @model @auth(rules: [{ allow: public }]) {
   id: ID!
   scientificName: String
   commonName: String
@@ -26,8 +27,9 @@ type Butterfly @model{
   funFact: String
 }
 
-type Organization @model{
+type Organization @model @auth(rules: [{ allow: public }]) {
   name: String
+  username: String
   locationCity: String
   locationState: String
   Shipments: [Order]
@@ -44,16 +46,13 @@ type Organization @model{
   activeModules: [Module]
   inactiveModules: [Module]
   speciesInfoList: [SpeciesInfo]
-
-
-
 }
-type replacementCommonName @model{
+type replacementCommonName @model @auth(rules: [{ allow: public }]) {
   buttery: Butterfly
   newName: String
 }
 
-type Order @model {
+type Order @model @auth(rules: [{ allow: public }]) {
   orderNumber: Int
   shipmentDate: String
   arrivalDate: String
@@ -61,7 +60,7 @@ type Order @model {
   packingList: [OrderItem]
 }
 
-type OrderItem @model {
+type OrderItem @model @auth(rules: [{ allow: public }]) {
   species: String
   numReceived: Int
   emergedInTransit: Int
@@ -69,11 +68,11 @@ type OrderItem @model {
   diseased: Int
   parasites: Int
 }
-type Module @model{
+type Module @model @auth(rules: [{ allow: public }]) {
   title: String
   content: String
 }
-type SpeciesInfo @model{
+type SpeciesInfo @model @auth(rules: [{ allow: public }]) {
   name: String
   numInFlight: Int
   totalReceived: Int
