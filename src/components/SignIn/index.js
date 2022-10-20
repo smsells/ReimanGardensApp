@@ -1,90 +1,92 @@
-import {React, useState}  from 'react';
-import {  Auth } from 'aws-amplify';
-import {useNavigate} from 'react-router-dom';
-import { Authenticator } from '@aws-amplify/ui-react';
+import { React, useState } from 'react';
+import { Auth } from 'aws-amplify';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import { Authenticator} from '@aws-amplify/ui-react';
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from '../AdminButton/AdminButton';
+import AddButterfly from '../AddButterfly/AddButterfly';
+import DisplayShipments from '../DisplayShipments';
+// import Grid from '@mui/material/Grid';
 
-const SignIn = ({onSignIn}) => {
+const SignIn = ({ onSignIn }) => {
     const navigate = useNavigate();
 
 
-    function navigateHome(){
-       
+    function navigateHome() {
+
         navigate('/');
         //window.location.reload(false);
         onSignIn();
 
     }
-    function pullUser(){
+    function pullUser() {
 
         Auth.currentAuthenticatedUser({
             bypassCache: false
-        }).then(user=> {
+        }).then(user => {
             console.log(user);
             console.log(user.pool);
-            if(user.pool.userPoolId=="us-east-2_tyNlmQmJu"){
-                 console.log("success");
-                 //can redirect in here
+            if (user.pool.userPoolId == "us-east-2_tyNlmQmJu") {
+                console.log("success");
+                //can redirect in here
             }
-        }).catch(err=> console.log(err));
-        
+        }).catch(err => console.log(err));
+
     }
 
-   // function testOnload(){
-   //     console.log("Hey I loaded");
-   // }
+    // function testOnload(){
+    //     console.log("Hey I loaded");
+    // }
 
-   
 
-   
+
+
 
     return (
-    <Authenticator>
-        
-        <div className = 'SignIn' slot= "sign-in" style={{
+        <Authenticator>
 
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '100vh',
-            backgroundImage: 'url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)',
-            backgroundSize: '1800px 1800px'
+            <div className='SignIn' slot="sign-in" style={{
 
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100vh',
+                backgroundImage: 'url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)',
+                backgroundSize: 'cover',
+                maxHeight: 'height',
+                maxWidth: 'width'}}>
 
-        
-        }}>
+                <div style={{
+                    height:"100%",
+                    width:"100%",
+                    display: "grid",
+                    gap: "5%",
+                    backgroundColor: "rgba(222, 184, 135, 0.5)",
+                    padding: "10px",
+                    gridAutoColumns: "30%"
+                    }}>
+                    <div style={{gridArea: "2 / 1 / span 1 / span 3"}}>
+                        <div className='grid-item'>
+                            <Link to={'/displayShipments'}><AdminButton>View Shipments</AdminButton></Link>
+                            <Link to={'/'}><AdminButton>Add Shipment</AdminButton></Link>
+                            <Link to={'/'}><AdminButton>Import/Export Shipments</AdminButton></Link>
+                        </div>
+                    </div>
+                    <div style={{gridArea: "3 / 1 / span 1 / span 3"}}>
+                        <div className='grid-item'>
+                            <AdminButton link="/addButterfly">Add Butterfly</AdminButton>
+                            <Link to={'/'}><AdminButton>Edit Butterfly</AdminButton></Link>
+                            <Link to={'/'}><AdminButton>Add/Edit Notes</AdminButton></Link>
+                        </div>
+                    </div>
 
-        <div>
-             <button className='homeButton' onClick={navigateHome}>Home</button>
-        </div>
-        <div>
-            <button className='addButterfly'>Add Butterfly</button>
-            <button className='editButterfly'>Edit Butterfly</button>
-            <button className='adedNotes'>Add/Edit Notes</button>
+                    <div style={{ display:'-ms-inline-grid', alignItems: 'center', justifyContent: 'center' }}>
+                            
+                    </div>
+                </div>
+            </div>
 
-        <div>
-            <button className='viewShipments'>View Shipments</button>
-            <button className='addShipments'>Add Shipments</button>
-            <button className='imexShipments'>Import/Export Shipments</button>
-
-        </div>
-        <div>
-            <button className='addButterfly'>Add Butterfly</button>
-            <button className='editButterfly'>Edit Butterfly</button>
-            <button className='adedNotes'>Add/Edit Notes</button>
-
-        </div>
-
-            
-            
-
-            
-            <button onClick={pullUser}>Who am I?</button>
-          
-
-        </div>
-     </Authenticator>
+        </Authenticator>
 
     );
 }
@@ -96,7 +98,7 @@ export default SignIn;
 
 /*
 const [user, setUser] = useState('');
-    const [pass, setPass] = useState(''); 
+    const [pass, setPass] = useState('');
      const navigate = useNavigate();
 
     const signIn = async () => {
@@ -116,14 +118,14 @@ const [user, setUser] = useState('');
 <input
                 onChange={e => setUser(e.target.value )}
                 placeholder="Username"
-                
+
               />
               <input
                 onChange={e => setPass(e.target.value )}
                 placeholder="Pass"
-                
+
               />
-            <button  onClick={signIn}>Sign in</button> 
+            <button  onClick={signIn}>Sign in</button>
 */
 //might be easiest to just have a navigation page kinda thing after sign in and the normal page just loads the reiman gardens thing
 //Navigating from the navbar to home currently doesn't auto refresh the page so the signout button switch is broken. 
