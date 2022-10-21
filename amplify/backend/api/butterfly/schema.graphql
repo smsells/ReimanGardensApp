@@ -67,6 +67,8 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
   damagedInTransit: Int
   diseased: Int
   parasites: Int
+  poorEmerged: Int
+  numEmerged: Int
 }
 type Module @model @auth(rules: [{ allow: public }]) {
   title: String

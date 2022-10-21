@@ -128,6 +128,7 @@ export const createOrganization = /* GraphQL */ `
   ) {
     createOrganization(input: $input, condition: $condition) {
       name
+      username
       locationCity
       locationState
       Shipments {
@@ -220,6 +221,7 @@ export const updateOrganization = /* GraphQL */ `
   ) {
     updateOrganization(input: $input, condition: $condition) {
       name
+      username
       locationCity
       locationState
       Shipments {
@@ -312,6 +314,7 @@ export const deleteOrganization = /* GraphQL */ `
   ) {
     deleteOrganization(input: $input, condition: $condition) {
       name
+      username
       locationCity
       locationState
       Shipments {
@@ -507,6 +510,8 @@ export const createOrder = /* GraphQL */ `
         damagedInTransit
         diseased
         parasites
+        poorEmerged
+        numEmerged
         id
         createdAt
         updatedAt
@@ -534,6 +539,8 @@ export const updateOrder = /* GraphQL */ `
         damagedInTransit
         diseased
         parasites
+        poorEmerged
+        numEmerged
         id
         createdAt
         updatedAt
@@ -561,6 +568,8 @@ export const deleteOrder = /* GraphQL */ `
         damagedInTransit
         diseased
         parasites
+        poorEmerged
+        numEmerged
         id
         createdAt
         updatedAt
@@ -583,6 +592,8 @@ export const createOrderItem = /* GraphQL */ `
       damagedInTransit
       diseased
       parasites
+      poorEmerged
+      numEmerged
       id
       createdAt
       updatedAt
@@ -601,6 +612,8 @@ export const updateOrderItem = /* GraphQL */ `
       damagedInTransit
       diseased
       parasites
+      poorEmerged
+      numEmerged
       id
       createdAt
       updatedAt
@@ -619,6 +632,8 @@ export const deleteOrderItem = /* GraphQL */ `
       damagedInTransit
       diseased
       parasites
+      poorEmerged
+      numEmerged
       id
       createdAt
       updatedAt
