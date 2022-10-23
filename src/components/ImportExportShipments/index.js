@@ -52,19 +52,20 @@ function csvToJson(files) {
       for (i = 1; i < 25; i++) {
         let orderItem = {};
         orderItem["species"] = results.data[i][0];
-        orderItem["numReceived"] = results.data[i][2];
-        orderItem["emergedInTransit"] = results.data[i][6];
-        orderItem["damagedInTransit"] = results.data[i][7];
-        orderItem["diseased"] = results.data[i][8];
-        orderItem["parasites"] = results.data[i][9];
-        orderItem["numEmerged"] = results.data[i][10];
-        orderItem["poorEmerged"] = results.data[i][11];
+        orderItem["numReceived"] = results.data[i][2] || 0;
+        orderItem["emergedInTransit"] = results.data[i][6] || 0;
+        orderItem["damagedInTransit"] = results.data[i][7] || 0;
+        orderItem["diseased"] = results.data[i][8] || 0;
+        orderItem["parasites"] = results.data[i][9] || 0;
+        orderItem["numEmerged"] = results.data[i][10] || 0;
+        orderItem["poorEmerged"] = results.data[i][11] || 0;
         let item = await API.graphql({
           query: createOrderItemMutation,
           variables: {
             input: orderItem,
           },
         });
+        console.log("item created", item);
         // addDataToDynamoDB(orderItem);
         reqArray.push(item);
       }
@@ -75,10 +76,11 @@ function csvToJson(files) {
             shipmentDate: results.data[1][4],
             arrivalDate: results.data[1][5],
             supplier: results.data[1][3],
-            packingList: reqArray,
+            packingList: [],
           },
         },
       });
+      console.log("orders created", orders);
       // exportUserInfo(testShipment);
       // console.log("test-shipment", testShipment);
       // return testShipment;
