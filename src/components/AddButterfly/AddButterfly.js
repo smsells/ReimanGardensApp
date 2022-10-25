@@ -1,7 +1,8 @@
 import React from 'react'
 import { speciesRangeList, butterflyFamilies, butterflySubFamilies } from './AddButterflyList';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { graphqlOperation, Storage } from 'aws-amplify';
+import { useNavigate } from 'react-router-dom';
 import { API } from 'aws-amplify';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@mui/material/Checkbox';
@@ -15,6 +16,7 @@ import { listButterflies } from '../../graphql/queries';
 const AddButterfly = () => {
 
     var butterflyObject;
+    const navigate = useNavigate();
 
     //for species range checklist
     const [checkedState, setCheckedState] = useState(
@@ -42,14 +44,10 @@ const AddButterfly = () => {
 
     //uploading images
     async function handleFileEvent(e) {
-        console.log("location 1");
-        // const chosenFiles = Array.prototype.slice.call(e.target.files)
-        // handleUploadFiles(chosenFiles);
         if (!e.target.files[0]) return
         const file = e.target.files[0];
         setImages(file.name);
         await Storage.put(file.name, file);
-        console.log("location 2");
         fetchButterflies();
     };
 
@@ -62,6 +60,7 @@ const AddButterfly = () => {
                 const image = await Storage.get(butterfly.image);
                 butterfly.image = image;
             }
+            console.log("butterfly", butterfly);
             return butterfly;
             }))
         } catch (error){
@@ -102,6 +101,7 @@ const AddButterfly = () => {
         }
         console.log(butterflyObject);
         createButterfly();
+        navigate('/signin');
     };
 
     async function createButterfly() {
@@ -113,7 +113,8 @@ const AddButterfly = () => {
             butterflyObject.image = image;
           }
         console.log("creating...")
-        //setFormData(initialFormState);
+        butterflyObject = initialButterflyObjectState;
+
     }
 
     const [scientificName, setScientificName] = useState("");
@@ -129,6 +130,23 @@ const AddButterfly = () => {
     const [flightDurationEnd, setFlightDurationEnd] = useState("");
     const [funFacts, setFunFacts] = useState("");
     const [images, setImages] = useState([]);
+
+    const initialButterflyObjectState = {
+        scientificName: "",
+        commonName: "",
+        image: "",
+        family: "",
+        subfamily: "",
+        lifespan: "",
+        range: "",
+        hosts: "",
+        food: "",
+        habitat: "",
+        //etymology: etymology,
+        flights: "",
+        history: "",
+        funFact: ""
+    };
 
     return (
         <form style={{ fontSize: "x-large", backgroundColor: "rgba(222, 184, 135, 0.5)", padding: "5px" }}>
@@ -198,7 +216,7 @@ const AddButterfly = () => {
                     <FormGroup>
                       {speciesRangeList.map(({ location, value }, index) => {
                         return (
-                            <FormControlLabel
+                            <FormControlLabel key={index}
                                 control={
                                     <Checkbox
                                         size="lg"
