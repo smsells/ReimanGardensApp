@@ -57,6 +57,7 @@ function csvToJson(files) {
         orderItem["species"] = results.data[i][0];
         orderItem["numReceived"] = results.data[i][2] || 0;
         orderItem["emergedInTransit"] = results.data[i][6] || 0;
+        console.log("emergedInTransit", results.data[i][6]);
         orderItem["damagedInTransit"] = results.data[i][7] || 0;
         orderItem["diseased"] = results.data[i][8] || 0;
         orderItem["parasites"] = results.data[i][9] || 0;
