@@ -55,14 +55,22 @@ function App() {
         // const res = await API.graphql({
         //   query: listOrganizations,
         // });
-        console.log("try", res);
-        if (res == null) {
+        console.log("try", res.data.getOrganization);
+        if (res.data.getOrganization == null) {
           const cat = await API.graphql({
             query: createOrganizationMutation,
             variables: {
               input: {
                 id: sha512Hash,
                 username: userName,
+                // Shipments: [
+                //   {
+                //     shipmentDate: "results.data[1][4]",
+                //     arrivalDate: "results.data[1][5]",
+                //     supplier: "results.data[1][3]",
+                //     packingList: [],
+                //   },
+                // ],
               },
             },
           });

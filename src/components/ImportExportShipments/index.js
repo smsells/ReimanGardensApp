@@ -3,6 +3,8 @@ import Papa from "papaparse";
 import { Auth, API } from "aws-amplify";
 import { createOrderItem as createOrderItemMutation } from "../../graphql/mutations";
 import { createOrder as createOrderMutation } from "../../graphql/mutations";
+import { updateOrder as updateOrderMutation } from "../../graphql/mutations";
+import { appendOwnerState } from "@mui/base";
 
 // const addDataToDynamoDB = async (data) => {
 //   const userData = data;
@@ -47,6 +49,7 @@ function csvToJson(files) {
     complete: async function (results) {
       // console.log("Finished:", results.data);
       let reqArray = [];
+      let orderItemList = [];
       let i = 0;
 
       for (i = 1; i < 25; i++) {
@@ -59,16 +62,18 @@ function csvToJson(files) {
         orderItem["parasites"] = results.data[i][9] || 0;
         orderItem["numEmerged"] = results.data[i][10] || 0;
         orderItem["poorEmerged"] = results.data[i][11] || 0;
-        let item = await API.graphql({
-          query: createOrderItemMutation,
-          variables: {
-            input: orderItem,
-          },
-        });
-        console.log("item created", item);
-        // addDataToDynamoDB(orderItem);
-        reqArray.push(item);
+        // let item = await API.graphql({
+        //   query: createOrderItemMutation,
+        //   variables: {
+        //     input: orderItem,
+        //   },
+        // });
+        console.log("item created", orderItem);
+        // // addDataToDynamoDB(orderItem);
+        // reqArray.push(item);
+        orderItemList.push(orderItem);
       }
+
       let orders = await API.graphql({
         query: createOrderMutation,
         variables: {
@@ -76,12 +81,25 @@ function csvToJson(files) {
             shipmentDate: results.data[1][4],
             arrivalDate: results.data[1][5],
             supplier: results.data[1][3],
-            packingList: [],
+            // packingList: orderItemList[0],
           },
         },
       });
+
+      // let updateOrders = await API.graphql({
+      //   query: updateOrderMutation,
+      //   variables: {
+      //     input: {
+      //       shipmentDate: results.data[1][4],
+      //       arrivalDate: results.data[1][5],
+      //       supplier: results.data[1][3],
+      //       packingList: orders.data.packingList.next,
+      //     },
+      //   },
+      // });
       console.log("orders created", orders);
-      // exportUserInfo(testShipment);
+      // console.log("orders update", updateOrders);
+      // // exportUserInfo(testShipment);
       // console.log("test-shipment", testShipment);
       // return testShipment;
     },
