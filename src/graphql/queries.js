@@ -91,24 +91,17 @@ export const getOrganization = /* GraphQL */ `
       locationCity
       locationState
       Shipments {
-        orderNumber
-        shipmentDate
-        arrivalDate
-        supplier
-        packingList {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
+        items {
+          orderNumber
+          shipmentDate
+          arrivalDate
+          supplier
           id
           createdAt
           updatedAt
+          organizationShipmentsId
         }
-        id
-        createdAt
-        updatedAt
+        nextToken
       }
       commonNameList {
         buttery {
@@ -158,14 +151,18 @@ export const getOrganization = /* GraphQL */ `
         updatedAt
       }
       speciesInfoList {
-        name
-        numInFlight
-        totalReceived
-        firstFlown
-        lastFlown
-        id
-        createdAt
-        updatedAt
+        items {
+          name
+          numInFlight
+          totalReceived
+          firstFlown
+          lastFlown
+          id
+          createdAt
+          updatedAt
+          organizationSpeciesInfoListId
+        }
+        nextToken
       }
       id
       createdAt
@@ -186,13 +183,7 @@ export const listOrganizations = /* GraphQL */ `
         locationCity
         locationState
         Shipments {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          id
-          createdAt
-          updatedAt
+          nextToken
         }
         commonNameList {
           newName
@@ -224,14 +215,7 @@ export const listOrganizations = /* GraphQL */ `
           updatedAt
         }
         speciesInfoList {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          id
-          createdAt
-          updatedAt
+          nextToken
         }
         id
         createdAt
@@ -316,19 +300,26 @@ export const getOrder = /* GraphQL */ `
       arrivalDate
       supplier
       packingList {
-        species
-        numReceived
-        emergedInTransit
-        damagedInTransit
-        diseased
-        parasites
-        id
-        createdAt
-        updatedAt
+        items {
+          species
+          numReceived
+          emergedInTransit
+          damagedInTransit
+          diseased
+          parasites
+          poorEmerged
+          numEmerged
+          id
+          createdAt
+          updatedAt
+          orderPackingListId
+        }
+        nextToken
       }
       id
       createdAt
       updatedAt
+      organizationShipmentsId
     }
   }
 `;
@@ -345,19 +336,12 @@ export const listOrders = /* GraphQL */ `
         arrivalDate
         supplier
         packingList {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          id
-          createdAt
-          updatedAt
+          nextToken
         }
         id
         createdAt
         updatedAt
+        organizationShipmentsId
       }
       nextToken
     }
@@ -372,9 +356,12 @@ export const getOrderItem = /* GraphQL */ `
       damagedInTransit
       diseased
       parasites
+      poorEmerged
+      numEmerged
       id
       createdAt
       updatedAt
+      orderPackingListId
     }
   }
 `;
@@ -392,9 +379,12 @@ export const listOrderItems = /* GraphQL */ `
         damagedInTransit
         diseased
         parasites
+        poorEmerged
+        numEmerged
         id
         createdAt
         updatedAt
+        orderPackingListId
       }
       nextToken
     }
@@ -440,6 +430,7 @@ export const getSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      organizationSpeciesInfoListId
     }
   }
 `;
@@ -459,6 +450,7 @@ export const listSpeciesInfos = /* GraphQL */ `
         id
         createdAt
         updatedAt
+        organizationSpeciesInfoListId
       }
       nextToken
     }

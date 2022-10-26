@@ -3,6 +3,8 @@ import Papa from "papaparse";
 import { Auth, API } from "aws-amplify";
 import { createOrderItem as createOrderItemMutation } from "../../graphql/mutations";
 import { createOrder as createOrderMutation } from "../../graphql/mutations";
+import { updateOrder as updateOrderMutation } from "../../graphql/mutations";
+import { appendOwnerState } from "@mui/base";
 
 // const addDataToDynamoDB = async (data) => {
 //   const userData = data;
@@ -47,27 +49,31 @@ function csvToJson(files) {
     complete: async function (results) {
       // console.log("Finished:", results.data);
       let reqArray = [];
+      let orderItemList = [];
       let i = 0;
 
       for (i = 1; i < 25; i++) {
         let orderItem = {};
         orderItem["species"] = results.data[i][0];
-        orderItem["numReceived"] = results.data[i][2];
-        orderItem["emergedInTransit"] = results.data[i][6];
-        orderItem["damagedInTransit"] = results.data[i][7];
-        orderItem["diseased"] = results.data[i][8];
-        orderItem["parasites"] = results.data[i][9];
-        orderItem["numEmerged"] = results.data[i][10];
-        orderItem["poorEmerged"] = results.data[i][11];
-        let item = await API.graphql({
-          query: createOrderItemMutation,
-          variables: {
-            input: orderItem,
-          },
-        });
-        // addDataToDynamoDB(orderItem);
-        reqArray.push(item);
+        orderItem["numReceived"] = results.data[i][2] || 0;
+        orderItem["emergedInTransit"] = results.data[i][6] || 0;
+        orderItem["damagedInTransit"] = results.data[i][7] || 0;
+        orderItem["diseased"] = results.data[i][8] || 0;
+        orderItem["parasites"] = results.data[i][9] || 0;
+        orderItem["numEmerged"] = results.data[i][10] || 0;
+        orderItem["poorEmerged"] = results.data[i][11] || 0;
+        // let item = await API.graphql({
+        //   query: createOrderItemMutation,
+        //   variables: {
+        //     input: orderItem,
+        //   },
+        // });
+        console.log("item created", orderItem);
+        // // addDataToDynamoDB(orderItem);
+        // reqArray.push(item);
+        orderItemList.push(orderItem);
       }
+
       let orders = await API.graphql({
         query: createOrderMutation,
         variables: {
@@ -75,11 +81,25 @@ function csvToJson(files) {
             shipmentDate: results.data[1][4],
             arrivalDate: results.data[1][5],
             supplier: results.data[1][3],
-            packingList: reqArray,
+            // packingList: orderItemList[0],
           },
         },
       });
-      // exportUserInfo(testShipment);
+
+      // let updateOrders = await API.graphql({
+      //   query: updateOrderMutation,
+      //   variables: {
+      //     input: {
+      //       shipmentDate: results.data[1][4],
+      //       arrivalDate: results.data[1][5],
+      //       supplier: results.data[1][3],
+      //       packingList: orders.data.packingList.next,
+      //     },
+      //   },
+      // });
+      console.log("orders created", orders);
+      // console.log("orders update", updateOrders);
+      // // exportUserInfo(testShipment);
       // console.log("test-shipment", testShipment);
       // return testShipment;
     },
