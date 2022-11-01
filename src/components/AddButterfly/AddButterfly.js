@@ -319,7 +319,7 @@ const AddButterfly = () => {
                 </Grid>
             </Grid>
             <br/>
-            <button type="submit" value="Submit" onClick={toJson}>Submit</button>
+            <button className="add-form-button" type="submit" value="Submit" onClick={toJson}>Submit</button>
         </form>
     )
 }

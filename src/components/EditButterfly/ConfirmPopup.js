@@ -6,8 +6,8 @@ export const ConfirmPopup = ({closePopup, deleteButterfly}) => {
      <div className="popup-body">
       <h1>Are you sure you would like to delete this butterfly?</h1>
       <br/><br/>
-      <button onClick={deleteButterfly}>Confirm</button>
-      <button onClick={closePopup}> Cancel </button>
+      <button className="popup-button" onClick={deleteButterfly}>Confirm</button>
+      <button className="popup-button" onClick={closePopup}> Cancel </button>
      </div>
     </div>
   );

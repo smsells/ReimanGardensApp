@@ -2,3 +2,16 @@ input, textarea, select {
   width: 75%;
   
 }
+
+.add-form-button{
+  left: 30%;
+  right: 30%;
+  bottom: 30%;
+  top: 30%;
+  text-align: center;
+  margin: auto;
+  border-radius: 10px;
+  background: #7C98B3;
+  color: #FEFAE0;
+  border-color: #7C98B3;
+}

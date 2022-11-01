@@ -391,15 +391,15 @@ const EditButterfly = () => {
                 </Grid> 
                 <Grid item xs={12}/>
                 <Grid item xs={2}>
-                    <button type="button" value="delete" onClick={() => setPopupVisibility(true)}>Delete Butterfly</button>
+                    <button className="form-button" type="button" value="delete" onClick={() => setPopupVisibility(true)}>Delete Butterfly</button>
                 </Grid>
                 <Grid item xs={1}></Grid> 
                 <Grid item xs={2}>
-                    <button type="submit" value="Submit" onClick={editButterfly}>Save Changes</button>
+                    <button  className="form-button" type="submit" value="Submit" onClick={editButterfly}>Save Changes</button>
                 </Grid>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={2}>
-                    <button type="button" value="cancel" onClick={cancelEdit}>Cancel</button>
+                    <button className="form-button" type="button" value="cancel" onClick={cancelEdit}>Cancel</button>
                 </Grid>
             </Grid>
             <div>
