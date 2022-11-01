@@ -197,7 +197,7 @@ function App() {
       </Navbar>
 
       <header className="header">
-        <h1>Welcome to {organization.data.getOrganization.name}</h1>
+        <h1>Welcome to Reiman Gardens</h1>
       </header>
       <Routes>
         <Route exact path="/" element={<Home />} />

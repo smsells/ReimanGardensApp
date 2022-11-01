@@ -47,7 +47,7 @@ const CustomizePage = () => {
     });
     console.log("org", org);
     setOrganization(org);
-    setFormData(org);
+    setFormData({ name: org.data.getOrganization.name });
   }
 
   async function handleSubmit() {
@@ -56,7 +56,7 @@ const CustomizePage = () => {
       variables: {
         input: {
           id: sha512Hash,
-          name: formData.name,
+          ...formData,
         },
       },
     });
