@@ -312,7 +312,8 @@ const AddButterfly = () => {
                     <label>Add Images</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <label>
+                    <label className='custom-file-upload'>
+                        Choose Files
                         <input type="file" name="imageUpload" onChange={handleFileEvent}></input>
                     </label>
                 </Grid>

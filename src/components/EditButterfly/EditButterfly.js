@@ -391,7 +391,7 @@ const EditButterfly = () => {
                 </Grid> 
                 <Grid item xs={12}/>
                 <Grid item xs={2}>
-                    <button type="button" value="delete" onClick={confirmedDelete}>Delete Butterfly</button>
+                    <button type="button" value="delete" onClick={() => setPopupVisibility(true)}>Delete Butterfly</button>
                 </Grid>
                 <Grid item xs={1}></Grid> 
                 <Grid item xs={2}>
