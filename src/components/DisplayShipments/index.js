@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
-import { API, JS } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { listOrganizations } from '../../graphql/queries';
 //import { Storage} from 'aws-amplify';
 import Table from 'react-bootstrap/Table';
@@ -54,10 +54,12 @@ const navigate = useNavigate();
 
       
     async function fetchShipments() {
-        
+      Auth.currentAuthenticatedUser().then(async(user) =>{
+        var username = user.username;
+        console.log("Username: "+username);
         const apiData = await API.graphql({ query: listOrganizations });
         //check what theyre called lol
-        //console.log("Here's what the query returned: "+apiData);
+        console.log("Here's what the query returned: "+JSON.stringify(apiData));
         if(apiData==null){
           console.log("its null");
         }
@@ -93,6 +95,9 @@ const navigate = useNavigate();
         })
         
         setTableRows(data);
+      })
+        
+        
         
         /*
         
