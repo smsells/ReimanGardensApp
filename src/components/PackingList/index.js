@@ -19,7 +19,7 @@ const PackingList = () =>{
     //const initialFormState = { /* Object to hold how much info we need for each form*/  }
 
     //const [formData, setFormData] = useState(initialFormState);
-    const tableRows=null;
+    const[tableRows, setTableRows]=useState();
 
     useEffect(() => {
         fetchShipments();
@@ -31,12 +31,36 @@ const PackingList = () =>{
              variables: {id: searchparams.get("id") }
             });
         //check what theyre called lol
-        const packingListFromAPI = apiData.PackingList;
+        console.log("id query data: "+JSON.stringify(apiData));
+        //const packingListFromAPI = apiData.PackingList;
+        const packingListFromAPI= {
+          packingList: [
+            {
+            species: "MONARCH",
+            numReceived: 20,
+            emergedInTransit: 0,
+            damagedInTransit: 0,
+            diseased: 1,
+            parasites: 2,
+            poorEmerged: 4,
+            numEmerged: 0
+          },{
+            species: "NOT MONARCH",
+            numReceived: 20,
+            emergedInTransit: 20,
+            damagedInTransit: 12,
+            diseased: 1,
+            parasites: 2,
+            poorEmerged: 4,
+            numEmerged: 17
+          }
+
+       ] }
+        console.log("packing list query: "+JSON.stringify(packingListFromAPI));
         //There should be only 1 organization so 
         
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
-
-         tableRows = packingListFromAPI.map(element =>{
+        var data = packingListFromAPI.packingList.map(element =>{
           return(
             <tr>
               <td>{element.species}</td>
@@ -49,6 +73,7 @@ const PackingList = () =>{
             </tr>
           )
         })
+        setTableRows(data)
         /*
         Not sure if this will work because the table is nested but
               Ideas:
@@ -87,6 +112,7 @@ const PackingList = () =>{
               {tableRows}
             </tbody>
           </Table>  
+
           
 
 
