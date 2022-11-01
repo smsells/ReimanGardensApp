@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { listOrganizations } from '../../graphql/queries';
 //import { Storage} from 'aws-amplify';
 import Table from 'react-bootstrap/Table';
@@ -11,7 +11,7 @@ import { Navigate, useNavigate, createSearchParams, Link} from 'react-router-dom
 const DisplayShipments = () =>{
 
 const navigate = useNavigate();
-  var handleEdit = (id) =>{
+  function handleEdit(id, e){
     console.log(id);
     navigate({
       pathname: "/editShipment",
@@ -24,7 +24,7 @@ const navigate = useNavigate();
 
   }
 
-   var handlePackingList = (id) =>{
+   function handlePackingList(id, e){
     console.log(id);
     navigate({
       pathname: "/packingList",
@@ -38,47 +38,76 @@ const navigate = useNavigate();
 
   }
 
-    const [shipments, setShipments] = useState([[]]); //not sure I need the typing thing
+   
     //Idea is that it will be an array of objects to populate a 2d array
     //Will need Query Schema for all of this
 
     //const initialFormState = { /* Object to hold how much info we need for each form*/  }
 
     //const [formData, setFormData] = useState(initialFormState);
-    const tableRows=null;
+    const[tableRows, setTableRows]=useState();
 
     useEffect(() => {
         fetchShipments();
       }, []);
 
+
+      
     async function fetchShipments() {
+      Auth.currentAuthenticatedUser().then(async(user) =>{
+        var username = user.username;
+        console.log("Username: "+username);
         const apiData = await API.graphql({ query: listOrganizations });
         //check what theyre called lol
+        console.log("Here's what the query returned: "+JSON.stringify(apiData));
+        if(apiData==null){
+          console.log("its null");
+        }
         const organizationsFromAPI = apiData.data.listOrganizations.items;
+        //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
         //There should be only 1 organization so 
-        const shipmentsFromAPI = organizationsFromAPI.Shipments;
+        //const shipmentsFromAPI = organizationsFromAPI.Shipments;
+        const shipmentsFromAPI = {
+          shipments: [
+            { orderNumber: "1",
+            shipmentDate: "1/1/2022",
+            arrivalDate: "1/1/2022",
+            supplier: "Butterfly Inc",
+            ID: "12"
+          }
+          ]
+         
+
+        }
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
 
-         tableRows = shipmentsFromAPI.map(element =>{
+         var data = shipmentsFromAPI.shipments.map(element =>{
           return(
             <tr>
               <td>{element.orderNumber}</td>
               <td>{element.shipmentDate}</td>
               <td>{element.arrivalDate}</td>
               <td>{element.supplier}</td>
-              <td> <button  onClick={ handleEdit(element.ID)}> Edit </button></td>
-              <td> <button  onClick={ handlePackingList(element.ID)}> Packing List </button></td>
+              <td> <button onClick={handleEdit.bind(this, element.ID)}> Edit </button></td>
+              <td> <button  onClick={handlePackingList.bind(this,element.ID)}> Packing List </button></td>
             </tr>
           )
         })
+        
+        setTableRows(data);
+      })
+        
+        
+        
         /*
+        
         Not sure if this will work because the table is nested but
               Ideas:
               Button with the ID of the shipment on the inside to take you to another page where the order items are iterated in a similar way to this page
               For loop to iterate over all the 
         */
         
-        console.log(organizationsFromAPI);
+        
       }
       
 
@@ -107,11 +136,11 @@ const navigate = useNavigate();
               </tr>
             </thead>
             <tbody>
+             
               {tableRows}
             </tbody>
           </Table>  
-          <button  onClick={() => handleEdit(12)}>Go To Edit </button>
-          <button  onClick={() => handlePackingList(13)}> Packing List </button>
+          
 
 
         </div>
