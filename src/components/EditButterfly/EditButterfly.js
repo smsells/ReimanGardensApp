@@ -18,6 +18,7 @@ const EditButterfly = () => {
 
     var butterflyObject;
     const navigate = useNavigate();
+    const [editID, setEditID] = useState("");
     const [scientificName, setScientificName] = useState("");
     const [commonName, setCommonName] = useState("");
     const [butterflyFamily, setButterflyFamily] = useState("");
@@ -91,8 +92,7 @@ const EditButterfly = () => {
     }, []);
 
     //converts all data to json object and submits
-    const toJson = function (event) {
-        event.preventDefault();
+    const toJson = function () {
         var range = new Array();
         for (var i = 0; i < speciesRangeList.length; i++) {
             if (checkedState[i] == true) {
@@ -101,6 +101,7 @@ const EditButterfly = () => {
         }
 
         butterflyObject = {
+            id: editID,
             scientificName: scientificName,
             commonName: commonName,
             image: images,
@@ -117,12 +118,12 @@ const EditButterfly = () => {
             funFact: funFacts,
         }
         console.log(butterflyObject);
-        editButterfly();
-        //navigate('/signin');
     };
 
-    async function editButterfly() {
+    async function editButterfly(event) {
         try{
+            event.preventDefault();
+            toJson();
             if (!butterflyObject.scientificName) return;
             await API.graphql({ query: updateButterflyMutation, variables: { input: butterflyObject } });
             if (butterflyObject.image) {
@@ -138,6 +139,7 @@ const EditButterfly = () => {
     };
 
     const initialButterflyObjectState = {
+        id: "",
         scientificName: "",
         commonName: "",
         image: "",
@@ -158,7 +160,7 @@ const EditButterfly = () => {
         const found = butterflyList.find(obj => {
             return obj.id === event.target.value;
           });
-
+        setEditID(found.id);
         setScientificName(found.scientificName);
         setCommonName(found.commonName);
         setButterflyFamily(found.family);
@@ -173,43 +175,33 @@ const EditButterfly = () => {
         setFlightDurationEnd(months[1]);
         setFunFacts(found.funFact);
         setImages(found.image);
-        //setRange();
-
-        
-        
+        //setRange(); 
     };
 
-    async function confirmedDelete(){
+    async function confirmedDelete(event){
 
-        butterflyObject = {
-            scientificName: scientificName,
-            commonName: commonName,
-            image: images,
-            family: butterflyFamily,
-            subfamily: butterflySubFamily,
-            lifespan: lifespan,
-            range: "",
-            hosts: hostPlant,
-            food: "",
-            habitat: habitat,
-            etymology: etymology,
-            flights: flightDurationStart + "-" + flightDurationEnd,
-            history: lifeHistory,
-            funFact: funFacts,
+        try{
+            event.preventDefault();
+            toJson();
+            if (!butterflyObject.scientificName) return;
+            await API.graphql({ query: deleteButterflyMutation, variables: { input: butterflyObject } });
+            if (butterflyObject.image) {
+                const image = await Storage.get(butterflyObject.image);
+                butterflyObject.image = image;
+            }
+            console.log("deleting...")
+            butterflyObject = initialButterflyObjectState;
+
+            //setPopupVisibility(false);
+            //navigate("/signin");  
+        } catch (error){
+            console.log("delete error", error);
         }
-
-        if (!butterflyObject.scientificName) return;
-        await API.graphql({ query: deleteButterflyMutation, variables: { input: butterflyObject } });
-        if (butterflyObject.image) {
-            const image = await Storage.get(butterflyObject.image);
-            butterflyObject.image = image;
-        }
-        console.log("deleting...")
-        butterflyObject = initialButterflyObjectState;
-
-        setPopupVisibility(false);
-        navigate("/signin");
     };
+
+   function cancelEdit(){
+        navigate('/signin');
+    }
 
     return (
         <form style={{ fontSize: "x-large", backgroundColor: "rgba(222, 184, 135, 0.5)", padding: "5px" }}>
@@ -398,15 +390,15 @@ const EditButterfly = () => {
                 </Grid> 
                 <Grid item xs={12}/>
                 <Grid item xs={2}>
-                    <button type="button" value="delete" onClick={() => setPopupVisibility(true)}>Delete Butterfly</button>
+                    <button type="button" value="delete" onClick={confirmedDelete}>Delete Butterfly</button>
                 </Grid>
                 <Grid item xs={1}></Grid> 
                 <Grid item xs={2}>
-                    <button type="submit" value="Submit" onClick={toJson}>Save Changes</button>
+                    <button type="submit" value="Submit" onClick={editButterfly}>Save Changes</button>
                 </Grid>
                 <Grid item xs={1}></Grid>
                 <Grid item xs={2}>
-                    <button type="button" value="cancel">Cancel</button>
+                    <button type="button" value="cancel" onClick={cancelEdit}>Cancel</button>
                 </Grid>
             </Grid>
             <div>
