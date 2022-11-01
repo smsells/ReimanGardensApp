@@ -96,6 +96,13 @@ const SignIn = ({ onSignIn }) => {
               </Link>
             </div>
           </div>
+          <div style={{ gridArea: "4 / 1 / span 1 / span 3" }}>
+            <div className="grid-item">
+              <Link to={"/customizePage"}>
+                <AdminButton>Customize Page</AdminButton>
+              </Link>
+            </div>
+          </div>
 
           <div
             style={{

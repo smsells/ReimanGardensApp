@@ -82,7 +82,7 @@ function csvToJson(files) {
             shipmentDate: results.data[1][4],
             arrivalDate: results.data[1][5],
             supplier: results.data[1][3],
-            // packingList: orderItemList[0],
+            packingList: orderItemList[0],
           },
         },
       });
