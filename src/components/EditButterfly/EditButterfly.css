@@ -1,0 +1,35 @@
+button {
+    left: 30%;
+    right: 30%;
+    bottom: 30%;
+    top: 30%;
+    text-align: center;
+    margin: auto;
+    border-radius: 10px;
+    background: #7C98B3;
+    color: #FEFAE0;
+    border-color: #7C98B3;
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    left: 50%;
+    right: 50%;
+    bottom: 50%;
+    top: 50%;
+    text-align: center;
+    margin: auto;
+    border-radius: 10px;
+    background: #7C98B3;
+    color: #FEFAE0;
+    border-color: #7C98B3;
+    cursor: pointer;
+}
+
+label{
+    font-family:"verdana";
+    font-size: 22;
+    color:#FEFAE0;
+}

@@ -22,6 +22,7 @@ import logo from './rg_logo.png';
 import sidebarStyle from './components/Sidebar/Sidebar.css';
 import { stack as Menu } from 'react-burger-menu';
 import AddButterfly from './components/AddButterfly/AddButterfly';
+import EditButterfly from './components/EditButterfly/EditButterfly';
 import DisplayShipments from './components/DisplayShipments';
 import PackingList from './components/PackingList';
 import EditShipments from './components/EditShipments';
@@ -117,6 +118,7 @@ function App() {
         <Route exact path='/gallery' element={<Gallery />} />
         <Route exact path='/parks' element={<Parks />} />
         <Route exact path='/addButterfly' element={<AddButterfly/>} />
+        <Route exact path='/editButterfly' element={<EditButterfly/>} />
         <Route exact path= '/displayShipments' element={<DisplayShipments/>}/>
         <Route exact path='/packingList' element={<PackingList/>} />
         <Route exact path= '/editShipment' element={<EditShipments/>}/>
