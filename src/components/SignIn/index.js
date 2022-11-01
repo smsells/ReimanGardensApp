@@ -87,11 +87,13 @@ const SignIn = ({ onSignIn }) => {
           </div>
           <div style={{ gridArea: "3 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
-              <AdminButton link="/addButterfly">Add Butterfly</AdminButton>
-              <Link to={"/"}>
+              <Link to={"/addButterfly"}>
+                <AdminButton>Add Butterfly</AdminButton>
+              </Link>
+              <Link to={"/editButterfly"}>
                 <AdminButton>Edit Butterfly</AdminButton>
               </Link>
-              <Link to={"/"}>
+              <Link to={"/notes"}>
                 <AdminButton>Add/Edit Notes</AdminButton>
               </Link>
             </div>
