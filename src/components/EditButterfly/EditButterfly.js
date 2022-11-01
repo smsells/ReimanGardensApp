@@ -184,7 +184,8 @@ const EditButterfly = () => {
             event.preventDefault();
             toJson();
             if (!butterflyObject.scientificName) return;
-            await API.graphql({ query: deleteButterflyMutation, variables: { input: butterflyObject } });
+            var id = editID;
+            await API.graphql({ query: deleteButterflyMutation, variables: { input: {id} } });
             if (butterflyObject.image) {
                 const image = await Storage.get(butterflyObject.image);
                 butterflyObject.image = image;
@@ -192,8 +193,8 @@ const EditButterfly = () => {
             console.log("deleting...")
             butterflyObject = initialButterflyObjectState;
 
-            //setPopupVisibility(false);
-            //navigate("/signin");  
+            setPopupVisibility(false);
+            navigate("/signin");  
         } catch (error){
             console.log("delete error", error);
         }
