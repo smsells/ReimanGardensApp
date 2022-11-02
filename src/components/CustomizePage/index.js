@@ -31,11 +31,10 @@ async function changeName(newName) {
 }
 
 const CustomizePage = () => {
-  const initialFormState = { name: "" };
   const sha512Hash = localStorage.getItem("token");
 
   const [organization, setOrganization] = useState({});
-  const [formData, setFormData] = useState(initialFormState);
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     getOrg();
@@ -46,7 +45,9 @@ const CustomizePage = () => {
       query: getOrganization,
       variables: { id: sha512Hash },
     });
+    console.log("org", org);
     setOrganization(org);
+    setFormData({ name: org.data.getOrganization.name });
   }
 
   async function handleSubmit() {
@@ -55,12 +56,11 @@ const CustomizePage = () => {
       variables: {
         input: {
           id: sha512Hash,
-          name: formData.name,
+          ...formData,
         },
       },
     });
     setOrganization(formData);
-    setFormData(initialFormState);
   }
 
   return (
@@ -69,11 +69,15 @@ const CustomizePage = () => {
         <header> Customize Page </header>
       </div>
       <div>
-        <input
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Note name"
-          value={formData.name}
-        />
+        <p>
+          Name:
+          <input
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            placeholder={formData.name}
+            defaultValue={formData.name}
+            value={formData.name}
+          />
+        </p>
         <button onClick={handleSubmit}>Apply changes</button>
       </div>
     </>

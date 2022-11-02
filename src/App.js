@@ -35,10 +35,14 @@ import crypto from "crypto-js";
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [organization, setOrganization] = useState({});
 
   useEffect(() => {
     isLoggedIn();
+    getOrg();
   }, []);
+
+  const orgId = localStorage.getItem("token");
 
   /**
    * Load user-specific organization or create on if user doesn't have an organization
@@ -103,6 +107,14 @@ function App() {
       console.log("error signing out " + error);
     }
   };
+
+  async function getOrg() {
+    const org = await API.graphql({
+      query: getOrganization,
+      variables: { id: orgId },
+    });
+    setOrganization(org);
+  }
 
   //used for closing hamburger menu
   const [isMenuOpen, handleMenu] = useState(false);
@@ -199,7 +211,7 @@ function App() {
         <Route exact path="/gallery" element={<Gallery />} />
         <Route exact path="/parks" element={<Parks />} />
         <Route exact path="/addButterfly" element={<AddButterfly />} />
-        <Route exact path="/editButterfly" element={<EditButterfly/>} />
+        <Route exact path="/editButterfly" element={<EditButterfly />} />
         <Route exact path="/displayShipments" element={<DisplayShipments />} />
         <Route exact path="/packingList" element={<PackingList />} />
         <Route exact path="/editShipment" element={<EditShipments />} />
