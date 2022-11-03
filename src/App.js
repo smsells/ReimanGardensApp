@@ -97,6 +97,7 @@ function App() {
 
   const signOut = async () => {
     console.log("in the signoutFunction");
+    localStorage.removeItem("token");
     try {
       await Auth.signOut();
       setLoggedIn(false);
@@ -106,6 +107,7 @@ function App() {
     } catch (error) {
       console.log("error signing out " + error);
     }
+    navigate(0);
   };
 
   async function getOrg() {
@@ -113,13 +115,18 @@ function App() {
       query: getOrganization,
       variables: { id: orgId },
     });
-    setOrganization(org);
+    setOrganization({ name: org.data.getOrganization.name });
+  }
+
+  function getHeaderColor() {
+    return organization.headerColor || "";
   }
 
   //used for closing hamburger menu
   const [isMenuOpen, handleMenu] = useState(false);
 
   const handleCloseMenu = () => {
+    // navigate(0);
     handleMenu(false);
   };
 
@@ -167,7 +174,7 @@ function App() {
         >
           Parks Around the World
         </Link>
-        {loggedIn ? (
+        {loggedIn && organization.name == null ? (
           <Link
             className="menu-link"
             onClick={() => {
@@ -186,6 +193,19 @@ function App() {
             Sign In{" "}
           </Link>
         )}
+        {loggedIn && organization.name != null ? (
+          <Link
+            className="menu-link"
+            onClick={() => {
+              signOut();
+              handleCloseMenu();
+            }}
+          >
+            Sign out
+          </Link>
+        ) : (
+          ""
+        )}
       </Menu>
 
       <Navbar style={{ backgroundColor: "#2C678E" }} expand="lg">
@@ -196,8 +216,13 @@ function App() {
         </Container>
       </Navbar>
 
-      <header className="header">
-        <h1>Welcome to Reiman Gardens</h1>
+      <header
+        // className="header"
+        style={{
+          backgroundColor: getHeaderColor() || "#2C678E",
+        }}
+      >
+        <h1>Welcome to {organization.name || "Reiman Garden"}</h1>
       </header>
       <Routes>
         <Route exact path="/" element={<Home />} />
