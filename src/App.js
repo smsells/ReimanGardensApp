@@ -115,11 +115,20 @@ function App() {
       query: getOrganization,
       variables: { id: orgId },
     });
-    setOrganization({ name: org.data.getOrganization.name });
-  }
-
-  function getHeaderColor() {
-    return organization.headerColor || "";
+    setOrganization({
+      name: org.data.getOrganization.name,
+      locationCity: org.data.getOrganization.locationCity,
+      locationState: org.data.getOrganization.locationState,
+      headerColor: org.data.getOrganization.headerColor,
+      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
+      menuColor: org.data.getOrganization.menuColor,
+      linkFontColor: org.data.getOrganization.linkFontColor,
+      adminIconColor: org.data.getOrganization.adminIconColor,
+      homepageBackground: org.data.getOrganization.homepageBackground,
+      font: org.data.getOrganization.font,
+      logo: org.data.getOrganization.logo,
+      coverMedia: org.data.getOrganization.coverMedia,
+    });
   }
 
   //used for closing hamburger menu
@@ -217,9 +226,9 @@ function App() {
       </Navbar>
 
       <header
-        // className="header"
+        className="header"
         style={{
-          backgroundColor: getHeaderColor() || "#2C678E",
+          backgroundColor: organization.headerColor || "#2C678E",
         }}
       >
         <h1>Welcome to {organization.name || "Reiman Garden"}</h1>
