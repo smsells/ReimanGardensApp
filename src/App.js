@@ -4,7 +4,7 @@ import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
 //import { Authenticator, Link } from '@aws-amplify/ui-react';
 import { Auth, API } from "aws-amplify";
-//import { listNotes } from './graphql/queries';
+import { Storage } from "aws-amplify";
 import { createOrganization as createOrganizationMutation } from "./graphql/mutations";
 import { getOrganization } from ".//graphql/queries";
 
@@ -44,6 +44,12 @@ function App() {
 
   const orgId = localStorage.getItem("token");
 
+  console.log("Organization", organization);
+
+  const menuStyle = {
+    backgroundColor: organization.menuColor || "",
+  };
+
   /**
    * Load user-specific organization or create on if user doesn't have an organization
    */
@@ -58,9 +64,6 @@ function App() {
           query: getOrganization,
           variables: { id: sha512Hash },
         });
-        // const res = await API.graphql({
-        //   query: listOrganizations,
-        // });
         console.log("try", res.data.getOrganization);
         if (res.data.getOrganization == null) {
           const cat = await API.graphql({
@@ -69,14 +72,6 @@ function App() {
               input: {
                 id: sha512Hash,
                 username: userName,
-                // Shipments: [
-                //   {
-                //     shipmentDate: "results.data[1][4]",
-                //     arrivalDate: "results.data[1][5]",
-                //     supplier: "results.data[1][3]",
-                //     packingList: [],
-                //   },
-                // ],
               },
             },
           });
@@ -101,8 +96,6 @@ function App() {
     try {
       await Auth.signOut();
       setLoggedIn(false);
-      //right now has to be refreshed to update
-
       navigate("/");
     } catch (error) {
       console.log("error signing out " + error);
@@ -148,11 +141,17 @@ function App() {
       <Menu
         disableAutoFocus
         right
-        style={sidebarStyle}
+        // style={menuStyle}
+        style={{ color: organization.menuColor }}
         isOpen={isMenuOpen}
         onStateChange={handleStateChange}
       >
-        <Link className="menu-link" to={"/"} onClick={() => handleCloseMenu()}>
+        <Link
+          className="menu-link"
+          style={{ color: organization.menuColor }}
+          to={"/"}
+          onClick={() => handleCloseMenu()}
+        >
           Home
         </Link>
         <Link
@@ -217,10 +216,13 @@ function App() {
         )}
       </Menu>
 
-      <Navbar style={{ backgroundColor: "#2C678E" }} expand="lg">
+      <Navbar
+        style={{ backgroundColor: organization.headerColor || "#2C678E" }}
+        expand="lg"
+      >
         <Container>
           <Navbar.Brand href="#home" style={{ color: "#FEFAE0" }}>
-            <img src={logo} />
+            {organization.logo && <img src={organization.logo || logo} />}
           </Navbar.Brand>
         </Container>
       </Navbar>
@@ -228,7 +230,8 @@ function App() {
       <header
         className="header"
         style={{
-          backgroundColor: organization.headerColor || "#2C678E",
+          backgroundColor: organization.sectionHeaderColor || "#2C678E",
+          fontSize: organization.font + "px" || "50px",
         }}
       >
         <h1>Welcome to {organization.name || "Reiman Garden"}</h1>

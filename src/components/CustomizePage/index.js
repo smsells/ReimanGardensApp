@@ -1,10 +1,12 @@
 import { React, useEffect, useState } from "react";
-import { Auth, API } from "aws-amplify";
+import { API } from "aws-amplify";
 import { getOrganization } from "../../graphql/queries";
 import { updateOrganization as updateOrgMutation } from "../../graphql/mutations";
 import Grid from "@material-ui/core/Grid";
 import { useNavigate } from "react-router-dom";
 import { ColorPicker, useColor } from "react-color-palette";
+import { Storage } from "aws-amplify";
+
 import "react-color-palette/lib/css/styles.css";
 
 const CustomizePage = () => {
@@ -28,11 +30,25 @@ const CustomizePage = () => {
 
   const [organization, setOrganization] = useState({});
   const [formData, setFormData] = useState(initialCustomizeState);
-  const [headerColor, setHeaderColor] = useColor("hex", formData.headerColor);
 
   useEffect(() => {
     getOrg();
   }, []);
+
+  const [headerColor, setHeaderColor] = useColor("hex", formData.headerColor);
+  const [sectionHeaderColor, setSectionHeaderColor] = useColor(
+    "hex",
+    formData.sectionHeaderColor
+  );
+  const [menuColor, setMenuColor] = useColor("hex", formData.menuColor);
+  const [linkFontColor, setLinkFontColor] = useColor(
+    "hex",
+    formData.linkFontColor
+  );
+  const [adminIconColor, setAdminIconColor] = useColor(
+    "hex",
+    formData.adminIconColor
+  );
 
   async function getOrg() {
     const org = await API.graphql({
@@ -57,14 +73,34 @@ const CustomizePage = () => {
     });
   }
 
+  async function onChangeLogo(e) {
+    if (!e.target.files[0]) return;
+    const file = e.target.files[0];
+    setFormData({ ...formData, logo: file.name });
+    await Storage.put(file.name, file);
+    getOrg();
+  }
+
   function setHColor(color) {
     setHeaderColor(color);
     setFormData({ ...formData, headerColor: headerColor.hex });
   }
-
-  const refreshPage = () => {
-    navigate(0);
-  };
+  function setSHColor(color) {
+    setSectionHeaderColor(color);
+    setFormData({ ...formData, sectionHeaderColor: sectionHeaderColor.hex });
+  }
+  function setMcolor(color) {
+    setMenuColor(color);
+    setFormData({ ...formData, menuColor: menuColor.hex });
+  }
+  function setLFColor(color) {
+    setLinkFontColor(color);
+    setFormData({ ...formData, linkFontColor: linkFontColor.hex });
+  }
+  function setAIColor(color) {
+    setAdminIconColor(color);
+    setFormData({ ...formData, adminIconColor: adminIconColor.hex });
+  }
 
   async function handleSubmit() {
     await API.graphql({
@@ -76,18 +112,19 @@ const CustomizePage = () => {
         },
       },
     });
+    if (formData.logo) {
+      const image = await Storage.get(formData.logo);
+      formData.logo = image;
+    }
     // setFormData(initialCustomizeState);
-    refreshPage();
     console.log("form data", formData);
     setOrganization(formData);
+    navigate(0);
     // navigate("/signin");s
   }
 
   return (
     <>
-      <div className="Home">
-        <header> Customize Page </header>
-      </div>
       <div>
         <Grid
           container
@@ -106,7 +143,6 @@ const CustomizePage = () => {
                 setFormData({ ...formData, name: e.target.value })
               }
               placeholder="Butterfly house name"
-              defaultValue={initialCustomizeState.name}
               value={formData.name}
             />
           </Grid>
@@ -119,7 +155,6 @@ const CustomizePage = () => {
                 setFormData({ ...formData, locationCity: e.target.value })
               }
               placeholder="location City"
-              defaultValue={initialCustomizeState.locationState}
               value={formData.locationCity}
             />
           </Grid>
@@ -132,7 +167,6 @@ const CustomizePage = () => {
                 setFormData({ ...formData, locationState: e.target.value })
               }
               placeholder="Location state"
-              defaultValue={initialCustomizeState.locationState}
               value={formData.locationState}
             />
           </Grid>
@@ -142,10 +176,67 @@ const CustomizePage = () => {
           <Grid item xs={8}>
             <ColorPicker
               width={256}
-              height={128}
+              height={100}
               color={headerColor}
               onChange={setHColor}
               hideHSV
+              hideRGB
+              dark
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Section Header Color </label>
+          </Grid>
+          <Grid item xs={8}>
+            <ColorPicker
+              width={256}
+              height={100}
+              color={sectionHeaderColor}
+              onChange={setSHColor}
+              hideHSV
+              hideRGB
+              dark
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Menu Color </label>
+          </Grid>
+          <Grid item xs={8}>
+            <ColorPicker
+              width={256}
+              height={100}
+              color={menuColor}
+              onChange={setMcolor}
+              hideHSV
+              hideRGB
+              dark
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Link Font Color </label>
+          </Grid>
+          <Grid item xs={8}>
+            <ColorPicker
+              width={256}
+              height={100}
+              color={linkFontColor}
+              onChange={setLFColor}
+              hideHSV
+              hideRGB
+              dark
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Admin Icon Color </label>
+          </Grid>
+          <Grid item xs={8}>
+            <ColorPicker
+              width={256}
+              height={100}
+              color={adminIconColor}
+              onChange={setAIColor}
+              hideHSV
+              hideRGB
               dark
             />
           </Grid>
@@ -158,12 +249,36 @@ const CustomizePage = () => {
                 setFormData({ ...formData, font: e.target.value })
               }
               placeholder="Font"
-              defaultValue={initialCustomizeState.font}
               value={formData.font}
             />
           </Grid>
+          <Grid item xs={4}>
+            <label> Logo </label>
+          </Grid>
+          <Grid item xs={8}>
+            <label for="fileUpload" class="custom-file-upload">
+              Choose Files
+            </label>
+            <input
+              id="fileUpload"
+              type="file"
+              accept=".png, .jpeg, .jpg"
+              name="imageUpload"
+              onChange={onChangeLogo}
+            ></input>
+            {formData.logo && (
+              <img src={formData.logo} style={{ width: 200 }} />
+            )}
+          </Grid>
         </Grid>
-        <button onClick={handleSubmit}>Apply changes</button>
+        <button
+          className="form-button"
+          type="submit"
+          value="Submit"
+          onClick={handleSubmit}
+        >
+          Save Changes
+        </button>
       </div>
     </>
   );

@@ -3,6 +3,10 @@ import Papa from "papaparse";
 import { Auth, API } from "aws-amplify";
 import { createOrderItem as createOrderItemMutation } from "../../graphql/mutations";
 import { createOrder as createOrderMutation } from "../../graphql/mutations";
+import {
+  getOrder as getOrderQuery,
+  listOrders as listOrdersQuery,
+} from "../../graphql/queries";
 import { updateOrder as updateOrderMutation } from "../../graphql/mutations";
 import { appendOwnerState } from "@mui/base";
 
@@ -52,8 +56,25 @@ function csvToJson(files) {
       let orderItemList = [];
       let i = 0;
 
+      let order = await API.graphql({
+        query: createOrderMutation,
+        variables: {
+          input: {
+            orgID: token,
+            shipmentDate: results.data[1][4],
+            arrivalDate: results.data[1][5],
+            supplier: results.data[1][3],
+            // packingList: orderItemList[0],
+          },
+        },
+      });
+      const orderToken = order.data.createOrder.id;
+      console.log("orders created", order);
+
       for (i = 1; i < 25; i++) {
         let orderItem = {};
+        orderItem["orgID"] = token;
+        orderItem["orderID"] = orderToken;
         orderItem["species"] = results.data[i][0];
         orderItem["numReceived"] = results.data[i][2] || 0;
         orderItem["emergedInTransit"] = results.data[i][6] || 0;
@@ -63,56 +84,37 @@ function csvToJson(files) {
         orderItem["parasites"] = results.data[i][9] || 0;
         orderItem["numEmerged"] = results.data[i][10] || 0;
         orderItem["poorEmerged"] = results.data[i][11] || 0;
-        // let item = await API.graphql({
-        //   query: createOrderItemMutation,
-        //   variables: {
-        //     input: orderItem,
-        //   },
-        // });
+        let item = await API.graphql({
+          query: createOrderItemMutation,
+          variables: {
+            input: orderItem,
+          },
+        });
         console.log("item created", orderItem);
         // // addDataToDynamoDB(orderItem);
         // reqArray.push(item);
         orderItemList.push(orderItem);
       }
-
-      let orders = await API.graphql({
-        query: createOrderMutation,
-        variables: {
-          input: {
-            shipmentDate: results.data[1][4],
-            arrivalDate: results.data[1][5],
-            supplier: results.data[1][3],
-            packingList: orderItemList[0],
-          },
-        },
-      });
-
-      // let updateOrders = await API.graphql({
-      //   query: updateOrderMutation,
-      //   variables: {
-      //     input: {
-      //       shipmentDate: results.data[1][4],
-      //       arrivalDate: results.data[1][5],
-      //       supplier: results.data[1][3],
-      //       packingList: orders.data.packingList.next,
-      //     },
-      //   },
-      // });
-      console.log("orders created", orders);
       // console.log("orders update", updateOrders);
       // // exportUserInfo(testShipment);
       // console.log("test-shipment", testShipment);
-      // return testShipment;
+      return orderItemList;
     },
   });
 }
 
 function ImportExportShipments() {
+  const orgID = localStorage.getItem("token");
   return (
     <div className="App">
+      <label for="fileUpload" class="custom-file-upload">
+        Choose File
+      </label>
       <input
+        id="fileUpload"
         type="file"
         accept=".csv,.xlsx,.xls"
+        name="imageUpload"
         onChange={(e) => {
           const files = e.target.files;
           // console.log(files);

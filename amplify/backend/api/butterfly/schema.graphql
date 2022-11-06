@@ -50,6 +50,7 @@ type Organization @model @auth(rules: [{ allow: public }]) {
 type replacementCommonName @model @auth(rules: [{ allow: public }]) {
   buttery: Butterfly
   newName: String
+  orgID: String
 }
 
 type Order @model @auth(rules: [{ allow: public }]) {
@@ -58,6 +59,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
   arrivalDate: String
   supplier: String
   packingList: [OrderItem] @hasMany
+  orgID: String
 }
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {
@@ -69,6 +71,8 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
   parasites: Int
   poorEmerged: Int
   numEmerged: Int
+  orgID: String
+  orderID: String
 }
 type Module @model @auth(rules: [{ allow: public }]) {
   title: String

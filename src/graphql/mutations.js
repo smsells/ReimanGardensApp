@@ -137,6 +137,7 @@ export const createOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -164,6 +165,7 @@ export const createOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -227,6 +229,7 @@ export const updateOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -254,6 +257,7 @@ export const updateOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -317,6 +321,7 @@ export const deleteOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -344,6 +349,7 @@ export const deleteOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -416,6 +422,7 @@ export const createReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -447,6 +454,7 @@ export const updateReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -478,6 +486,7 @@ export const deleteReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -504,6 +513,8 @@ export const createOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -511,6 +522,7 @@ export const createOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -538,6 +550,8 @@ export const updateOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -545,6 +559,7 @@ export const updateOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -572,6 +587,8 @@ export const deleteOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -579,6 +596,7 @@ export const deleteOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -600,6 +618,8 @@ export const createOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
@@ -621,6 +641,8 @@ export const updateOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
@@ -642,6 +664,8 @@ export const deleteOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
