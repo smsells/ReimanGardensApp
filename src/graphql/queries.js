@@ -49,6 +49,7 @@ export const getButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
@@ -76,6 +77,7 @@ export const listButterflies = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -119,6 +121,7 @@ export const getOrganization = /* GraphQL */ `
           flights
           history
           funFact
+          etymology
           createdAt
           updatedAt
         }
@@ -243,6 +246,7 @@ export const getReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -280,6 +284,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
           flights
           history
           funFact
+          etymology
           createdAt
           updatedAt
         }

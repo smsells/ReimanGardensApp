@@ -4,16 +4,16 @@ import { schema } from './schema';
 
 
 
-const { OrderItem, Order, Note, Butterfly, Organization, replacementCommonName, Module, SpeciesInfo, CreateOrderPayload } = initSchema(schema);
+const { Note, Butterfly, Organization, Order, OrderItem, replacementCommonName, Module, SpeciesInfo, Image } = initSchema(schema);
 
 export {
-  OrderItem,
-  Order,
   Note,
   Butterfly,
   Organization,
+  Order,
+  OrderItem,
   replacementCommonName,
   Module,
   SpeciesInfo,
-  CreateOrderPayload
+  Image
 };
