@@ -141,6 +141,9 @@ export const getOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -148,6 +151,9 @@ export const getOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -159,6 +165,7 @@ export const getOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -206,6 +213,9 @@ export const listOrganizations = /* GraphQL */ `
         activeModules {
           title
           content
+          image
+          active
+          orgID
           id
           createdAt
           updatedAt
@@ -213,6 +223,9 @@ export const listOrganizations = /* GraphQL */ `
         inactiveModules {
           title
           content
+          image
+          active
+          orgID
           id
           createdAt
           updatedAt
@@ -408,6 +421,9 @@ export const getModule = /* GraphQL */ `
     getModule(id: $id) {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -424,6 +440,9 @@ export const listModules = /* GraphQL */ `
       items {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -440,6 +459,7 @@ export const getSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt
@@ -460,6 +480,7 @@ export const listSpeciesInfos = /* GraphQL */ `
         totalReceived
         firstFlown
         lastFlown
+        orgID
         id
         createdAt
         updatedAt

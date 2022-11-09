@@ -161,6 +161,9 @@ export const onCreateOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -168,6 +171,9 @@ export const onCreateOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -179,6 +185,7 @@ export const onCreateOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -250,6 +257,9 @@ export const onUpdateOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -257,6 +267,9 @@ export const onUpdateOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -268,6 +281,7 @@ export const onUpdateOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -339,6 +353,9 @@ export const onDeleteOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -346,6 +363,9 @@ export const onDeleteOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -357,6 +377,7 @@ export const onDeleteOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -624,6 +645,9 @@ export const onCreateModule = /* GraphQL */ `
     onCreateModule {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -635,6 +659,9 @@ export const onUpdateModule = /* GraphQL */ `
     onUpdateModule {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -646,6 +673,9 @@ export const onDeleteModule = /* GraphQL */ `
     onDeleteModule {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -660,6 +690,7 @@ export const onCreateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt
@@ -675,6 +706,7 @@ export const onUpdateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt
@@ -690,6 +722,7 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt

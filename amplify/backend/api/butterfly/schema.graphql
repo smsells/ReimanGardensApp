@@ -77,6 +77,9 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
 type Module @model @auth(rules: [{ allow: public }]) {
   title: String
   content: String
+  image: String
+  active: Int
+  orgID: String
 }
 type SpeciesInfo @model @auth(rules: [{ allow: public }]) {
   name: String
@@ -84,4 +87,5 @@ type SpeciesInfo @model @auth(rules: [{ allow: public }]) {
   totalReceived: Int
   firstFlown: String
   lastFlown: String
+  orgID: String
 }

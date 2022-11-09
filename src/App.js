@@ -33,18 +33,32 @@ import ImportExportShipments from "./components/ImportExportShipments";
 import crypto from "crypto-js";
 
 function App() {
+  const orgId = localStorage.getItem("token");
+
+  const initialOrganizationState = {
+    name: "",
+    locationCity: "",
+    locationState: "",
+    headerColor: "",
+    sectionHeaderColor: "",
+    menuColor: "",
+    linkFontColor: "",
+    adminIconColor: "",
+    homepageBackground: "",
+    font: "",
+    logo: "",
+    coverMedia: "",
+  };
+
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const [organization, setOrganization] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
     isLoggedIn();
     getOrg();
   }, []);
-
-  const orgId = localStorage.getItem("token");
-
-  console.log("Organization", organization);
+  // console.log("Organization", organization);
 
   const menuStyle = {
     backgroundColor: organization.menuColor || "",
