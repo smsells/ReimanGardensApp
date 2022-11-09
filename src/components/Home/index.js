@@ -1,7 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { API } from "aws-amplify";
 import { Storage } from "aws-amplify";
-import { Link } from "react-router-dom";
 import { listModules } from "../../graphql/queries";
 
 const Home = () => {

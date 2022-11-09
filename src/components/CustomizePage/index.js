@@ -40,15 +40,13 @@ const CustomizePage = () => {
     active: 0,
   };
   const navigate = useNavigate();
-
-  const [organization, setOrganization] = useState({});
   const [formData, setFormData] = useState(initialCustomizeState);
   const [modules, setModules] = useState([]);
   const [newModule, setNewModule] = useState(initialModule);
 
   useEffect(() => {
     getOrg();
-    getModules();
+    getOrganizationModules();
   }, []);
 
   const [headerColor, setHeaderColor] = useColor("hex", formData.headerColor);
@@ -66,13 +64,23 @@ const CustomizePage = () => {
     formData.adminIconColor
   );
 
+  /**
+   * @description Load organization using organization id
+   */
   async function getOrg() {
     const org = await API.graphql({
       query: getOrganization,
       variables: { id: sha512Hash },
     });
+    if (org.data.getOrganization.logo) {
+      const image = await Storage.get(org.data.getOrganization.logo);
+      org.data.getOrganization.logo = image;
+    }
+    if (org.data.getOrganization.coverMedia) {
+      const image = await Storage.get(org.data.getOrganization.coverMedia);
+      org.data.getOrganization.coverMedia = image;
+    }
     // console.log("org", org);
-    setOrganization(org);
     setFormData({
       name: org.data.getOrganization.name,
       locationCity: org.data.getOrganization.locationCity,
@@ -89,7 +97,10 @@ const CustomizePage = () => {
     });
   }
 
-  async function getModules() {
+  /**
+   * @description load all modules belonging to this organization
+   */
+  async function getOrganizationModules() {
     let filter = {
       or: [
         {
@@ -122,7 +133,7 @@ const CustomizePage = () => {
       query: deleteModuleMutation,
       variables: { input: { id } },
     });
-    getModules();
+    getOrganizationModules();
     navigate(0);
   }
 
@@ -140,10 +151,16 @@ const CustomizePage = () => {
         },
       },
     });
-    getModules();
+    getOrganizationModules();
     navigate(0);
   }
 
+  /**
+   *
+   * @param {*} e
+   * @description load selected logo into aws storage and update logo field.
+   * Reload organization to get new logo loaded
+   */
   async function onChangeLogo(e) {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
@@ -166,28 +183,55 @@ const CustomizePage = () => {
     await Storage.put(file.name, file);
   }
 
-  function setHColor(color) {
+  /**
+   *
+   * @param {*} color new header color to be added in formData
+   */
+  function setHeaderColorFunction(color) {
     setHeaderColor(color);
     setFormData({ ...formData, headerColor: headerColor.hex });
   }
-  function setSHColor(color) {
+
+  /**
+   *
+   * @param {*} color: new section header color to be added in formData
+   */
+  function setSectionHeaderColorFunction(color) {
     setSectionHeaderColor(color);
     setFormData({ ...formData, sectionHeaderColor: sectionHeaderColor.hex });
   }
+
+  /**
+   *
+   * @param {*} color new menu color to be added in formData
+   */
   function setMcolor(color) {
     setMenuColor(color);
     setFormData({ ...formData, menuColor: menuColor.hex });
   }
-  function setLFColor(color) {
+
+  /**
+   *
+   * @param {*} color new link font color to be added in formData
+   */
+  function setLinkFontColorFunction(color) {
     setLinkFontColor(color);
     setFormData({ ...formData, linkFontColor: linkFontColor.hex });
   }
-  function setAIColor(color) {
+
+  /**
+   *
+   * @param {*} color new admin icon to be added in formData
+   */
+  function setAdminIconColorFunction(color) {
     setAdminIconColor(color);
     setFormData({ ...formData, adminIconColor: adminIconColor.hex });
   }
 
-  function checkBoxHandler() {
+  /**
+   * @description checkbox handler for active field in newly created module
+   */
+  function newModuleActiveCheckboxHandler() {
     if (newModule.active == 1) {
       setNewModule({ ...newModule, active: 0 });
     } else {
@@ -203,6 +247,12 @@ const CustomizePage = () => {
     }
   }
 
+  /**
+   * @description handle form submit
+   * - update orgnization info from form data
+   * - create new module if new module title and content has been added
+   * - refresh page to show changes
+   */
   async function handleSubmit() {
     await API.graphql({
       query: updateOrgMutation,
@@ -217,9 +267,7 @@ const CustomizePage = () => {
       const image = await Storage.get(formData.logo);
       formData.logo = image;
     }
-    // setFormData(initialCustomizeState);
-    console.log("form data", formData);
-    setOrganization(formData);
+    // console.log("form data", formData);
 
     // create module
     if (newModule.title && newModule.content) {
@@ -234,7 +282,6 @@ const CustomizePage = () => {
       setNewModule(initialModule);
     }
     navigate(0);
-    // navigate("/signin");s
   }
 
   return (
@@ -292,7 +339,7 @@ const CustomizePage = () => {
               width={256}
               height={100}
               color={headerColor}
-              onChange={setHColor}
+              onChange={setHeaderColorFunction}
               hideHSV
               hideRGB
               dark
@@ -306,7 +353,7 @@ const CustomizePage = () => {
               width={256}
               height={100}
               color={sectionHeaderColor}
-              onChange={setSHColor}
+              onChange={setSectionHeaderColorFunction}
               hideHSV
               hideRGB
               dark
@@ -334,7 +381,7 @@ const CustomizePage = () => {
               width={256}
               height={100}
               color={linkFontColor}
-              onChange={setLFColor}
+              onChange={setLinkFontColorFunction}
               hideHSV
               hideRGB
               dark
@@ -348,7 +395,7 @@ const CustomizePage = () => {
               width={256}
               height={100}
               color={adminIconColor}
-              onChange={setAIColor}
+              onChange={setAdminIconColorFunction}
               hideHSV
               hideRGB
               dark
@@ -476,7 +523,7 @@ const CustomizePage = () => {
             <input
               type="checkbox"
               id="checkboxModule"
-              onChange={checkBoxHandler}
+              onChange={newModuleActiveCheckboxHandler}
             />
             <label htmlFor="checkboxModule">Active? </label>
           </Grid>

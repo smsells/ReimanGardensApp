@@ -1,20 +1,9 @@
 import React from "react";
 import Papa from "papaparse";
-import { Auth, API } from "aws-amplify";
+import { API } from "aws-amplify";
 import { createOrderItem as createOrderItemMutation } from "../../graphql/mutations";
 import { createOrder as createOrderMutation } from "../../graphql/mutations";
-import {
-  getOrder as getOrderQuery,
-  listOrders as listOrdersQuery,
-} from "../../graphql/queries";
-import { updateOrder as updateOrderMutation } from "../../graphql/mutations";
-import { appendOwnerState } from "@mui/base";
-
-// const addDataToDynamoDB = async (data) => {
-//   const userData = data;
-
-//   await putData("test-shipment", userData);
-// };
+import { Link } from "react-router-dom";
 
 function exportUserInfo(file) {
   const fileData = JSON.stringify(file);
@@ -51,7 +40,6 @@ function csvToJson(files) {
 
   Papa.parse(files[0], {
     complete: async function (results) {
-      // console.log("Finished:", results.data);
       let reqArray = [];
       let orderItemList = [];
       let i = 0;
@@ -69,7 +57,7 @@ function csvToJson(files) {
         },
       });
       const orderToken = order.data.createOrder.id;
-      console.log("orders created", order);
+      // console.log("orders created", order);
 
       for (i = 1; i < 25; i++) {
         let orderItem = {};
@@ -90,14 +78,9 @@ function csvToJson(files) {
             input: orderItem,
           },
         });
-        console.log("item created", orderItem);
-        // // addDataToDynamoDB(orderItem);
-        // reqArray.push(item);
+        // console.log("item created", orderItem);
         orderItemList.push(orderItem);
       }
-      // console.log("orders update", updateOrders);
-      // // exportUserInfo(testShipment);
-      // console.log("test-shipment", testShipment);
       return orderItemList;
     },
   });
@@ -121,6 +104,7 @@ function ImportExportShipments() {
           if (files) {
             //testShipment = csvToJson(files);
             console.log("result", csvToJson(files));
+            <Link to={"/displayShipments"}>Check out shipments</Link>;
           }
         }}
       />

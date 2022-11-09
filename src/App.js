@@ -122,6 +122,16 @@ function App() {
       query: getOrganization,
       variables: { id: orgId },
     });
+
+    if (org.data.getOrganization.logo) {
+      const image = await Storage.get(org.data.getOrganization.logo);
+      org.data.getOrganization.logo = image;
+    }
+    if (org.data.getOrganization.coverMedia) {
+      const image = await Storage.get(org.data.getOrganization.coverMedia);
+      org.data.getOrganization.coverMedia = image;
+    }
+
     setOrganization({
       name: org.data.getOrganization.name,
       locationCity: org.data.getOrganization.locationCity,
