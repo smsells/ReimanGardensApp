@@ -79,7 +79,15 @@ const NoteList = () => {
         placeholder="Note description"
         value={formData.description}
       />
-      <input type="file" onChange={onChange} />
+      <label for="fileUpload" class="custom-file-upload">
+        Choose Files
+      </label>
+      <input
+        id="fileUpload"
+        type="file"
+        name="imageUpload"
+        onChange={onChange}
+      ></input>
       <button onClick={createNote}>Create Note</button>
       <div style={{ marginBottom: 30 }}>
         {notes.map((note) => (

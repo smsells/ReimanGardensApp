@@ -47,11 +47,11 @@ export declare class Butterfly {
   readonly id: string;
   readonly scientificName?: string | null;
   readonly commonName?: string | null;
-  readonly image?: string | null;
+  readonly image?: (string | null)[] | null;
   readonly family?: string | null;
   readonly subfamily?: string | null;
   readonly lifespan?: string | null;
-  readonly range?: string | null;
+  readonly range?: (string | null)[] | null;
   readonly hosts?: string | null;
   readonly food?: string | null;
   readonly habitat?: string | null;
@@ -94,6 +94,7 @@ export declare class Order {
   readonly arrivalDate?: string | null;
   readonly supplier?: string | null;
   readonly packingList?: (OrderItem | null)[] | null;
+  readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly organizationShipmentsId?: string | null;
@@ -111,6 +112,8 @@ export declare class OrderItem {
   readonly parasites?: number | null;
   readonly poorEmerged?: number | null;
   readonly numEmerged?: number | null;
+  readonly orgID?: string | null;
+  readonly orderID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly orderPackingListId?: string | null;
@@ -121,6 +124,7 @@ export declare class OrderItem {
 export declare class replacementCommonName {
   readonly id: string;
   readonly newName?: string | null;
+  readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<replacementCommonName, replacementCommonNameMetaData>);
@@ -131,6 +135,9 @@ export declare class Module {
   readonly id: string;
   readonly title?: string | null;
   readonly content?: string | null;
+  readonly image?: string | null;
+  readonly active?: number | null;
+  readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Module, ModuleMetaData>);
@@ -144,6 +151,7 @@ export declare class SpeciesInfo {
   readonly totalReceived?: number | null;
   readonly firstFlown?: string | null;
   readonly lastFlown?: string | null;
+  readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   readonly organizationSpeciesInfoListId?: string | null;

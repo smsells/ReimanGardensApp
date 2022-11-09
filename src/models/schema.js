@@ -99,10 +99,11 @@ export const schema = {
                 },
                 "image": {
                     "name": "image",
-                    "isArray": false,
+                    "isArray": true,
                     "type": "String",
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true
                 },
                 "family": {
                     "name": "family",
@@ -127,10 +128,11 @@ export const schema = {
                 },
                 "range": {
                     "name": "range",
-                    "isArray": false,
+                    "isArray": true,
                     "type": "String",
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true
                 },
                 "hosts": {
                     "name": "hosts",
@@ -439,6 +441,13 @@ export const schema = {
                         "associatedWith": "orderPackingListId"
                     }
                 },
+                "orgID": {
+                    "name": "orgID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -554,6 +563,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "orgID": {
+                    "name": "orgID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "orderID": {
+                    "name": "orderID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -620,6 +643,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "orgID": {
+                    "name": "orgID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -681,6 +711,27 @@ export const schema = {
                 },
                 "content": {
                     "name": "content",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "image": {
+                    "name": "image",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "active": {
+                    "name": "active",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "orgID": {
+                    "name": "orgID",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -773,6 +824,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "orgID": {
+                    "name": "orgID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -825,5 +883,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "0fc60180c4d365461f0f82b0f3f0e305"
+    "version": "3e36eea039bc388d2dd70e9a111ec066"
 };

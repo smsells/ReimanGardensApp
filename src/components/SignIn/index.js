@@ -1,15 +1,10 @@
-import { React, useState } from "react";
+import { React } from "react";
 import { Auth, API } from "aws-amplify";
-import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Authenticator } from "@aws-amplify/ui-react";
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from "../AdminButton/AdminButton";
-import AddButterfly from "../AddButterfly/AddButterfly";
-import DisplayShipments from "../DisplayShipments";
-import {
-  createOrganization as createOrgMutation,
-  deleteOrganization as deleteOrgMutation,
-} from "../../graphql/mutations";
+import { createOrganization as createOrgMutation } from "../../graphql/mutations";
 
 // import Grid from '@mui/material/Grid';
 
@@ -95,6 +90,13 @@ const SignIn = ({ onSignIn }) => {
               </Link>
               <Link to={"/notes"}>
                 <AdminButton>Add/Edit Notes</AdminButton>
+              </Link>
+            </div>
+          </div>
+          <div style={{ gridArea: "4 / 1 / span 1 / span 3" }}>
+            <div className="grid-item">
+              <Link to={"/customizePage"}>
+                <AdminButton>Customize Page</AdminButton>
               </Link>
             </div>
           </div>

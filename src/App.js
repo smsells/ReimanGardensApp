@@ -4,7 +4,7 @@ import "./App.css";
 import "@aws-amplify/ui-react/styles.css";
 //import { Authenticator, Link } from '@aws-amplify/ui-react';
 import { Auth, API } from "aws-amplify";
-//import { listNotes } from './graphql/queries';
+import { Storage } from "aws-amplify";
 import { createOrganization as createOrganizationMutation } from "./graphql/mutations";
 import { getOrganization } from ".//graphql/queries";
 
@@ -28,16 +28,41 @@ import EditButterfly from "./components/EditButterfly/EditButterfly";
 import DisplayShipments from "./components/DisplayShipments";
 import PackingList from "./components/PackingList";
 import EditShipments from "./components/EditShipments";
+import CustomizePage from "./components/CustomizePage";
 import ImportExportShipments from "./components/ImportExportShipments";
 import crypto from "crypto-js";
 
 function App() {
+  const orgId = localStorage.getItem("token");
+
+  const initialOrganizationState = {
+    name: "",
+    locationCity: "",
+    locationState: "",
+    headerColor: "",
+    sectionHeaderColor: "",
+    menuColor: "",
+    linkFontColor: "",
+    adminIconColor: "",
+    homepageBackground: "",
+    font: "",
+    logo: "",
+    coverMedia: "",
+  };
+
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
     isLoggedIn();
+    getOrg();
   }, []);
+  // console.log("Organization", organization);
+
+  const menuStyle = {
+    backgroundColor: organization.menuColor || "",
+  };
 
   /**
    * Load user-specific organization or create on if user doesn't have an organization
@@ -53,9 +78,6 @@ function App() {
           query: getOrganization,
           variables: { id: sha512Hash },
         });
-        // const res = await API.graphql({
-        //   query: listOrganizations,
-        // });
         console.log("try", res.data.getOrganization);
         if (res.data.getOrganization == null) {
           const cat = await API.graphql({
@@ -64,14 +86,6 @@ function App() {
               input: {
                 id: sha512Hash,
                 username: userName,
-                // Shipments: [
-                //   {
-                //     shipmentDate: "results.data[1][4]",
-                //     arrivalDate: "results.data[1][5]",
-                //     supplier: "results.data[1][3]",
-                //     packingList: [],
-                //   },
-                // ],
               },
             },
           });
@@ -92,21 +106,53 @@ function App() {
 
   const signOut = async () => {
     console.log("in the signoutFunction");
+    localStorage.removeItem("token");
     try {
       await Auth.signOut();
       setLoggedIn(false);
-      //right now has to be refreshed to update
-
       navigate("/");
     } catch (error) {
       console.log("error signing out " + error);
     }
+    navigate(0);
   };
+
+  async function getOrg() {
+    const org = await API.graphql({
+      query: getOrganization,
+      variables: { id: orgId },
+    });
+
+    if (org.data.getOrganization.logo) {
+      const image = await Storage.get(org.data.getOrganization.logo);
+      org.data.getOrganization.logo = image;
+    }
+    if (org.data.getOrganization.coverMedia) {
+      const image = await Storage.get(org.data.getOrganization.coverMedia);
+      org.data.getOrganization.coverMedia = image;
+    }
+
+    setOrganization({
+      name: org.data.getOrganization.name,
+      locationCity: org.data.getOrganization.locationCity,
+      locationState: org.data.getOrganization.locationState,
+      headerColor: org.data.getOrganization.headerColor,
+      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
+      menuColor: org.data.getOrganization.menuColor,
+      linkFontColor: org.data.getOrganization.linkFontColor,
+      adminIconColor: org.data.getOrganization.adminIconColor,
+      homepageBackground: org.data.getOrganization.homepageBackground,
+      font: org.data.getOrganization.font,
+      logo: org.data.getOrganization.logo,
+      coverMedia: org.data.getOrganization.coverMedia,
+    });
+  }
 
   //used for closing hamburger menu
   const [isMenuOpen, handleMenu] = useState(false);
 
   const handleCloseMenu = () => {
+    // navigate(0);
     handleMenu(false);
   };
 
@@ -119,11 +165,17 @@ function App() {
       <Menu
         disableAutoFocus
         right
-        style={sidebarStyle}
+        // style={menuStyle}
+        style={{ color: organization.menuColor }}
         isOpen={isMenuOpen}
         onStateChange={handleStateChange}
       >
-        <Link className="menu-link" to={"/"} onClick={() => handleCloseMenu()}>
+        <Link
+          className="menu-link"
+          style={{ color: organization.menuColor }}
+          to={"/"}
+          onClick={() => handleCloseMenu()}
+        >
           Home
         </Link>
         <Link
@@ -154,7 +206,7 @@ function App() {
         >
           Parks Around the World
         </Link>
-        {loggedIn ? (
+        {loggedIn && organization.name == null ? (
           <Link
             className="menu-link"
             onClick={() => {
@@ -173,18 +225,40 @@ function App() {
             Sign In{" "}
           </Link>
         )}
+        {loggedIn && organization.name != null ? (
+          <Link
+            className="menu-link"
+            onClick={() => {
+              signOut();
+              handleCloseMenu();
+            }}
+          >
+            Sign out
+          </Link>
+        ) : (
+          ""
+        )}
       </Menu>
 
-      <Navbar style={{ backgroundColor: "#2C678E" }} expand="lg">
+      <Navbar
+        style={{ backgroundColor: organization.headerColor || "#2C678E" }}
+        expand="lg"
+      >
         <Container>
           <Navbar.Brand href="#home" style={{ color: "#FEFAE0" }}>
-            <img src={logo} />
+            {organization.logo && <img src={organization.logo || logo} />}
           </Navbar.Brand>
         </Container>
       </Navbar>
 
-      <header className="header">
-        <h1>Welcome to Reiman Gardens</h1>
+      <header
+        className="header"
+        style={{
+          backgroundColor: organization.sectionHeaderColor || "#2C678E",
+          fontSize: organization.font + "px" || "50px",
+        }}
+      >
+        <h1>Welcome to {organization.name || "Reiman Garden"}</h1>
       </header>
       <Routes>
         <Route exact path="/" element={<Home />} />
@@ -198,10 +272,11 @@ function App() {
         <Route exact path="/gallery" element={<Gallery />} />
         <Route exact path="/parks" element={<Parks />} />
         <Route exact path="/addButterfly" element={<AddButterfly />} />
-        <Route exact path="/editButterfly" element={<EditButterfly/>} />
+        <Route exact path="/editButterfly" element={<EditButterfly />} />
         <Route exact path="/displayShipments" element={<DisplayShipments />} />
         <Route exact path="/packingList" element={<PackingList />} />
         <Route exact path="/editShipment" element={<EditShipments />} />
+        <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route
           exact
           path="/importExportShipments"
