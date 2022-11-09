@@ -14,11 +14,11 @@ type Butterfly @model @auth(rules: [{ allow: public }]) {
   id: ID!
   scientificName: String
   commonName: String
-  image: String
+  image: [String]
   family: String
   subfamily: String
   lifespan: String
-  range: String
+  range: [String]
   hosts: String
   food: String
   habitat: String
@@ -50,6 +50,7 @@ type Organization @model @auth(rules: [{ allow: public }]) {
 type replacementCommonName @model @auth(rules: [{ allow: public }]) {
   buttery: Butterfly
   newName: String
+  orgID: String
 }
 
 type Order @model @auth(rules: [{ allow: public }]) {
@@ -58,6 +59,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
   arrivalDate: String
   supplier: String
   packingList: [OrderItem] @hasMany
+  orgID: String
 }
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {
@@ -69,10 +71,15 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
   parasites: Int
   poorEmerged: Int
   numEmerged: Int
+  orgID: String
+  orderID: String
 }
 type Module @model @auth(rules: [{ allow: public }]) {
   title: String
   content: String
+  image: String
+  active: Int
+  orgID: String
 }
 type SpeciesInfo @model @auth(rules: [{ allow: public }]) {
   name: String
@@ -80,4 +87,5 @@ type SpeciesInfo @model @auth(rules: [{ allow: public }]) {
   totalReceived: Int
   firstFlown: String
   lastFlown: String
+  orgID: String
 }
