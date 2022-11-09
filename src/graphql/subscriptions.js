@@ -119,6 +119,7 @@ export const onCreateOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -147,6 +148,7 @@ export const onCreateOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -163,6 +165,9 @@ export const onCreateOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -170,6 +175,9 @@ export const onCreateOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -181,6 +189,7 @@ export const onCreateOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -207,6 +216,7 @@ export const onUpdateOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -235,6 +245,7 @@ export const onUpdateOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -251,6 +262,9 @@ export const onUpdateOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -258,6 +272,9 @@ export const onUpdateOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -269,6 +286,7 @@ export const onUpdateOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -295,6 +313,7 @@ export const onDeleteOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -323,6 +342,7 @@ export const onDeleteOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -339,6 +359,9 @@ export const onDeleteOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -346,6 +369,9 @@ export const onDeleteOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -357,6 +383,7 @@ export const onDeleteOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -393,6 +420,7 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -422,6 +450,7 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -451,6 +480,7 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -474,6 +504,8 @@ export const onCreateOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -481,6 +513,7 @@ export const onCreateOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -505,6 +538,8 @@ export const onUpdateOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -512,6 +547,7 @@ export const onUpdateOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -536,6 +572,8 @@ export const onDeleteOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -543,6 +581,7 @@ export const onDeleteOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -561,6 +600,8 @@ export const onCreateOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
@@ -579,6 +620,8 @@ export const onUpdateOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
@@ -597,6 +640,8 @@ export const onDeleteOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
@@ -609,6 +654,9 @@ export const onCreateModule = /* GraphQL */ `
     onCreateModule {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -620,6 +668,9 @@ export const onUpdateModule = /* GraphQL */ `
     onUpdateModule {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -631,6 +682,9 @@ export const onDeleteModule = /* GraphQL */ `
     onDeleteModule {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -645,6 +699,7 @@ export const onCreateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt
@@ -660,6 +715,7 @@ export const onUpdateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt
@@ -675,6 +731,7 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt

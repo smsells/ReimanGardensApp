@@ -98,6 +98,7 @@ export const getOrganization = /* GraphQL */ `
           shipmentDate
           arrivalDate
           supplier
+          orgID
           id
           createdAt
           updatedAt
@@ -126,6 +127,7 @@ export const getOrganization = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -142,6 +144,9 @@ export const getOrganization = /* GraphQL */ `
       activeModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -149,6 +154,9 @@ export const getOrganization = /* GraphQL */ `
       inactiveModules {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -160,6 +168,7 @@ export const getOrganization = /* GraphQL */ `
           totalReceived
           firstFlown
           lastFlown
+          orgID
           id
           createdAt
           updatedAt
@@ -190,6 +199,7 @@ export const listOrganizations = /* GraphQL */ `
         }
         commonNameList {
           newName
+          orgID
           id
           createdAt
           updatedAt
@@ -206,6 +216,9 @@ export const listOrganizations = /* GraphQL */ `
         activeModules {
           title
           content
+          image
+          active
+          orgID
           id
           createdAt
           updatedAt
@@ -213,6 +226,9 @@ export const listOrganizations = /* GraphQL */ `
         inactiveModules {
           title
           content
+          image
+          active
+          orgID
           id
           createdAt
           updatedAt
@@ -251,6 +267,7 @@ export const getReplacementCommonName = /* GraphQL */ `
         updatedAt
       }
       newName
+      orgID
       id
       createdAt
       updatedAt
@@ -289,6 +306,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
           updatedAt
         }
         newName
+        orgID
         id
         createdAt
         updatedAt
@@ -314,6 +332,8 @@ export const getOrder = /* GraphQL */ `
           parasites
           poorEmerged
           numEmerged
+          orgID
+          orderID
           id
           createdAt
           updatedAt
@@ -321,6 +341,7 @@ export const getOrder = /* GraphQL */ `
         }
         nextToken
       }
+      orgID
       id
       createdAt
       updatedAt
@@ -343,6 +364,7 @@ export const listOrders = /* GraphQL */ `
         packingList {
           nextToken
         }
+        orgID
         id
         createdAt
         updatedAt
@@ -363,6 +385,8 @@ export const getOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      orgID
+      orderID
       id
       createdAt
       updatedAt
@@ -386,6 +410,8 @@ export const listOrderItems = /* GraphQL */ `
         parasites
         poorEmerged
         numEmerged
+        orgID
+        orderID
         id
         createdAt
         updatedAt
@@ -400,6 +426,9 @@ export const getModule = /* GraphQL */ `
     getModule(id: $id) {
       title
       content
+      image
+      active
+      orgID
       id
       createdAt
       updatedAt
@@ -416,6 +445,9 @@ export const listModules = /* GraphQL */ `
       items {
         title
         content
+        image
+        active
+        orgID
         id
         createdAt
         updatedAt
@@ -432,6 +464,7 @@ export const getSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      orgID
       id
       createdAt
       updatedAt
@@ -452,6 +485,7 @@ export const listSpeciesInfos = /* GraphQL */ `
         totalReceived
         firstFlown
         lastFlown
+        orgID
         id
         createdAt
         updatedAt
