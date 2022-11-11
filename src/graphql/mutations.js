@@ -66,7 +66,6 @@ export const createButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -92,7 +91,6 @@ export const updateButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -118,7 +116,6 @@ export const deleteButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -147,32 +144,6 @@ export const createOrganization = /* GraphQL */ `
           organizationShipmentsId
         }
         nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
       }
       headerColor
       sectionHeaderColor
@@ -248,32 +219,6 @@ export const updateOrganization = /* GraphQL */ `
         }
         nextToken
       }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -348,32 +293,6 @@ export const deleteOrganization = /* GraphQL */ `
         }
         nextToken
       }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -430,7 +349,7 @@ export const createReplacementCommonName = /* GraphQL */ `
     $condition: ModelReplacementCommonNameConditionInput
   ) {
     createReplacementCommonName(input: $input, condition: $condition) {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -445,7 +364,6 @@ export const createReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -454,6 +372,7 @@ export const createReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -463,7 +382,7 @@ export const updateReplacementCommonName = /* GraphQL */ `
     $condition: ModelReplacementCommonNameConditionInput
   ) {
     updateReplacementCommonName(input: $input, condition: $condition) {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -478,7 +397,6 @@ export const updateReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -487,6 +405,7 @@ export const updateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -496,7 +415,7 @@ export const deleteReplacementCommonName = /* GraphQL */ `
     $condition: ModelReplacementCommonNameConditionInput
   ) {
     deleteReplacementCommonName(input: $input, condition: $condition) {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -511,7 +430,6 @@ export const deleteReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -520,6 +438,7 @@ export const deleteReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -808,6 +727,48 @@ export const deleteSpeciesInfo = /* GraphQL */ `
       createdAt
       updatedAt
       organizationSpeciesInfoListId
+    }
+  }
+`;
+export const createImage = /* GraphQL */ `
+  mutation CreateImage(
+    $input: CreateImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    createImage(input: $input, condition: $condition) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateImage = /* GraphQL */ `
+  mutation UpdateImage(
+    $input: UpdateImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    updateImage(input: $input, condition: $condition) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteImage = /* GraphQL */ `
+  mutation DeleteImage(
+    $input: DeleteImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    deleteImage(input: $input, condition: $condition) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
     }
   }
 `;

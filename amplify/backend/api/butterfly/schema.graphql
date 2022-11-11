@@ -33,7 +33,7 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   locationCity: String
   locationState: String
   Shipments: [Order] @hasMany
-  commonNameList: [replacementCommonName]
+  
   headerColor: String
   sectionHeaderColor: String
   menuColor: String

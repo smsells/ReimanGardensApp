@@ -11,18 +11,7 @@ import { Navigate, useNavigate, createSearchParams, Link} from 'react-router-dom
 const DisplayShipments = () =>{
 
 const navigate = useNavigate();
-  function handleEdit(id, e){
-    console.log(id);
-    navigate({
-      pathname: "/editShipment",
-      search: createSearchParams({
-        id: id
-      }).toString()
 
-    });
-   
-
-  }
 
    function handlePackingList(id, e){
     console.log(id);
@@ -57,9 +46,12 @@ const navigate = useNavigate();
       Auth.currentAuthenticatedUser().then(async(user) =>{
         var usernameToGet = user.username;
         console.log("Username: "+usernameToGet);
+        let filter = {
+          username: {eq: usernameToGet},
+        }
         const apiData = await API.graphql({
-           query: getOrganization,
-           variables:  {username: {usernameToGet} },
+           query: listOrganizations,
+           variables:  {filter: filter },
           });
         //check what theyre called lol
         console.log("Here's what the query returned: "+JSON.stringify(apiData));
@@ -67,38 +59,36 @@ const navigate = useNavigate();
           console.log("its null");
         }
         
-        const organizationFromAPI = apiData.data.getOrganizations.items;
-        const organizationID = organizationFromAPI.id;
+        const organizationFromAPI = apiData.data.listOrganizations.items;
+        const organizationID = organizationFromAPI[0].id;
+        console.log("Organization ID: "+organizationID);
         //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
         //There should be only 1 organization so 
         //const shipmentsFromAPI = organizationsFromAPI.Shipments;
+        let filterShip = {
+          orgID: {eq: organizationID},
+        }
         const shipmentsFromID = await API.graphql({
           query: listOrders,
-          variables: {orgID: {organizationID}},
+          variables: {filter: filterShip},
         });
-        const shipmentsFromAPI = {
-          shipments: [
-            { orderNumber: "1",
-            shipmentDate: "1/1/2022",
-            arrivalDate: "1/1/2022",
-            supplier: "Butterfly Inc",
-            ID: "12"
-          }
-          ]
-         
+        console.log("Here's what the query returned (shipment): "+JSON.stringify(shipmentsFromID));
 
-        }
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
+        var orders = shipmentsFromID.data.listOrders.items;
+        console.log("Here is what is in the array:  "+JSON.stringify(orders)); 
+        var result = [];
+        for(var i in orders)
+          result.push([i, orders[i]]);
 
-         var data = shipmentsFromAPI.shipments.map(element =>{
+         var data = orders.map(element =>{
           return(
             <tr>
               <td>{element.orderNumber}</td>
               <td>{element.shipmentDate}</td>
               <td>{element.arrivalDate}</td>
               <td>{element.supplier}</td>
-              <td> <button onClick={handleEdit.bind(this, element.ID)}> Edit </button></td>
-              <td> <button  onClick={handlePackingList.bind(this,element.ID)}> Packing List </button></td>
+              <td> <button  onClick={handlePackingList.bind(this,element.id)}> Packing List </button></td>
             </tr>
           )
         })
@@ -138,7 +128,6 @@ const navigate = useNavigate();
                 <th>Shipment Date</th>
                 <th>Arrival Date</th>
                 <th>Supplier</th>
-                <th>Edit</th>
                  
                 <th>View More</th>
                 

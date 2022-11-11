@@ -49,7 +49,6 @@ export const getButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -77,7 +76,6 @@ export const listButterflies = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -105,32 +103,6 @@ export const getOrganization = /* GraphQL */ `
           organizationShipmentsId
         }
         nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
       }
       headerColor
       sectionHeaderColor
@@ -197,13 +169,6 @@ export const listOrganizations = /* GraphQL */ `
         Shipments {
           nextToken
         }
-        commonNameList {
-          newName
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
         headerColor
         sectionHeaderColor
         menuColor
@@ -247,7 +212,7 @@ export const listOrganizations = /* GraphQL */ `
 export const getReplacementCommonName = /* GraphQL */ `
   query GetReplacementCommonName($id: ID!) {
     getReplacementCommonName(id: $id) {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -262,7 +227,6 @@ export const getReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -271,6 +235,7 @@ export const getReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -286,7 +251,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        buttery {
+        butterfly {
           id
           scientificName
           commonName
@@ -301,7 +266,6 @@ export const listReplacementCommonNames = /* GraphQL */ `
           flights
           history
           funFact
-          etymology
           createdAt
           updatedAt
         }
@@ -310,6 +274,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
         id
         createdAt
         updatedAt
+        replacementCommonNameButterflyId
       }
       nextToken
     }
@@ -490,6 +455,35 @@ export const listSpeciesInfos = /* GraphQL */ `
         createdAt
         updatedAt
         organizationSpeciesInfoListId
+      }
+      nextToken
+    }
+  }
+`;
+export const getImage = /* GraphQL */ `
+  query GetImage($id: ID!) {
+    getImage(id: $id) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listImages = /* GraphQL */ `
+  query ListImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        butterflyName
+        imageAddress
+        createdAt
+        updatedAt
       }
       nextToken
     }

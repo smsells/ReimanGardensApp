@@ -54,7 +54,6 @@ export const onCreateButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -77,7 +76,6 @@ export const onUpdateButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -100,7 +98,6 @@ export const onDeleteButterfly = /* GraphQL */ `
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -126,32 +123,6 @@ export const onCreateOrganization = /* GraphQL */ `
           organizationShipmentsId
         }
         nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
       }
       headerColor
       sectionHeaderColor
@@ -224,32 +195,6 @@ export const onUpdateOrganization = /* GraphQL */ `
         }
         nextToken
       }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -321,32 +266,6 @@ export const onDeleteOrganization = /* GraphQL */ `
         }
         nextToken
       }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          etymology
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -400,7 +319,7 @@ export const onDeleteOrganization = /* GraphQL */ `
 export const onCreateReplacementCommonName = /* GraphQL */ `
   subscription OnCreateReplacementCommonName {
     onCreateReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -415,7 +334,6 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -424,13 +342,14 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
 export const onUpdateReplacementCommonName = /* GraphQL */ `
   subscription OnUpdateReplacementCommonName {
     onUpdateReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -445,7 +364,6 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -454,13 +372,14 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
 export const onDeleteReplacementCommonName = /* GraphQL */ `
   subscription OnDeleteReplacementCommonName {
     onDeleteReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -475,7 +394,6 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -484,6 +402,7 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -736,6 +655,39 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       createdAt
       updatedAt
       organizationSpeciesInfoListId
+    }
+  }
+`;
+export const onCreateImage = /* GraphQL */ `
+  subscription OnCreateImage {
+    onCreateImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateImage = /* GraphQL */ `
+  subscription OnUpdateImage {
+    onUpdateImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteImage = /* GraphQL */ `
+  subscription OnDeleteImage {
+    onDeleteImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
     }
   }
 `;
