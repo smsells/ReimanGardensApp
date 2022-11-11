@@ -10,7 +10,7 @@ const EditShipments = () =>{
     console.log(searchparams.get("id")+ " in EditShipments");
     const [showForm, setShowForm]=useState(false);
 
-    const handleEdit = useCallback((species, numReceived, numEmerged, damagedInTransit, diseased, parasites, poorEmerged, numEmerged, ID)=>{
+    const handleEdit = useCallback((species, numReceived, emergedInTransit, damagedInTransit, diseased, parasites, poorEmerged, numEmerged, ID)=>{
 
 
     })

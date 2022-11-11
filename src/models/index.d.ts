@@ -32,6 +32,10 @@ type SpeciesInfoMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type ImageMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class Note {
   readonly id: string;
   readonly name: string;
@@ -47,11 +51,11 @@ export declare class Butterfly {
   readonly id: string;
   readonly scientificName?: string | null;
   readonly commonName?: string | null;
-  readonly image?: (string | null)[] | null;
+  readonly image?: string | null;
   readonly family?: string | null;
   readonly subfamily?: string | null;
   readonly lifespan?: string | null;
-  readonly range?: (string | null)[] | null;
+  readonly range?: string | null;
   readonly hosts?: string | null;
   readonly food?: string | null;
   readonly habitat?: string | null;
@@ -123,10 +127,12 @@ export declare class OrderItem {
 
 export declare class replacementCommonName {
   readonly id: string;
+  readonly butterfly?: Butterfly | null;
   readonly newName?: string | null;
   readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
+  readonly replacementCommonNameButterflyId?: string | null;
   constructor(init: ModelInit<replacementCommonName, replacementCommonNameMetaData>);
   static copyOf(source: replacementCommonName, mutator: (draft: MutableModel<replacementCommonName, replacementCommonNameMetaData>) => MutableModel<replacementCommonName, replacementCommonNameMetaData> | void): replacementCommonName;
 }
@@ -157,4 +163,14 @@ export declare class SpeciesInfo {
   readonly organizationSpeciesInfoListId?: string | null;
   constructor(init: ModelInit<SpeciesInfo, SpeciesInfoMetaData>);
   static copyOf(source: SpeciesInfo, mutator: (draft: MutableModel<SpeciesInfo, SpeciesInfoMetaData>) => MutableModel<SpeciesInfo, SpeciesInfoMetaData> | void): SpeciesInfo;
+}
+
+export declare class Image {
+  readonly id: string;
+  readonly butterflyName?: string | null;
+  readonly imageAddress?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<Image, ImageMetaData>);
+  static copyOf(source: Image, mutator: (draft: MutableModel<Image, ImageMetaData>) => MutableModel<Image, ImageMetaData> | void): Image;
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../App.css';
 import { API, Auth } from 'aws-amplify';
-import { listOrganizations } from '../../graphql/queries';
+import { listOrganizations, getOrganization, listOrders} from '../../graphql/queries';
 //import { Storage} from 'aws-amplify';
 import Table from 'react-bootstrap/Table';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -55,18 +55,27 @@ const navigate = useNavigate();
       
     async function fetchShipments() {
       Auth.currentAuthenticatedUser().then(async(user) =>{
-        var username = user.username;
-        console.log("Username: "+username);
-        const apiData = await API.graphql({ query: listOrganizations });
+        var usernameToGet = user.username;
+        console.log("Username: "+usernameToGet);
+        const apiData = await API.graphql({
+           query: getOrganization,
+           variables:  {username: {usernameToGet} },
+          });
         //check what theyre called lol
         console.log("Here's what the query returned: "+JSON.stringify(apiData));
         if(apiData==null){
           console.log("its null");
         }
-        const organizationsFromAPI = apiData.data.listOrganizations.items;
+        
+        const organizationFromAPI = apiData.data.getOrganizations.items;
+        const organizationID = organizationFromAPI.id;
         //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
         //There should be only 1 organization so 
         //const shipmentsFromAPI = organizationsFromAPI.Shipments;
+        const shipmentsFromID = await API.graphql({
+          query: listOrders,
+          variables: {orgID: {organizationID}},
+        });
         const shipmentsFromAPI = {
           shipments: [
             { orderNumber: "1",

@@ -4,7 +4,7 @@ import { schema } from './schema';
 
 
 
-const { Note, Butterfly, Organization, Order, OrderItem, replacementCommonName, Module, SpeciesInfo } = initSchema(schema);
+const { Note, Butterfly, Organization, Order, OrderItem, replacementCommonName, Module, SpeciesInfo, Image } = initSchema(schema);
 
 export {
   Note,
@@ -14,5 +14,6 @@ export {
   OrderItem,
   replacementCommonName,
   Module,
-  SpeciesInfo
+  SpeciesInfo,
+  Image
 };
