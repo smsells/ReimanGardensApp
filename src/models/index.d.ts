@@ -51,7 +51,10 @@ export declare class Butterfly {
   readonly id: string;
   readonly scientificName?: string | null;
   readonly commonName?: string | null;
+<<<<<<< HEAD
   readonly image?: string | null;
+=======
+>>>>>>> 335e95f48b54b5a3c6bb3b9862ccd96adace2efb
   readonly family?: string | null;
   readonly subfamily?: string | null;
   readonly lifespan?: string | null;
@@ -89,6 +92,40 @@ export declare class Organization {
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Organization, OrganizationMetaData>);
   static copyOf(source: Organization, mutator: (draft: MutableModel<Organization, OrganizationMetaData>) => MutableModel<Organization, OrganizationMetaData> | void): Organization;
+}
+
+export declare class Order {
+  readonly id: string;
+  readonly orderNumber?: number | null;
+  readonly shipmentDate?: string | null;
+  readonly arrivalDate?: string | null;
+  readonly supplier?: string | null;
+  readonly packingList?: (OrderItem | null)[] | null;
+  readonly orgID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly organizationShipmentsId?: string | null;
+  constructor(init: ModelInit<Order, OrderMetaData>);
+  static copyOf(source: Order, mutator: (draft: MutableModel<Order, OrderMetaData>) => MutableModel<Order, OrderMetaData> | void): Order;
+}
+
+export declare class OrderItem {
+  readonly id: string;
+  readonly species?: string | null;
+  readonly numReceived?: number | null;
+  readonly emergedInTransit?: number | null;
+  readonly damagedInTransit?: number | null;
+  readonly diseased?: number | null;
+  readonly parasites?: number | null;
+  readonly poorEmerged?: number | null;
+  readonly numEmerged?: number | null;
+  readonly orgID?: string | null;
+  readonly orderID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  readonly orderPackingListId?: string | null;
+  constructor(init: ModelInit<OrderItem, OrderItemMetaData>);
+  static copyOf(source: OrderItem, mutator: (draft: MutableModel<OrderItem, OrderItemMetaData>) => MutableModel<OrderItem, OrderItemMetaData> | void): OrderItem;
 }
 
 export declare class Order {
