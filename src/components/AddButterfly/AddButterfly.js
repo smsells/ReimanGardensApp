@@ -15,8 +15,6 @@ import { listButterflies } from '../../graphql/queries';
 
 const AddButterfly = () => {
 
-    var butterflyImages = [];
-
     var butterflyObject;
 
     const initialButterflyObjectState = {
@@ -70,6 +68,7 @@ const AddButterfly = () => {
 
     //uploading images
     async function handleFileEvent(e) {
+        var temp = [];
         if (!e.target.files[0]) return
         for (var i = 0; i < e.target.files.length; i++) {
             const file = e.target.files[i];
@@ -78,10 +77,11 @@ const AddButterfly = () => {
                 butterflyName: scientificName,
                 imageAddress: file.name
             }
-            butterflyImages.push(tempObj);
+            // displayImage.push(tempObj);
+            temp.push(tempObj)
         }
-        setDisplayImage(butterflyImages);
-        console.log(butterflyImages);
+        setDisplayImage(temp);
+        console.log(displayImage);
 
         fetchButterflies();
     };
@@ -131,10 +131,6 @@ const AddButterfly = () => {
         }
         console.log(butterflyObject);
 
-        //make sure all images have correct scientific name assigned
-        for (var j = 0; j < butterflyImages.length; j++) {
-            butterflyImages[j].butterflyName = scientificName;
-        }
         createButterfly();
         navigate('/signin');
     };
@@ -153,16 +149,14 @@ const AddButterfly = () => {
             console.log("butterfly creation error", error);
         }
 
-
-        if (!butterflyImages[0]) return;
-        //await API.graphql({ query: createImageMutation, variables: { input: butterflyImages } });
-        for (var i = 0; i < butterflyImages.length; i++) {
-            await API.graphql({ query: createImageMutation, variables: { input: butterflyImages[i] } });
-            const image = await Storage.get(butterflyImages[i]);
-            butterflyImages[i].imageAddress = image;
+        if (!displayImage[0]) return;
+        for (var i = 0; i < displayImage.length; i++) {
+            await API.graphql({ query: createImageMutation, variables: { input: displayImage[i] } });
+            const image = await Storage.get(displayImage[i]);
+            displayImage[i].imageAddress = image;
         }
         console.log("uploading images...");
-        butterflyImages = [];
+        setDisplayImage([]);
 
     }
 
@@ -220,7 +214,7 @@ const AddButterfly = () => {
                     <label>Host Plant</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <input type="text" name="hostPlant" onChange={(e) => setHostPlant(e.target.value)} />
+                    <input type="textarea" name="hostPlant" onChange={(e) => setHostPlant(e.target.value)} />
                 </Grid>
             </Grid>
             <Grid container spacing={1} direction="row" alignItems="center" justifyContent="center" rowSpacing={2}>

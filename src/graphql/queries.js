@@ -197,6 +197,13 @@ export const listOrganizations = /* GraphQL */ `
         Shipments {
           nextToken
         }
+        commonNameList {
+          newName
+          orgID
+          id
+          createdAt
+          updatedAt
+        }
         headerColor
         sectionHeaderColor
         menuColor
@@ -264,7 +271,6 @@ export const getReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      replacementCommonNameButterflyId
     }
   }
 `;
@@ -304,7 +310,6 @@ export const listReplacementCommonNames = /* GraphQL */ `
         id
         createdAt
         updatedAt
-        replacementCommonNameButterflyId
       }
       nextToken
     }

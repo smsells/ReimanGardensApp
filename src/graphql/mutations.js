@@ -454,7 +454,6 @@ export const createReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      replacementCommonNameButterflyId
     }
   }
 `;
@@ -488,7 +487,6 @@ export const updateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      replacementCommonNameButterflyId
     }
   }
 `;
@@ -522,7 +520,6 @@ export const deleteReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      replacementCommonNameButterflyId
     }
   }
 `;
