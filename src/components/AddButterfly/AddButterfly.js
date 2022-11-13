@@ -15,7 +15,7 @@ import { listButterflies } from '../../graphql/queries';
 
 const AddButterfly = () => {
 
-    var butterflyImages = new Array();
+    var butterflyImages = [];
 
     var butterflyObject;
 
@@ -49,6 +49,8 @@ const AddButterfly = () => {
     const [food, setFood] = useState("");
     const [flightInfo, setFlightInfo] = useState("");
     const [funFacts, setFunFacts] = useState("");
+    //used for displaying file names after upload
+    const [displayImage, setDisplayImage] = useState([]);
     //for species range checklist
     const [checkedState, setCheckedState] = useState(
         new Array(speciesRangeList.length).fill(false)
@@ -78,7 +80,9 @@ const AddButterfly = () => {
             }
             butterflyImages.push(tempObj);
         }
+        setDisplayImage(butterflyImages);
         console.log(butterflyImages);
+
         fetchButterflies();
     };
 
@@ -102,9 +106,9 @@ const AddButterfly = () => {
     const toJson = function (event) {
         event.preventDefault();
         //convert check box values into array of locations
-        var range = new Array();
+        var range = [];
         for (var i = 0; i < speciesRangeList.length; i++) {
-            if (checkedState[i] == true) {
+            if (checkedState[i] === true) {
                 range.push(speciesRangeList[i].location);
             }
         }
@@ -128,8 +132,8 @@ const AddButterfly = () => {
         console.log(butterflyObject);
 
         //make sure all images have correct scientific name assigned
-        for (var i = 0; i < butterflyImages.length; i++) {
-            butterflyImages[i].butterflyName = scientificName;
+        for (var j = 0; j < butterflyImages.length; j++) {
+            butterflyImages[j].butterflyName = scientificName;
         }
         createButterfly();
         navigate('/signin');
@@ -300,16 +304,16 @@ const AddButterfly = () => {
                         Choose Files
                         <input multiple type="file" name="imageUpload" onChange={handleFileEvent}></input>
                     </label>
-                    <label>
-                        {butterflyImages.map((file, index) => {
-                            return (
-                                <div key={index}>
-                                    {file.imageAddress}
-                                </div>
-                            );
-                        })}
-                    </label>
                 </Grid>
+                {displayImage.map((image) => {
+                    return (
+                        <Grid item xs={12}>
+                            <label key={image.imageAddress}>
+                                {image.imageAddress}
+                            </label>
+                        </Grid>
+                    );
+                })}
             </Grid>
             <br />
             <button className="add-form-button" type="submit" value="Submit" onClick={toJson}>Submit</button>
