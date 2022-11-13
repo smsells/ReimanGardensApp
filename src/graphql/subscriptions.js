@@ -48,13 +48,13 @@ export const onCreateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -71,13 +71,13 @@ export const onUpdateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -94,13 +94,13 @@ export const onDeleteButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
       flights
       history
       funFact
-      etymology
       createdAt
       updatedAt
     }
@@ -128,7 +128,7 @@ export const onCreateOrganization = /* GraphQL */ `
         nextToken
       }
       commonNameList {
-        buttery {
+        butterfly {
           id
           scientificName
           commonName
@@ -137,13 +137,13 @@ export const onCreateOrganization = /* GraphQL */ `
           subfamily
           lifespan
           range
+          etymology
           hosts
           food
           habitat
           flights
           history
           funFact
-          etymology
           createdAt
           updatedAt
         }
@@ -225,7 +225,7 @@ export const onUpdateOrganization = /* GraphQL */ `
         nextToken
       }
       commonNameList {
-        buttery {
+        butterfly {
           id
           scientificName
           commonName
@@ -234,13 +234,13 @@ export const onUpdateOrganization = /* GraphQL */ `
           subfamily
           lifespan
           range
+          etymology
           hosts
           food
           habitat
           flights
           history
           funFact
-          etymology
           createdAt
           updatedAt
         }
@@ -322,7 +322,7 @@ export const onDeleteOrganization = /* GraphQL */ `
         nextToken
       }
       commonNameList {
-        buttery {
+        butterfly {
           id
           scientificName
           commonName
@@ -331,13 +331,13 @@ export const onDeleteOrganization = /* GraphQL */ `
           subfamily
           lifespan
           range
+          etymology
           hosts
           food
           habitat
           flights
           history
           funFact
-          etymology
           createdAt
           updatedAt
         }
@@ -400,7 +400,7 @@ export const onDeleteOrganization = /* GraphQL */ `
 export const onCreateReplacementCommonName = /* GraphQL */ `
   subscription OnCreateReplacementCommonName {
     onCreateReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -409,13 +409,13 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -430,7 +430,7 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
 export const onUpdateReplacementCommonName = /* GraphQL */ `
   subscription OnUpdateReplacementCommonName {
     onUpdateReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -439,13 +439,13 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -460,7 +460,7 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
 export const onDeleteReplacementCommonName = /* GraphQL */ `
   subscription OnDeleteReplacementCommonName {
     onDeleteReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -469,13 +469,13 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
         flights
         history
         funFact
-        etymology
         createdAt
         updatedAt
       }
@@ -736,6 +736,39 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       createdAt
       updatedAt
       organizationSpeciesInfoListId
+    }
+  }
+`;
+export const onCreateImage = /* GraphQL */ `
+  subscription OnCreateImage {
+    onCreateImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateImage = /* GraphQL */ `
+  subscription OnUpdateImage {
+    onUpdateImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteImage = /* GraphQL */ `
+  subscription OnDeleteImage {
+    onDeleteImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
     }
   }
 `;

@@ -8,23 +8,58 @@ import Grid from '@material-ui/core/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
-import { createButterfly as createButterflyMutation } from '../../graphql/mutations';
+import { createButterfly as createButterflyMutation, createImage as createImageMutation } from '../../graphql/mutations';
 import "./AddButterfly.css";
 import { listButterflies } from '../../graphql/queries';
 
 
 const AddButterfly = () => {
 
-    var butterflyObject;
-    const navigate = useNavigate();
+    var butterflyImages = new Array();
 
+    var butterflyObject;
+
+    const initialButterflyObjectState = {
+        scientificName: "",
+        commonName: "",
+        image: "",
+        family: "",
+        subfamily: "",
+        lifespan: "",
+        range: "",
+        hosts: "",
+        food: "",
+        habitat: "",
+        etymology: "",
+        flights: "",
+        history: "",
+        funFact: ""
+    };
+
+    const navigate = useNavigate();
+    const [scientificName, setScientificName] = useState("");
+    const [commonName, setCommonName] = useState("");
+    const [butterflyFamily, setButterflyFamily] = useState("");
+    const [butterflySubFamily, setButterflySubFamily] = useState("");
+    const [lifespan, setLifespan] = useState("");
+    const [hostPlant, setHostPlant] = useState("");
+    const [etymology, setEtymology] = useState("");
+    const [habitat, setHabitat] = useState("");
+    const [lifeHistory, setLifeHistory] = useState("");
+    const [food, setFood] = useState("");
+    const [flightInfo, setFlightInfo] = useState("");
+    const [funFacts, setFunFacts] = useState("");
     //for species range checklist
     const [checkedState, setCheckedState] = useState(
         new Array(speciesRangeList.length).fill(false)
     );
 
+    useEffect(() => {
+        fetchButterflies();
+    }, []);
+
     //holds states of species range checkboxes
-    const handleOnChange = (position) => {
+    const handleOnRangeChange = (position) => {
         const updatedCheckedState = checkedState.map((item, index) =>
             index === position ? !item : item
         );
@@ -32,22 +67,18 @@ const AddButterfly = () => {
     };
 
     //uploading images
-    const handleUploadFiles = files => {
-        const uploaded = [...images];
-        files.some((file) => {
-            if (uploaded.findIndex((f) => f.name === file.name) === -1) {
-                uploaded.push(file);
-            }
-        })
-        setImages(uploaded)
-    };
-
-    //uploading images
     async function handleFileEvent(e) {
         if (!e.target.files[0]) return
-        const file = e.target.files[0];
-        setImages(file.name);
-        await Storage.put(file.name, file);
+        for (var i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i];
+            await Storage.put(file.name, file);
+            var tempObj = {
+                butterflyName: scientificName,
+                imageAddress: file.name
+            }
+            butterflyImages.push(tempObj);
+        }
+        console.log(butterflyImages);
         fetchButterflies();
     };
 
@@ -56,37 +87,32 @@ const AddButterfly = () => {
             const apiData = await API.graphql(graphqlOperation(listButterflies));
             const butterfliesFromAPI = apiData.data.listButterflies.items;
             await Promise.all(butterfliesFromAPI.map(async butterfly => {
-            if (butterfly.image) {
-                const image = await Storage.get(butterfly.image);
-                butterfly.image = image;
-            }
-            console.log("butterfly", butterfly);
-            return butterfly;
+                if (butterfly.image) {
+                    const image = await Storage.get(butterfly.image);
+                    butterfly.image = image;
+                }
+                return butterfly;
             }))
-        } catch (error){
+        } catch (error) {
             console.log("error fetching", error);
         }
-        
     }
-
-    useEffect(() => {
-        fetchButterflies();
-      }, []);
 
     //converts all data to json object and submits
     const toJson = function (event) {
         event.preventDefault();
+        //convert check box values into array of locations
         var range = new Array();
         for (var i = 0; i < speciesRangeList.length; i++) {
             if (checkedState[i] == true) {
                 range.push(speciesRangeList[i].location);
             }
         }
-
+        //compile hooks into single object
         butterflyObject = {
             scientificName: scientificName,
             commonName: commonName,
-            image: images,
+            image: "",
             family: butterflyFamily,
             subfamily: butterflySubFamily,
             lifespan: lifespan,
@@ -100,52 +126,41 @@ const AddButterfly = () => {
             funFact: funFacts,
         }
         console.log(butterflyObject);
+
+        //make sure all images have correct scientific name assigned
+        for (var i = 0; i < butterflyImages.length; i++) {
+            butterflyImages[i].butterflyName = scientificName;
+        }
         createButterfly();
         navigate('/signin');
     };
 
     async function createButterfly() {
-        if (!butterflyObject.scientificName) return;
-        await API.graphql({ query: createButterflyMutation, variables: { input: butterflyObject } });
-        if (butterflyObject.image) {
-            const image = await Storage.get(butterflyObject.image);
-            butterflyObject.image = image;
-          }
-        console.log("creating...")
-        butterflyObject = initialButterflyObjectState;
+        try {
+            if (!butterflyObject.scientificName) return;
+            await API.graphql({ query: createButterflyMutation, variables: { input: butterflyObject } });
+            if (butterflyObject.image) {
+                const image = await Storage.get(butterflyObject.image);
+                butterflyObject.image = image;
+            }
+            console.log("creating butterfly...")
+            butterflyObject = initialButterflyObjectState;
+        } catch (error) {
+            console.log("butterfly creation error", error);
+        }
+
+
+        if (!butterflyImages[0]) return;
+        //await API.graphql({ query: createImageMutation, variables: { input: butterflyImages } });
+        for (var i = 0; i < butterflyImages.length; i++) {
+            await API.graphql({ query: createImageMutation, variables: { input: butterflyImages[i] } });
+            const image = await Storage.get(butterflyImages[i]);
+            butterflyImages[i].imageAddress = image;
+        }
+        console.log("uploading images...");
+        butterflyImages = [];
 
     }
-
-    const [scientificName, setScientificName] = useState("");
-    const [commonName, setCommonName] = useState("");
-    const [butterflyFamily, setButterflyFamily] = useState("");
-    const [butterflySubFamily, setButterflySubFamily] = useState("");
-    const [lifespan, setLifespan] = useState("");
-    const [hostPlant, setHostPlant] = useState("");
-    const [etymology, setEtymology] = useState("");
-    const [habitat, setHabitat] = useState("");
-    const [lifeHistory, setLifeHistory] = useState("");
-    const [food, setFood] = useState("");
-    const [flightInfo, setFlightInfo] = useState("");
-    const [funFacts, setFunFacts] = useState("");
-    const [images, setImages] = useState([]);
-
-    const initialButterflyObjectState = {
-        scientificName: "",
-        commonName: "",
-        image: "",
-        family: "",
-        subfamily: "",
-        lifespan: "",
-        range: "",
-        hosts: "",
-        food: "",
-        habitat: "",
-        etymology: etymology,
-        flights: "",
-        history: "",
-        funFact: ""
-    };
 
     return (
         <form style={{ fontSize: "x-large", backgroundColor: "rgba(222, 184, 135, 0.5)", padding: "5px" }}>
@@ -155,7 +170,7 @@ const AddButterfly = () => {
                     <label> Scientific Name </label>
                 </Grid>
                 <Grid item xs={8}>
-                    <input type="text" width={"100%"} onChange={(e) => setScientificName(e.target.value)} />
+                    <input required type="text" width={"100%"} onChange={(e) => setScientificName(e.target.value)} />
                 </Grid>
                 <Grid item xs={4}>
                     <label> Common Name </label>
@@ -213,30 +228,30 @@ const AddButterfly = () => {
                 </Grid>
                 <Grid item xs={6}>
                     <FormGroup>
-                      {speciesRangeList.map(({ location, value }, index) => {
-                        return (
-                            <FormControlLabel key={index}
-                                control={
-                                    <Checkbox
-                                        size="lg"
-                                        value={value}
-                                        checked={checkedState[index]}
-                                        onChange={() => handleOnChange(index)}
-                                        id={"checkbox-" + index}
-                                        sx={{
-                                            '&.Mui-checked': {
-                                                color: "#FEFAE0",
-                                            },
-                                        }}
-                                    />   
-                                }
-                                label={location}
+                        {speciesRangeList.map(({ location, value }, index) => {
+                            return (
+                                <FormControlLabel key={index}
+                                    control={
+                                        <Checkbox
+                                            size="lg"
+                                            value={value}
+                                            checked={checkedState[index]}
+                                            onChange={() => handleOnRangeChange(index)}
+                                            id={"checkbox-" + index}
+                                            sx={{
+                                                '&.Mui-checked': {
+                                                    color: "#FEFAE0",
+                                                },
+                                            }}
+                                        />
+                                    }
+                                    label={location}
                                 />
-                                
-                        );
-                    })}  
+
+                            );
+                        })}
                     </FormGroup>
-                    
+
 
                 </Grid>
             </Grid>
@@ -263,13 +278,13 @@ const AddButterfly = () => {
                     <label>Food</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <textarea value={food} name="food" onChange={(e) => setFood(e.target.value)}/>
+                    <textarea value={food} name="food" onChange={(e) => setFood(e.target.value)} />
                 </Grid>
                 <Grid item xs={4}>
                     <label>Flight Info</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <textarea value={flightInfo} name="flightInfo" onChange={(e) => setFlightInfo(e.target.value)}/>
+                    <textarea value={flightInfo} name="flightInfo" onChange={(e) => setFlightInfo(e.target.value)} />
                 </Grid>
                 <Grid item xs={4}>
                     <label>Fun Facts</label>
@@ -283,11 +298,20 @@ const AddButterfly = () => {
                 <Grid item xs={8}>
                     <label className='custom-file-upload'>
                         Choose Files
-                        <input type="file" name="imageUpload" onChange={handleFileEvent}></input>
+                        <input multiple type="file" name="imageUpload" onChange={handleFileEvent}></input>
+                    </label>
+                    <label>
+                        {butterflyImages.map((file, index) => {
+                            return (
+                                <div key={index}>
+                                    {file.imageAddress}
+                                </div>
+                            );
+                        })}
                     </label>
                 </Grid>
             </Grid>
-            <br/>
+            <br />
             <button className="add-form-button" type="submit" value="Submit" onClick={toJson}>Submit</button>
         </form>
     )
