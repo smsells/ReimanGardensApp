@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Form, useSearchParams } from "react-router-dom";
 import { API } from "aws-amplify";
-import { getOrder } from "../../graphql/queries";
+import { getOrder, listOrderItems } from "../../graphql/queries";
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -18,48 +18,55 @@ const PackingList = () => {
 
   //const [formData, setFormData] = useState(initialFormState);
   const [tableRows, setTableRows] = useState();
+  const [showForm, setShowForm]= useState(false);
+  const[defaultSpecies, setDefaultSpecies] = useState("");
+  const[defaultNumReceived, setDefaultNumReceived] = useState("");
+
+  const[defaultEmTransit, setDefaultEmTransit] = useState("");
+  const[defaultDamTransit, setDefaultDamTransit] = useState("");
+  const[defaultDiseased, setDefaultDiseased] = useState("");
+  const[defaultParasites, setDefaultParasites] = useState("");
+
+
 
   useEffect(() => {
     fetchShipments();
   }, []);
 
+  function handleEdit( id, species, numReceived, emergedInTransit, damagedInTransit, diseased, parasites){
+
+
+ 
+    setShowForm(current=>!current);
+    setDefaultSpecies(species);
+    setDefaultDamTransit(damagedInTransit);
+    setDefaultEmTransit(emergedInTransit);
+    setDefaultParasites(parasites);
+    setDefaultDiseased(diseased);
+    setDefaultNumReceived(numReceived);
+    
+   
+
+  }
   async function fetchShipments() {
+   
+    let filter = {
+      orderID: {eq: searchparams.get("id")},
+    }
     const apiData = await API.graphql({
-      query: getOrder,
-      variables: { id: searchparams.get("id") },
+      query: listOrderItems,
+      variables: { filter: filter},
     });
     //check what theyre called lol
     console.log("id query data: " + JSON.stringify(apiData));
-    //const packingListFromAPI = apiData.PackingList;
-    const packingListFromAPI = {
-      packingList: [
-        {
-          species: "MONARCH",
-          numReceived: 20,
-          emergedInTransit: 0,
-          damagedInTransit: 0,
-          diseased: 1,
-          parasites: 2,
-          poorEmerged: 4,
-          numEmerged: 0,
-        },
-        {
-          species: "NOT MONARCH",
-          numReceived: 20,
-          emergedInTransit: 20,
-          damagedInTransit: 12,
-          diseased: 1,
-          parasites: 2,
-          poorEmerged: 4,
-          numEmerged: 17,
-        },
-      ],
-    };
+
+    const packingListFromAPI = apiData.data.listOrderItems.items;
+    
     console.log("packing list query: " + JSON.stringify(packingListFromAPI));
     //There should be only 1 organization so
 
     //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
-    var data = packingListFromAPI.packingList.map((element) => {
+    var data = packingListFromAPI.map((element) => {
       return (
         <tr>
           <td>{element.species}</td>
@@ -68,6 +75,7 @@ const PackingList = () => {
           <td>{element.damagedInTransit}</td>
           <td>{element.diseased}</td>
           <td>{element.parasites}</td>
+          <td> <button  onClick={handleEdit.bind(this,element.id,element.species, element.numReceived, element.emergedInTransit, element.damagedInTransit, element.diseased, element.parasites)}> Edit </button></td>
         </tr>
       );
     });
@@ -93,11 +101,41 @@ const PackingList = () => {
             <th>Diseased </th>
 
             <th>Parasites</th>
+            <th>Edit</th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>
       </Table>
+      {showForm &&<><div>
+        <form>
+          Edit
+          <div>
+            <label htmlFor="species">Species</label>
+          <input type="text" name="species" id="species" defaultValue={defaultSpecies}></input>
+          <br></br>
+          <label htmlFor="numReceived">Number Received</label>
+          <input type="text" name="numReceived" id="numReceived" defaultValue={defaultNumReceived}></input>
+          <br></br>
+          <label htmlFor="emTransit">Emerged In Transit</label>
+          <input type="text" name="emTransit" id="emTransit" defaultValue={defaultEmTransit}></input>
+          <br></br>
+          <label htmlFor="damTransit">Damaged In Transit</label>
+          <input type="text" name="damTransit" id="damTransit" defaultValue={defaultDamTransit}></input>
+          <br></br>
+          <label htmlFor="diseased">Diseased</label>
+          <input type="text" name="diseased" id="diseased" defaultValue={defaultDiseased}></input>
+          <br></br>
+          <label htmlFor="parasites">Parasites</label>
+          <input type="text" name="parasites" id="parasites" defaultValue={defaultParasites}></input>
+
+          </div>
+        </form>
+        
+        <button>Submit</button>
+        </div>
+        </>}
     </div>
   );
 };
+//TODO edit orderItem with submit button
 export default PackingList;

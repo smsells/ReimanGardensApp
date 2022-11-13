@@ -99,11 +99,10 @@ export const schema = {
                 },
                 "image": {
                     "name": "image",
-                    "isArray": true,
+                    "isArray": false,
                     "type": "String",
                     "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
+                    "attributes": []
                 },
                 "family": {
                     "name": "family",
@@ -128,11 +127,10 @@ export const schema = {
                 },
                 "range": {
                     "name": "range",
-                    "isArray": true,
+                    "isArray": false,
                     "type": "String",
                     "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true
+                    "attributes": []
                 },
                 "hosts": {
                     "name": "hosts",
@@ -636,6 +634,20 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "butterfly": {
+                    "name": "butterfly",
+                    "isArray": false,
+                    "type": {
+                        "model": "Butterfly"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "replacementCommonNameButterflyId"
+                    }
+                },
                 "newName": {
                     "name": "newName",
                     "isArray": false,
@@ -665,6 +677,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
+                },
+                "replacementCommonNameButterflyId": {
+                    "name": "replacementCommonNameButterflyId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -879,9 +898,75 @@ export const schema = {
                     }
                 }
             ]
+        },
+        "Image": {
+            "name": "Image",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "butterflyName": {
+                    "name": "butterflyName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "imageAddress": {
+                    "name": "imageAddress",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "Images",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "3e36eea039bc388d2dd70e9a111ec066"
+    "version": "bd9e77730be2ed103de8241670051631"
 };

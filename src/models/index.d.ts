@@ -51,10 +51,14 @@ export declare class Butterfly {
   readonly id: string;
   readonly scientificName?: string | null;
   readonly commonName?: string | null;
+<<<<<<< HEAD
+  readonly image?: string | null;
+=======
+>>>>>>> 335e95f48b54b5a3c6bb3b9862ccd96adace2efb
   readonly family?: string | null;
   readonly subfamily?: string | null;
   readonly lifespan?: string | null;
-  readonly range?: (string | null)[] | null;
+  readonly range?: string | null;
   readonly hosts?: string | null;
   readonly food?: string | null;
   readonly habitat?: string | null;
@@ -160,10 +164,12 @@ export declare class OrderItem {
 
 export declare class replacementCommonName {
   readonly id: string;
+  readonly butterfly?: Butterfly | null;
   readonly newName?: string | null;
   readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
+  readonly replacementCommonNameButterflyId?: string | null;
   constructor(init: ModelInit<replacementCommonName, replacementCommonNameMetaData>);
   static copyOf(source: replacementCommonName, mutator: (draft: MutableModel<replacementCommonName, replacementCommonNameMetaData>) => MutableModel<replacementCommonName, replacementCommonNameMetaData> | void): replacementCommonName;
 }
