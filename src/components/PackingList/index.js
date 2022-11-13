@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Form, useSearchParams } from "react-router-dom";
-import { API } from "aws-amplify";
+import { Form, Navigate, useSearchParams } from "react-router-dom";
+import { a, API } from "aws-amplify";
 import { getOrder, listOrderItems } from "../../graphql/queries";
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { updateOrderItem } from "../../graphql/mutations";
+import { useNavigate } from "react-router-dom";
 
 const PackingList = () => {
   //Doing something similar to before except with the PackingList Object
@@ -17,15 +19,17 @@ const PackingList = () => {
   //const initialFormState = { /* Object to hold how much info we need for each form*/  }
 
   //const [formData, setFormData] = useState(initialFormState);
+  const navigate = useNavigate();
   const [tableRows, setTableRows] = useState();
   const [showForm, setShowForm]= useState(false);
-  const[defaultSpecies, setDefaultSpecies] = useState("");
-  const[defaultNumReceived, setDefaultNumReceived] = useState("");
+  const[defaultSpecies, setDefaultSpecies] = useState();
+  const[defaultNumReceived, setDefaultNumReceived] = useState();
 
-  const[defaultEmTransit, setDefaultEmTransit] = useState("");
-  const[defaultDamTransit, setDefaultDamTransit] = useState("");
-  const[defaultDiseased, setDefaultDiseased] = useState("");
-  const[defaultParasites, setDefaultParasites] = useState("");
+  const[defaultEmTransit, setDefaultEmTransit] = useState();
+  const[defaultDamTransit, setDefaultDamTransit] = useState();
+  const[defaultDiseased, setDefaultDiseased] = useState();
+  const[defaultParasites, setDefaultParasites] = useState();
+  const [defaultID, setDefaultID] = useState();
 
 
 
@@ -33,6 +37,47 @@ const PackingList = () => {
     fetchShipments();
   }, []);
 
+  async function handleSubmit(){
+    console.log("In handle Submit");
+    var diseasedInternal = document.getElementById("diseased").value;
+    var speciesInternal = document.getElementById("species").value;
+    var numEmergedInternal = document.getElementById("emTransit").value; 
+    var numDamagedInternal= document.getElementById("damTransit").value;
+    var parasitesInternal= document.getElementById("parasites").value;
+    var numReceivedInternal= document.getElementById("numReceived").value;
+    /*
+    species: String
+    numReceived: Int
+    emergedInTransit: Int
+    damagedInTransit: Int
+    diseased: Int
+    parasites: Int
+    poorEmerged: Int
+    numEmerged: Int
+    orgID: String
+    orderID: String
+    */
+    await API.graphql({
+      query: updateOrderItem,
+      variables: {
+        input: {
+          id: defaultID,
+          species: speciesInternal,
+          numReceived: numReceivedInternal,
+          emergedInTransit: numEmergedInternal,
+          damagedInTransit: numDamagedInternal,
+          diseased: diseasedInternal,
+          parasites: parasitesInternal,
+
+        },
+      },
+    });
+    console.log("after query in handleSubmit");
+    navigate(0);
+
+    
+
+  }
   function handleEdit( id, species, numReceived, emergedInTransit, damagedInTransit, diseased, parasites){
 
 
@@ -44,6 +89,8 @@ const PackingList = () => {
     setDefaultParasites(parasites);
     setDefaultDiseased(diseased);
     setDefaultNumReceived(numReceived);
+    setDefaultID(id);
+    console.log("ID from handle Edit: "+id);
     
    
 
@@ -131,11 +178,11 @@ const PackingList = () => {
           </div>
         </form>
         
-        <button>Submit</button>
+        <button onClick={handleSubmit} >Submit</button>
         </div>
         </>}
     </div>
   );
 };
-//TODO edit orderItem with submit button
+//TODO edit orderItem with submit
 export default PackingList;
