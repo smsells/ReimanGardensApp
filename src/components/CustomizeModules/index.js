@@ -169,26 +169,32 @@ const CustomizeModules = () => {
       <div className="Home">
         {modulesList.map((module) => (
           <div key={module.id}>
-            <input
-              onChange={(e) => {
-                setModules({
-                  ...modules,
-                  [module.id]: { ...module, title: e.target.value },
-                });
-              }}
-              placeholder="Title"
-              value={modules[module.id].title}
-            />
-            <input
-              onChange={(e) =>
-                setModules({
-                  ...modules,
-                  [module.id]: { ...module, content: e.target.value },
-                })
-              }
-              placeholder="Title"
-              value={modules[module.id].content}
-            />
+            <p>
+              {"Title: "}
+              <input
+                onChange={(e) => {
+                  setModules({
+                    ...modules,
+                    [module.id]: { ...module, title: e.target.value },
+                  });
+                }}
+                placeholder="Title"
+                value={modules[module.id].title}
+              />
+            </p>
+            <p>
+              {"Content: "}
+              <input
+                onChange={(e) =>
+                  setModules({
+                    ...modules,
+                    [module.id]: { ...module, content: e.target.value },
+                  })
+                }
+                placeholder="Content"
+                value={modules[module.id].content}
+              />
+            </p>
             <p>
               <label for="moduleImageUpload" class="custom-file-upload">
                 Choose Module Image
@@ -267,11 +273,15 @@ const CustomizeModules = () => {
             name="moduleImageUpload"
             onChange={onChangeNewModuleImage}
           ></input>
+          {newModule.image && (
+            <img src={newModule.image} style={{ width: 400 }} />
+          )}
         </p>
         <p>
           <input
             type="checkbox"
             id="checkboxModule"
+            checked={newModule.active == 1 ? true : false}
             onChange={newModuleActiveCheckboxHandler}
           />
           <label htmlFor="checkboxModule">Active? </label>
