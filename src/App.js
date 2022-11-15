@@ -68,6 +68,11 @@ function App() {
    * Load user-specific organization or create on if user doesn't have an organization
    */
   const isLoggedIn = () => {
+    const token = localStorage.getItem("token");
+    if (token != null) {
+      setLoggedIn(true);
+      return;
+    }
     Auth.currentAuthenticatedUser()
       .then(async (user) => {
         const userName = user.username;
@@ -206,26 +211,15 @@ function App() {
         >
           Parks Around the World
         </Link>
-        {loggedIn && organization.name == null ? (
-          <Link
-            className="menu-link"
-            onClick={() => {
-              signOut();
-              handleCloseMenu();
-            }}
-          >
-            Sign out
-          </Link>
-        ) : (
-          <Link
-            className="menu-link"
-            to="/signin"
-            onClick={() => handleCloseMenu()}
-          >
-            Sign In{" "}
-          </Link>
-        )}
-        {loggedIn && organization.name != null ? (
+
+        <Link
+          className="menu-link"
+          to="/signin"
+          onClick={() => handleCloseMenu()}
+        >
+          {loggedIn ? "Admin Panel" : "Sign In"}
+        </Link>
+        {loggedIn ? (
           <Link
             className="menu-link"
             onClick={() => {

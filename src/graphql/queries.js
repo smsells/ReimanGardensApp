@@ -43,6 +43,7 @@ export const getButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
@@ -70,6 +71,7 @@ export const listButterflies = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
@@ -90,45 +92,6 @@ export const getOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -138,41 +101,6 @@ export const getOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -191,16 +119,6 @@ export const listOrganizations = /* GraphQL */ `
         username
         locationCity
         locationState
-        Shipments {
-          nextToken
-        }
-        commonNameList {
-          newName
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
         headerColor
         sectionHeaderColor
         menuColor
@@ -210,29 +128,6 @@ export const listOrganizations = /* GraphQL */ `
         font
         logo
         coverMedia
-        activeModules {
-          title
-          content
-          image
-          active
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
-        inactiveModules {
-          title
-          content
-          image
-          active
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
-        speciesInfoList {
-          nextToken
-        }
         id
         createdAt
         updatedAt
@@ -244,7 +139,7 @@ export const listOrganizations = /* GraphQL */ `
 export const getReplacementCommonName = /* GraphQL */ `
   query GetReplacementCommonName($id: ID!) {
     getReplacementCommonName(id: $id) {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -253,6 +148,7 @@ export const getReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
@@ -282,7 +178,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
       nextToken: $nextToken
     ) {
       items {
-        buttery {
+        butterfly {
           id
           scientificName
           commonName
@@ -291,6 +187,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
           subfamily
           lifespan
           range
+          etymology
           hosts
           food
           habitat
@@ -317,30 +214,10 @@ export const getOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -356,14 +233,10 @@ export const listOrders = /* GraphQL */ `
         shipmentDate
         arrivalDate
         supplier
-        packingList {
-          nextToken
-        }
         orgID
         id
         createdAt
         updatedAt
-        organizationShipmentsId
       }
       nextToken
     }
@@ -385,7 +258,6 @@ export const getOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -410,7 +282,6 @@ export const listOrderItems = /* GraphQL */ `
         id
         createdAt
         updatedAt
-        orderPackingListId
       }
       nextToken
     }
@@ -463,7 +334,6 @@ export const getSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;
@@ -484,7 +354,35 @@ export const listSpeciesInfos = /* GraphQL */ `
         id
         createdAt
         updatedAt
-        organizationSpeciesInfoListId
+      }
+      nextToken
+    }
+  }
+`;
+export const getImage = /* GraphQL */ `
+  query GetImage($id: ID!) {
+    getImage(id: $id) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listImages = /* GraphQL */ `
+  query ListImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        butterflyName
+        imageAddress
+        createdAt
+        updatedAt
       }
       nextToken
     }

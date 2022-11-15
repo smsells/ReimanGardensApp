@@ -12,6 +12,10 @@ type OrganizationMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type replacementCommonNameMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type OrderMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
@@ -20,15 +24,15 @@ type OrderItemMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
-type replacementCommonNameMetaData = {
-  readOnlyFields: 'createdAt' | 'updatedAt';
-}
-
 type ModuleMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
 type SpeciesInfoMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type ImageMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -47,11 +51,12 @@ export declare class Butterfly {
   readonly id: string;
   readonly scientificName?: string | null;
   readonly commonName?: string | null;
-  readonly image?: (string | null)[] | null;
+  readonly image?: string | null;
   readonly family?: string | null;
   readonly subfamily?: string | null;
   readonly lifespan?: string | null;
-  readonly range?: (string | null)[] | null;
+  readonly range?: string | null;
+  readonly etymology?: string | null;
   readonly hosts?: string | null;
   readonly food?: string | null;
   readonly habitat?: string | null;
@@ -70,7 +75,6 @@ export declare class Organization {
   readonly username?: string | null;
   readonly locationCity?: string | null;
   readonly locationState?: string | null;
-  readonly Shipments?: (Order | null)[] | null;
   readonly headerColor?: string | null;
   readonly sectionHeaderColor?: string | null;
   readonly menuColor?: string | null;
@@ -80,11 +84,20 @@ export declare class Organization {
   readonly font?: string | null;
   readonly logo?: string | null;
   readonly coverMedia?: string | null;
-  readonly speciesInfoList?: (SpeciesInfo | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Organization, OrganizationMetaData>);
   static copyOf(source: Organization, mutator: (draft: MutableModel<Organization, OrganizationMetaData>) => MutableModel<Organization, OrganizationMetaData> | void): Organization;
+}
+
+export declare class replacementCommonName {
+  readonly id: string;
+  readonly newName?: string | null;
+  readonly orgID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<replacementCommonName, replacementCommonNameMetaData>);
+  static copyOf(source: replacementCommonName, mutator: (draft: MutableModel<replacementCommonName, replacementCommonNameMetaData>) => MutableModel<replacementCommonName, replacementCommonNameMetaData> | void): replacementCommonName;
 }
 
 export declare class Order {
@@ -93,11 +106,9 @@ export declare class Order {
   readonly shipmentDate?: string | null;
   readonly arrivalDate?: string | null;
   readonly supplier?: string | null;
-  readonly packingList?: (OrderItem | null)[] | null;
   readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly organizationShipmentsId?: string | null;
   constructor(init: ModelInit<Order, OrderMetaData>);
   static copyOf(source: Order, mutator: (draft: MutableModel<Order, OrderMetaData>) => MutableModel<Order, OrderMetaData> | void): Order;
 }
@@ -116,19 +127,8 @@ export declare class OrderItem {
   readonly orderID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly orderPackingListId?: string | null;
   constructor(init: ModelInit<OrderItem, OrderItemMetaData>);
   static copyOf(source: OrderItem, mutator: (draft: MutableModel<OrderItem, OrderItemMetaData>) => MutableModel<OrderItem, OrderItemMetaData> | void): OrderItem;
-}
-
-export declare class replacementCommonName {
-  readonly id: string;
-  readonly newName?: string | null;
-  readonly orgID?: string | null;
-  readonly createdAt?: string | null;
-  readonly updatedAt?: string | null;
-  constructor(init: ModelInit<replacementCommonName, replacementCommonNameMetaData>);
-  static copyOf(source: replacementCommonName, mutator: (draft: MutableModel<replacementCommonName, replacementCommonNameMetaData>) => MutableModel<replacementCommonName, replacementCommonNameMetaData> | void): replacementCommonName;
 }
 
 export declare class Module {
@@ -154,7 +154,16 @@ export declare class SpeciesInfo {
   readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
-  readonly organizationSpeciesInfoListId?: string | null;
   constructor(init: ModelInit<SpeciesInfo, SpeciesInfoMetaData>);
   static copyOf(source: SpeciesInfo, mutator: (draft: MutableModel<SpeciesInfo, SpeciesInfoMetaData>) => MutableModel<SpeciesInfo, SpeciesInfoMetaData> | void): SpeciesInfo;
+}
+
+export declare class Image {
+  readonly id: string;
+  readonly butterflyName?: string | null;
+  readonly imageAddress?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<Image, ImageMetaData>);
+  static copyOf(source: Image, mutator: (draft: MutableModel<Image, ImageMetaData>) => MutableModel<Image, ImageMetaData> | void): Image;
 }

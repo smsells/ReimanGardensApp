@@ -48,6 +48,7 @@ export const onCreateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
@@ -70,6 +71,7 @@ export const onUpdateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
@@ -92,6 +94,7 @@ export const onDeleteButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
+      etymology
       hosts
       food
       habitat
@@ -110,45 +113,6 @@ export const onCreateOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -158,41 +122,6 @@ export const onCreateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -206,45 +135,6 @@ export const onUpdateOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -254,41 +144,6 @@ export const onUpdateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -302,45 +157,6 @@ export const onDeleteOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        buttery {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -350,41 +166,6 @@ export const onDeleteOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -394,7 +175,7 @@ export const onDeleteOrganization = /* GraphQL */ `
 export const onCreateReplacementCommonName = /* GraphQL */ `
   subscription OnCreateReplacementCommonName {
     onCreateReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -403,6 +184,7 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
@@ -423,7 +205,7 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
 export const onUpdateReplacementCommonName = /* GraphQL */ `
   subscription OnUpdateReplacementCommonName {
     onUpdateReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -432,6 +214,7 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
@@ -452,7 +235,7 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
 export const onDeleteReplacementCommonName = /* GraphQL */ `
   subscription OnDeleteReplacementCommonName {
     onDeleteReplacementCommonName {
-      buttery {
+      butterfly {
         id
         scientificName
         commonName
@@ -461,6 +244,7 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
+        etymology
         hosts
         food
         habitat
@@ -485,30 +269,10 @@ export const onCreateOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -519,30 +283,10 @@ export const onUpdateOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -553,30 +297,10 @@ export const onDeleteOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -596,7 +320,6 @@ export const onCreateOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -616,7 +339,6 @@ export const onUpdateOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -636,7 +358,6 @@ export const onDeleteOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -694,7 +415,6 @@ export const onCreateSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;
@@ -710,7 +430,6 @@ export const onUpdateSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;
@@ -726,7 +445,39 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
+    }
+  }
+`;
+export const onCreateImage = /* GraphQL */ `
+  subscription OnCreateImage {
+    onCreateImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateImage = /* GraphQL */ `
+  subscription OnUpdateImage {
+    onUpdateImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteImage = /* GraphQL */ `
+  subscription OnDeleteImage {
+    onDeleteImage {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
     }
   }
 `;
