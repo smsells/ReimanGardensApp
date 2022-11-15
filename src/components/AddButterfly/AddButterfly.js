@@ -92,10 +92,10 @@ const AddButterfly = () => {
             lifespan: lifespan,
             range: range,
             hosts: hostPlant,
-            food: "",
+            food: food,
             habitat: habitat,
-            //etymology: etymology,
-            flights: flightDurationStart + "-" + flightDurationEnd,
+            etymology: etymology,
+            flights: flightInfo,
             history: lifeHistory,
             funFact: funFacts,
         }
@@ -105,7 +105,6 @@ const AddButterfly = () => {
     };
 
     async function createButterfly() {
-        console.log("location 4");
         if (!butterflyObject.scientificName) return;
         await API.graphql({ query: createButterflyMutation, variables: { input: butterflyObject } });
         if (butterflyObject.image) {
@@ -126,8 +125,8 @@ const AddButterfly = () => {
     const [etymology, setEtymology] = useState("");
     const [habitat, setHabitat] = useState("");
     const [lifeHistory, setLifeHistory] = useState("");
-    const [flightDurationStart, setFlightDurationStart] = useState("");
-    const [flightDurationEnd, setFlightDurationEnd] = useState("");
+    const [food, setFood] = useState("");
+    const [flightInfo, setFlightInfo] = useState("");
     const [funFacts, setFunFacts] = useState("");
     const [images, setImages] = useState([]);
 
@@ -142,7 +141,7 @@ const AddButterfly = () => {
         hosts: "",
         food: "",
         habitat: "",
-        //etymology: etymology,
+        etymology: etymology,
         flights: "",
         history: "",
         funFact: ""
@@ -261,46 +260,16 @@ const AddButterfly = () => {
                     <textarea name="lifeHistory" onChange={(e) => setLifeHistory(e.target.value)} />
                 </Grid>
                 <Grid item xs={4}>
-                    <label>Flight Duration Start</label>
+                    <label>Food</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <select value={flightDurationStart} placeholder="Choose one" name="flightDurationStart" onChange={(e) => setFlightDurationStart(e.target.value)}>
-                        <option value=""></option>
-                        <option value="unknown">Unknown</option>
-                        <option value="january">January</option>
-                        <option value="february">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="august">August</option>
-                        <option value="september">September</option>
-                        <option value="october">October</option>
-                        <option value="november">November</option>
-                        <option value="december">December</option>
-                    </select>
+                    <textarea value={food} name="food" onChange={(e) => setFood(e.target.value)}/>
                 </Grid>
                 <Grid item xs={4}>
-                    <label>Flight Duration End</label>
+                    <label>Flight Info</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <select name="flightDurationEnd" onChange={(e) => setFlightDurationEnd(e.target.value)}>
-                        <option value=""></option>
-                        <option value="unknown">Unknown</option>
-                        <option value="january">January</option>
-                        <option value="february">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="august">August</option>
-                        <option value="september">September</option>
-                        <option value="october">October</option>
-                        <option value="november">November</option>
-                        <option value="december">December</option>
-                    </select>
+                    <textarea value={flightInfo} name="flightInfo" onChange={(e) => setFlightInfo(e.target.value)}/>
                 </Grid>
                 <Grid item xs={4}>
                     <label>Fun Facts</label>

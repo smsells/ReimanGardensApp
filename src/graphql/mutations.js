@@ -229,6 +229,7 @@ export const createReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -262,6 +263,7 @@ export const updateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -295,6 +297,7 @@ export const deleteReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -515,6 +518,48 @@ export const deleteSpeciesInfo = /* GraphQL */ `
       lastFlown
       orgID
       id
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createImage = /* GraphQL */ `
+  mutation CreateImage(
+    $input: CreateImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    createImage(input: $input, condition: $condition) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateImage = /* GraphQL */ `
+  mutation UpdateImage(
+    $input: UpdateImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    updateImage(input: $input, condition: $condition) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteImage = /* GraphQL */ `
+  mutation DeleteImage(
+    $input: DeleteImageInput!
+    $condition: ModelImageConditionInput
+  ) {
+    deleteImage(input: $input, condition: $condition) {
+      id
+      butterflyName
+      imageAddress
       createdAt
       updatedAt
     }

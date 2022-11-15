@@ -163,6 +163,7 @@ export const getReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -202,6 +203,7 @@ export const listReplacementCommonNames = /* GraphQL */ `
         id
         createdAt
         updatedAt
+        replacementCommonNameButterflyId
       }
       nextToken
     }
@@ -352,6 +354,35 @@ export const listSpeciesInfos = /* GraphQL */ `
         lastFlown
         orgID
         id
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getImage = /* GraphQL */ `
+  query GetImage($id: ID!) {
+    getImage(id: $id) {
+      id
+      butterflyName
+      imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listImages = /* GraphQL */ `
+  query ListImages(
+    $filter: ModelImageFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        butterflyName
+        imageAddress
         createdAt
         updatedAt
       }

@@ -19,7 +19,6 @@ type Butterfly @model @auth(rules: [{ allow: public }]) {
   subfamily: String
   lifespan: String
   range: String
-  etymology: String
   hosts: String
   food: String
   habitat: String
@@ -44,7 +43,7 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   coverMedia: String
 }
 type replacementCommonName @model @auth(rules: [{ allow: public }]) {
-  butterfly: Butterfly
+  butterfly: Butterfly @hasOne
   newName: String
   orgID: String
 }

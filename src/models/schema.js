@@ -131,6 +131,7 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
+<<<<<<< HEAD
                 },
                 "etymology": {
                     "name": "etymology",
@@ -138,6 +139,8 @@ export const schema = {
                     "type": "String",
                     "isRequired": false,
                     "attributes": []
+=======
+>>>>>>> dc7472beda324670dc4dc81b8bdf4af8cfd64e43
                 },
                 "hosts": {
                     "name": "hosts",
@@ -641,6 +644,96 @@ export const schema = {
                 }
             ]
         },
+<<<<<<< HEAD
+=======
+        "replacementCommonName": {
+            "name": "replacementCommonName",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "butterfly": {
+                    "name": "butterfly",
+                    "isArray": false,
+                    "type": {
+                        "model": "Butterfly"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "replacementCommonNameButterflyId"
+                    }
+                },
+                "newName": {
+                    "name": "newName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "orgID": {
+                    "name": "orgID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "replacementCommonNameButterflyId": {
+                    "name": "replacementCommonNameButterflyId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "replacementCommonNames",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+>>>>>>> dc7472beda324670dc4dc81b8bdf4af8cfd64e43
         "Module": {
             "name": "Module",
             "fields": {
@@ -891,5 +984,9 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
+<<<<<<< HEAD
     "version": "4668b05493c93d30ecaced9393117830"
+=======
+    "version": "bd9e77730be2ed103de8241670051631"
+>>>>>>> dc7472beda324670dc4dc81b8bdf4af8cfd64e43
 };
