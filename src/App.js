@@ -29,6 +29,7 @@ import DisplayShipments from "./components/DisplayShipments";
 import PackingList from "./components/PackingList";
 import EditShipments from "./components/EditShipments";
 import CustomizePage from "./components/CustomizePage";
+import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
 import crypto from "crypto-js";
 
@@ -271,6 +272,7 @@ function App() {
         <Route exact path="/packingList" element={<PackingList />} />
         <Route exact path="/editShipment" element={<EditShipments />} />
         <Route exact path="/customizePage" element={<CustomizePage />} />
+        <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route
           exact
           path="/importExportShipments"

@@ -60,7 +60,6 @@ export const createButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -86,7 +85,6 @@ export const updateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -112,7 +110,6 @@ export const deleteButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -214,7 +211,6 @@ export const createReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -248,7 +244,6 @@ export const updateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -282,7 +277,6 @@ export const deleteReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -518,48 +512,6 @@ export const deleteSpeciesInfo = /* GraphQL */ `
       lastFlown
       orgID
       id
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createImage = /* GraphQL */ `
-  mutation CreateImage(
-    $input: CreateImageInput!
-    $condition: ModelImageConditionInput
-  ) {
-    createImage(input: $input, condition: $condition) {
-      id
-      butterflyName
-      imageAddress
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateImage = /* GraphQL */ `
-  mutation UpdateImage(
-    $input: UpdateImageInput!
-    $condition: ModelImageConditionInput
-  ) {
-    updateImage(input: $input, condition: $condition) {
-      id
-      butterflyName
-      imageAddress
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteImage = /* GraphQL */ `
-  mutation DeleteImage(
-    $input: DeleteImageInput!
-    $condition: ModelImageConditionInput
-  ) {
-    deleteImage(input: $input, condition: $condition) {
-      id
-      butterflyName
-      imageAddress
       createdAt
       updatedAt
     }

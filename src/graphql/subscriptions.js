@@ -48,7 +48,6 @@ export const onCreateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -71,7 +70,6 @@ export const onUpdateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -94,7 +92,6 @@ export const onDeleteButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -113,23 +110,6 @@ export const onCreateOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-<<<<<<< HEAD
-=======
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
->>>>>>> dc7472beda324670dc4dc81b8bdf4af8cfd64e43
       headerColor
       sectionHeaderColor
       menuColor
@@ -152,23 +132,6 @@ export const onUpdateOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-<<<<<<< HEAD
-=======
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
->>>>>>> dc7472beda324670dc4dc81b8bdf4af8cfd64e43
       headerColor
       sectionHeaderColor
       menuColor
@@ -191,23 +154,6 @@ export const onDeleteOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-<<<<<<< HEAD
-=======
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
->>>>>>> dc7472beda324670dc4dc81b8bdf4af8cfd64e43
       headerColor
       sectionHeaderColor
       menuColor
@@ -235,7 +181,6 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -266,7 +211,6 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -297,7 +241,6 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -497,39 +440,6 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       lastFlown
       orgID
       id
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateImage = /* GraphQL */ `
-  subscription OnCreateImage {
-    onCreateImage {
-      id
-      butterflyName
-      imageAddress
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateImage = /* GraphQL */ `
-  subscription OnUpdateImage {
-    onUpdateImage {
-      id
-      butterflyName
-      imageAddress
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteImage = /* GraphQL */ `
-  subscription OnDeleteImage {
-    onDeleteImage {
-      id
-      butterflyName
-      imageAddress
       createdAt
       updatedAt
     }

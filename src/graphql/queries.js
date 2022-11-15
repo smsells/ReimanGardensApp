@@ -43,7 +43,6 @@ export const getButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -71,7 +70,6 @@ export const listButterflies = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -148,7 +146,6 @@ export const getReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -188,7 +185,6 @@ export const listReplacementCommonNames = /* GraphQL */ `
           subfamily
           lifespan
           range
-          etymology
           hosts
           food
           habitat
@@ -354,35 +350,6 @@ export const listSpeciesInfos = /* GraphQL */ `
         lastFlown
         orgID
         id
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getImage = /* GraphQL */ `
-  query GetImage($id: ID!) {
-    getImage(id: $id) {
-      id
-      butterflyName
-      imageAddress
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listImages = /* GraphQL */ `
-  query ListImages(
-    $filter: ModelImageFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listImages(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        butterflyName
-        imageAddress
         createdAt
         updatedAt
       }
