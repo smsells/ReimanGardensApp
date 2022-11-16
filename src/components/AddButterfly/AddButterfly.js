@@ -77,7 +77,6 @@ const AddButterfly = () => {
                 butterflyName: scientificName,
                 imageAddress: file.name
             }
-            // displayImage.push(tempObj);
             temp.push(tempObj)
         }
         setDisplayImage(temp);

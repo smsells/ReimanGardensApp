@@ -48,7 +48,6 @@ export const onCreateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -71,7 +70,6 @@ export const onUpdateButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -94,7 +92,6 @@ export const onDeleteButterfly = /* GraphQL */ `
       subfamily
       lifespan
       range
-      etymology
       hosts
       food
       habitat
@@ -184,7 +181,6 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -199,6 +195,7 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -214,7 +211,6 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -229,6 +225,7 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;
@@ -244,7 +241,6 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         subfamily
         lifespan
         range
-        etymology
         hosts
         food
         habitat
@@ -259,6 +255,7 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
       id
       createdAt
       updatedAt
+      replacementCommonNameButterflyId
     }
   }
 `;

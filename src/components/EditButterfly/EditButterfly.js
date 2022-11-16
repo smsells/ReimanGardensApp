@@ -8,7 +8,12 @@ import Grid from '@material-ui/core/Grid';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
-import { updateButterfly as updateButterflyMutation, deleteButterfly as deleteButterflyMutation } from '../../graphql/mutations';
+import {
+    updateButterfly as updateButterflyMutation,
+    deleteButterfly as deleteButterflyMutation,
+    deleteImage as deleteImageMutation,
+    createImage as createImageMutation
+} from '../../graphql/mutations';
 import { listButterflies, listImages } from '../../graphql/queries';
 import { ConfirmPopup } from './ConfirmPopup';
 import './EditButterfly.css'
@@ -17,7 +22,9 @@ import './EditButterfly.css'
 const EditButterfly = () => {
 
     var butterflyObject;
+
     const navigate = useNavigate();
+
     const [editID, setEditID] = useState("");
     const [scientificName, setScientificName] = useState("");
     const [commonName, setCommonName] = useState("");
@@ -34,11 +41,15 @@ const EditButterfly = () => {
     const [images, setImages] = useState([]);
     const [queryImages, setQueryImages] = useState([]);
     const [butterflyList, setButterflyList] = useState([]);
+    const [popupVisibility, setPopupVisibility] = useState(false);
+    //const [filesHaveChanged, setFilesHaveChanged] = useState(false);
     //for species range checklist
     const [checkedState, setCheckedState] = useState(
         new Array(speciesRangeList.length).fill(false)
     );
-    const [popupVisibility, setPopupVisibility] = useState(false);
+
+    var filesHaveChanged = false;
+
 
     const initialButterflyObjectState = {
         id: "",
@@ -58,32 +69,11 @@ const EditButterfly = () => {
         funFact: ""
     };
 
-    //holds states of species range checkboxes
-    const handleOnChange = (position) => {
-        const updatedCheckedState = checkedState.map((item, index) =>
-            index === position ? !item : item
-        );
-        setCheckedState(updatedCheckedState);
-    };
-
-    //uploading images
-    async function handleFileEvent(e) {
-        var temp = [];
-        if (!e.target.files[0]) return
-        for (var i = 0; i < e.target.files.length; i++) {
-            const file = e.target.files[i];
-            await Storage.put(file.name, file);
-            var tempObj = {
-                butterflyName: scientificName,
-                imageAddress: file.name
-            }
-            // displayImage.push(tempObj);
-            temp.push(tempObj)
-        }
-        setImages(temp);
+    useEffect(() => {
         fetchButterflies();
-    };
+    });
 
+    //Fetch butterfly objects and images from API
     const fetchButterflies = async () => {
         try {
             const apiButterflyData = await API.graphql(graphqlOperation(listButterflies));
@@ -99,6 +89,7 @@ const EditButterfly = () => {
             }))
 
             setQueryImages(imagesFromAPI);
+            populateImages();
 
             console.log("queried butterfly list", butterflyList);
             console.log("queried images", queryImages);
@@ -109,15 +100,133 @@ const EditButterfly = () => {
 
     }
 
-    useEffect(() => {
-        fetchButterflies();
-    }, []);
+    //Populate the edit form with the selected butterfly object
+    function populateButterfly(event) {
+        const found = butterflyList.find(obj => {
+            return obj.id === event.target.value;
+        });
+        setEditID(found.id);
+        setScientificName(found.scientificName);
+        setCommonName(found.commonName);
+        setButterflyFamily(found.family);
+        setButterflySubFamily(found.subfamily);
+        setLifespan(found.lifespan);
+        setHostPlant(found.hosts);
+        setEtymology(found.etymology);
+        setHabitat(found.habitat);
+        setLifeHistory(found.history);
+        setFood(found.food);
+        setFlightInfo(found.flights);
+        setFunFacts(found.funFact);
 
-    //converts all data to json object and submits
+        //format found range string
+        //range stored as stringified array, need to convert back to array to check range boxes
+        var tempRange = found.range.substring(1, found.range.length - 1);
+        var tempArr = tempRange.split(", ");
+        var setRangeValues = new Array(speciesRangeList.length).fill(false);
+        for (var i = 0; i < tempArr.length; i++) {
+            for (var j = 0; j < setRangeValues.length; j++) {
+                if (tempArr[i] === speciesRangeList[j].location) {
+                    setRangeValues[j] = true;
+                }
+            }
+        }
+        //filesHaveChanged = false;
+        setCheckedState(setRangeValues);
+        populateImages();
+    };
+
+    //populate images corresponding to selected butterfly
+    function populateImages() {
+       // if (!filesHaveChanged) {
+            const foundImages = queryImages.filter(img => {
+                return img.butterflyName === scientificName;
+            });
+            setImages(foundImages);
+            console.log("found images state array", images);
+       // }
+    }
+
+    //holds states of species range checkboxes
+    const handleOnRangeChange = (position) => {
+        const updatedCheckedState = checkedState.map((item, index) =>
+            index === position ? !item : item
+        );
+        setCheckedState(updatedCheckedState);
+    };
+
+    //gathers images to be uploaded
+    async function handleFileEvent(e) {
+
+
+        if (!e.target.files[0]) return
+        //delete current images
+        for (var j = 0; j < images.length; j++) {
+            if (!images[j].imageAddress) return;
+            var id = images[j].id;
+            await API.graphql({ query: deleteImageMutation, variables: { input: { id } } });
+        }
+
+        var temp = [];
+        //add new images
+        for (var i = 0; i < e.target.files.length; i++) {
+            const file = e.target.files[i];
+            await Storage.put(file.name, file);
+            var tempObj = {
+                butterflyName: scientificName,
+                imageAddress: file.name
+            }
+            temp.push(tempObj)
+        }
+
+        for (var i = 0; i < temp.length; i++) {
+            await API.graphql({ query: createImageMutation, variables: { input: temp[i] } });
+            const image = await Storage.get(temp[i]);
+            temp[i].imageAddress = image;
+        }
+        // console.log("temp file array", temp);
+        // filesHaveChanged = true;
+        // console.log("handleFileEvent function, files have changed should be true", filesHaveChanged);
+        // setImages(temp);
+        // console.log("handle file event, images array value", images);
+        fetchButterflies();
+    };
+
+    //edit butterfly in database on button click
+    async function editButterfly(event) {
+        try {
+            event.preventDefault();
+            toJson();
+            if (!butterflyObject.scientificName) return;
+            await API.graphql({ query: updateButterflyMutation, variables: { input: butterflyObject } });
+            if (butterflyObject.image) {
+                const image = await Storage.get(butterflyObject.image);
+                butterflyObject.image = image;
+            }
+
+            // if (filesHaveChanged) {
+            //     console.log("editButterfly function, files have changed should be true", filesHaveChanged)
+            //     for (var i = 0; i < images.length; i++) {
+            //         await API.graphql({ query: createImageMutation, variables: { input: images[i] } });
+            //         const image = await Storage.get(images[i]);
+            //         images[i].imageAddress = image;
+            //     }
+            // }
+
+
+            console.log("editing...")
+            butterflyObject = initialButterflyObjectState;
+        } catch (error) {
+            console.log("edit error", error);
+        }
+        navigate('/signin')
+    };
+
+    //converts all data to single json object and submits
     const toJson = function () {
-        var range = new Array();
+        var range = [];
         for (var i = 0; i < speciesRangeList.length; i++) {
-            if (checkedState[i] == true) {
+            if (checkedState[i] === true) {
                 range.push(speciesRangeList[i].location);
             }
         }
@@ -141,64 +250,7 @@ const EditButterfly = () => {
         console.log(butterflyObject);
     };
 
-    async function editButterfly(event) {
-        try {
-            event.preventDefault();
-            toJson();
-            if (!butterflyObject.scientificName) return;
-            await API.graphql({ query: updateButterflyMutation, variables: { input: butterflyObject } });
-            if (butterflyObject.image) {
-                const image = await Storage.get(butterflyObject.image);
-                butterflyObject.image = image;
-            }
-            console.log("editing...")
-            butterflyObject = initialButterflyObjectState;
-        } catch (error) {
-            console.log("edit error", error);
-        }
-
-        navigate('/signin')
-
-    };
-
-    function findButterfly(event) {
-        const found = butterflyList.find(obj => {
-            return obj.id === event.target.value;
-        });
-        setEditID(found.id);
-        setScientificName(found.scientificName);
-        setCommonName(found.commonName);
-        setButterflyFamily(found.family);
-        setButterflySubFamily(found.subfamily);
-        setLifespan(found.lifespan);
-        setHostPlant(found.hosts);
-        setEtymology(found.etymology);
-        setHabitat(found.habitat);
-        setLifeHistory(found.history);
-        setFood(found.food);
-        setFlightInfo(found.flights);
-        setFunFacts(found.funFact);
-
-        //format found range string
-        var tempRange = found.range.substring(1, found.range.length - 1);
-        var tempArr = tempRange.split(", ");
-        var setRangeValues = new Array(speciesRangeList.length).fill(false);
-        for (var i = 0; i < tempArr.length; i++) {
-            for (var j = 0; j < setRangeValues.length; j++) {
-                if (tempArr[i] === speciesRangeList[j].location) {
-                    setRangeValues[j] = true;
-                }
-            }
-        }
-        setCheckedState(setRangeValues);
-
-        const foundImages = queryImages.filter(img => {
-            return img.butterflyName === scientificName;
-        });
-        setImages(foundImages);
-        console.log("found images state array", images);
-    };
-
+    //deletes butterfly object after user confirms delete
     async function confirmedDelete(event) {
 
         try {
@@ -223,18 +275,28 @@ const EditButterfly = () => {
 
     function cancelEdit() {
         navigate('/signin');
-    }
+    };
+
+    async function deleteImage(index) {
+        console.log("image index", index);
+        if (!images[index].imageAddress) return;
+        var id = images[index].id;
+        await API.graphql({ query: deleteImageMutation, variables: { input: { id } } });
+        console.log("deleting image...")
+        fetchButterflies();
+        populateImages();
+    };
 
     return (
         <form style={{ fontSize: "x-large", backgroundColor: "rgba(222, 184, 135, 0.5)", padding: "5px" }}>
             <h1 style={{ color: "#606C38", textAlign: "center", fontFamily: "verdana" }}>Edit Butterfly</h1> <br />
             <Grid container spacing={2} direction="row" alignItems="center" justifyContent="center" rowSpacing={5}>
                 <Grid item xs={12}>
-                    <select placeholder="" onChange={(e) => findButterfly(e)}>
+                    <select placeholder="" onChange={(e) => populateButterfly(e)}>
                         <option></option>
                         {butterflyList.map(({ commonName, id }, index) => {
                             return (
-                                <option key={index} name={commonName} value={id}>
+                                <option key={"butterfly" + index} name={commonName} value={id}>
                                     {commonName}
                                 </option>
                             );
@@ -315,7 +377,7 @@ const EditButterfly = () => {
                                             size="lg"
                                             value={value}
                                             checked={checkedState[index]}
-                                            onChange={() => handleOnChange(index)}
+                                            onChange={() => handleOnRangeChange(index)}
                                             id={"checkbox-" + index}
                                             sx={{
                                                 '&.Mui-checked': {
@@ -375,15 +437,16 @@ const EditButterfly = () => {
                     <label>Add Images</label>
                 </Grid>
                 <Grid item xs={8}>
-                    <label for="fileUpload" className="custom-file-upload">
+                    <label htmlFor="fileUpload" className="custom-file-upload">
                         Choose Files
                     </label>
                     <input multiple id="fileUpload" type="file" name="imageUpload" onChange={handleFileEvent}></input>
                 </Grid>
-                {images.map((image) => {
+                {images.map((image, index) => {
                     return (
-                        <Grid item xs={12}>
-                            {image && <img src={image.imageAddress} style={{ width: 100, height: 100 }} />}
+                        <Grid item xs={2}>
+                            {image && <img src={image.imageAddress} style={{ width: 100, height: 100 }} key={"image" + index} />}
+                            <button className="form-button" type="button" value="delete" style={{ margin: "5px" }} onClick={() => deleteImage(index)}>X</button>
                         </Grid>
                     );
                 })}
