@@ -13,6 +13,7 @@ const CustomizePage = () => {
   const sha512Hash = localStorage.getItem("token");
 
   const initialCustomizeState = {
+    id: sha512Hash,
     name: "",
     locationCity: "",
     locationState: "",
@@ -29,6 +30,7 @@ const CustomizePage = () => {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialCustomizeState);
+  const [images, setImages] = useState({});
 
   useEffect(() => {
     getOrg();
@@ -59,12 +61,13 @@ const CustomizePage = () => {
     });
     if (org.data.getOrganization.logo) {
       const image = await Storage.get(org.data.getOrganization.logo);
-      org.data.getOrganization.logo = image;
+      images["logo"] = image;
     }
     if (org.data.getOrganization.coverMedia) {
       const image = await Storage.get(org.data.getOrganization.coverMedia);
-      org.data.getOrganization.coverMedia = image;
+      images["coverMedia"] = image;
     }
+
     // console.log("org", org);
     setFormData({
       name: org.data.getOrganization.name,
@@ -92,6 +95,22 @@ const CustomizePage = () => {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
     setFormData({ ...formData, logo: file.name });
+    setImages({ ...images, logo: file });
+    await Storage.put(file.name, file);
+    // getOrg();
+  }
+
+  /**
+   *
+   * @param {*} e
+   * @description load selected cover media into aws storage and update logo field.
+   * Reload organization to get new logo loaded
+   */
+  async function onChangeCoverMedia(e) {
+    if (!e.target.files[0]) return;
+    const file = e.target.files[0];
+    setFormData({ ...formData, coverMedia: file.name });
+    setImages({ ...images, coverMedia: file });
     await Storage.put(file.name, file);
     // getOrg();
   }
@@ -157,11 +176,11 @@ const CustomizePage = () => {
         },
       },
     });
-    if (formData.logo) {
-      const image = await Storage.get(formData.logo);
-      formData.logo = image;
-    }
-    // console.log("form data", formData);
+    // if (formData.logo) {
+    //   const image = await Storage.get(formData.logo);
+    //   formData.logo = image;
+    // }
+    // // console.log("form data", formData);
     navigate(0);
   }
 
@@ -308,11 +327,26 @@ const CustomizePage = () => {
               name="logoUpload"
               onChange={onChangeLogo}
             ></input>
-            {formData.logo && (
-              <img src={formData.logo} style={{ width: 400 }} />
+            {images.logo && <img src={images.logo} style={{ width: 100 }} />}
+          </Grid>
+          <Grid item xs={4}>
+            <label> Cover Media </label>
+          </Grid>
+          <Grid item xs={8}>
+            <label for="coverMediaUpload" class="custom-file-upload">
+              Choose Files
+            </label>
+            <input
+              id="coverMediaUpload"
+              type="file"
+              accept=".png, .jpeg, .jpg"
+              name="coverMediaUpload"
+              onChange={onChangeCoverMedia}
+            ></input>
+            {images.coverMedia && (
+              <img src={images.coverMedia} style={{ width: 100 }} />
             )}
           </Grid>
-          <Grid item xs={4}></Grid>
         </Grid>
         <button
           className="form-button"
