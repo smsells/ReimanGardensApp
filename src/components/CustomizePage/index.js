@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { API } from "aws-amplify";
-import { getOrganization, listModules, getModule } from "../../graphql/queries";
+import { getOrganization } from "../../graphql/queries";
 import { updateOrganization as updateOrgMutation } from "../../graphql/mutations";
 import Grid from "@material-ui/core/Grid";
 import { useNavigate } from "react-router-dom";
@@ -93,7 +93,7 @@ const CustomizePage = () => {
     const file = e.target.files[0];
     setFormData({ ...formData, logo: file.name });
     await Storage.put(file.name, file);
-    getOrg();
+    // getOrg();
   }
 
   /**

@@ -51,18 +51,18 @@ const CustomizeModules = () => {
     const moduleObjList = [];
     await Promise.all(
       modulesFromAPI.map(async (module) => {
-        const id = module.id;
         if (module.image) {
           const image = await Storage.get(module.image);
           module.image = image;
         }
-        const moduleObj = {};
-        moduleObj["id"] = module.id;
-        moduleObj["title"] = module.title;
-        moduleObj["content"] = module.content;
-        moduleObj["image"] = module.image;
-        moduleObj["active"] = module.active;
-        moduleObj["orgID"] = module.orgID;
+        let moduleObj = {
+          id: module.id,
+          title: module.title,
+          content: module.content,
+          image: module.image,
+          active: module.active,
+          orgID: module.orgID,
+        };
 
         modulesData[module.id] = moduleObj;
         moduleObjList.push(moduleObj);
@@ -81,12 +81,12 @@ const CustomizeModules = () => {
   async function onChangeModuleImage(module, e) {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
-    const key = module.id;
     setModules({
       ...modules,
-      key: { ...module, image: e.target.value },
+      [module.id]: { ...module, image: file.name },
     });
     await Storage.put(file.name, file);
+    // getModules();
   }
 
   async function onChangeNewModuleImage(e) {
@@ -94,6 +94,7 @@ const CustomizeModules = () => {
     const file = e.target.files[0];
     setNewModule({ ...newModule, image: file.name });
     await Storage.put(file.name, file);
+    // getModules();
   }
 
   async function handleSave(module, e) {
@@ -206,8 +207,8 @@ const CustomizeModules = () => {
                 name="moduleImageUpload"
                 onChange={(e) => onChangeModuleImage(modules[module.id], e)}
               ></input>
-              {module.image && (
-                <img src={module.image} style={{ width: 400 }} />
+              {modules[module.id].image && (
+                <img src={modules[module.id].image} style={{ width: 400 }} />
               )}
             </p>
             <p>
