@@ -31,6 +31,8 @@ import EditShipments from "./components/EditShipments";
 import CustomizePage from "./components/CustomizePage";
 import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
+import DeleteOrganizations from "./components/DeleteOrganizations";
+import AddShipments from "./components/AddShipments";
 import crypto from "crypto-js";
 
 function App() {
@@ -71,12 +73,13 @@ function App() {
    */
   const isLoggedIn = () => {
     const token = localStorage.getItem("token");
-    if (token != null) {
+    if (token !== null) {
       setLoggedIn(true);
       return;
     }
     Auth.currentAuthenticatedUser()
       .then(async (user) => {
+        console.log("user email", user.email);
         const userName = user.username;
         const sha512Hash = crypto.SHA512(userName).toString();
         console.log("result1: ", userName);
@@ -274,6 +277,12 @@ function App() {
         <Route exact path="/editShipment" element={<EditShipments />} />
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
+        <Route exact path="/addShipments" element={<AddShipments />} />
+        <Route
+          exact
+          path="/deleteOrganizations"
+          element={<DeleteOrganizations />}
+        />
         <Route
           exact
           path="/importExportShipments"
