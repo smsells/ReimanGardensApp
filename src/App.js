@@ -54,6 +54,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [organization, setOrganization] = useState(initialOrganizationState);
+  const [images, setImages] = useState({});
 
   useEffect(() => {
     isLoggedIn();
@@ -131,11 +132,11 @@ function App() {
 
     if (org.data.getOrganization.logo) {
       const image = await Storage.get(org.data.getOrganization.logo);
-      org.data.getOrganization.logo = image;
+      images["logo"] = image;
     }
     if (org.data.getOrganization.coverMedia) {
       const image = await Storage.get(org.data.getOrganization.coverMedia);
-      org.data.getOrganization.coverMedia = image;
+      images["coverMedia"] = image;
     }
 
     setOrganization({
@@ -241,7 +242,7 @@ function App() {
       >
         <Container>
           <Navbar.Brand href="#home" style={{ color: "#FEFAE0" }}>
-            {organization.logo && <img src={organization.logo || logo} />}
+            {images.logo && <img src={images.logo || logo} />}
           </Navbar.Brand>
         </Container>
       </Navbar>

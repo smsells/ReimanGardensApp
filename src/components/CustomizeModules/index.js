@@ -21,6 +21,7 @@ const CustomizeModules = () => {
   };
 
   const [modules, setModules] = useState({});
+  const [modulesImages, setModulesImages] = useState({});
   const [modulesList, setModulesList] = useState([]);
   const [newModule, setNewModule] = useState(initialModule);
 
@@ -45,48 +46,59 @@ const CustomizeModules = () => {
       query: listModules,
       variables: { filter: filter },
     });
-    console.log("Modules", apiData.data.listModules.items);
+    // console.log("Modules", apiData.data.listModules.items);
     const modulesFromAPI = apiData.data.listModules.items;
     const modulesData = {};
     const moduleObjList = [];
     await Promise.all(
       modulesFromAPI.map(async (module) => {
-        const id = module.id;
         if (module.image) {
           const image = await Storage.get(module.image);
-          module.image = image;
+          modulesImages[module.id] = image;
         }
-        const moduleObj = {};
-        moduleObj["id"] = module.id;
-        moduleObj["title"] = module.title;
-        moduleObj["content"] = module.content;
-        moduleObj["image"] = module.image;
-        moduleObj["active"] = module.active;
-        moduleObj["orgID"] = module.orgID;
+
+        let moduleObj = {
+          id: module.id,
+          title: module.title,
+          content: module.content,
+          image: module.image,
+          active: module.active,
+          orgID: module.orgID,
+        };
 
         modulesData[module.id] = moduleObj;
         moduleObjList.push(moduleObj);
+
         // console.log("Module Data id", modulesData[id]);
 
         return module;
       })
     );
-    console.log("Module Data", modulesData);
-    console.log("Modules from API", moduleObjList);
+    // console.log("Module Data", modulesData);
+    // console.log("Modules from API", moduleObjList);
 
     setModulesList(moduleObjList);
     setModules(modulesData);
   }
 
+  async function getImage(name) {
+    console.log("name", name);
+    const image = await Storage.get(name);
+    console.log("imag " + name + " imag" + image);
+
+    return image;
+  }
+
   async function onChangeModuleImage(module, e) {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
-    const key = module.id;
     setModules({
       ...modules,
-      key: { ...module, image: e.target.value },
+      [module.id]: { ...module, image: file.name },
     });
+    setModulesImages({ ...modulesImages, [module.id]: file });
     await Storage.put(file.name, file);
+    // getModules();
   }
 
   async function onChangeNewModuleImage(e) {
@@ -94,6 +106,7 @@ const CustomizeModules = () => {
     const file = e.target.files[0];
     setNewModule({ ...newModule, image: file.name });
     await Storage.put(file.name, file);
+    // getModules();
   }
 
   async function handleSave(module, e) {
@@ -112,13 +125,13 @@ const CustomizeModules = () => {
 
   async function handleDelete(module, e) {
     console.log("Submitting", module);
+    const id = module.id;
+    const newModulesArray = modulesList.filter((module) => module.id !== id);
+    setModulesList(newModulesArray);
     await API.graphql({
       query: deleteModuleMutation,
       variables: {
-        input: {
-          id: module.id,
-          ...module,
-        },
+        input: { id: module.id },
       },
     });
     navigate(0);
@@ -126,10 +139,10 @@ const CustomizeModules = () => {
 
   async function handleModuleCreate() {
     if (newModule.title && newModule.content) {
-      if (newModule.image) {
-        const image = await Storage.get(newModule.image);
-        newModule.image = image;
-      }
+      // if (newModule.image) {
+      //   const image = await Storage.get(newModule.image);
+      //   newModule.image = image;
+      // }
       await API.graphql({
         query: createModuleMutation,
         variables: { input: newModule },
@@ -196,30 +209,33 @@ const CustomizeModules = () => {
               />
             </p>
             <p>
-              <label for="moduleImageUpload" class="custom-file-upload">
+              <label
+                for={"moduleImageUpload" + module.id}
+                class="custom-file-upload"
+              >
                 Choose Module Image
               </label>
               <input
-                id="moduleImageUpload"
+                id={"moduleImageUpload" + module.id}
                 type="file"
                 accept=".png, .jpeg, .jpg"
-                name="moduleImageUpload"
+                name={"moduleImageUpload" + module.id}
                 onChange={(e) => onChangeModuleImage(modules[module.id], e)}
               ></input>
-              {module.image && (
-                <img src={module.image} style={{ width: 400 }} />
+              {modulesImages[module.id] && (
+                <img src={modulesImages[module.id]} style={{ width: 100 }} />
               )}
             </p>
             <p>
               <input
                 type="checkbox"
-                id="checkboxModule"
+                id={"checkboxModule" + module.id}
                 checked={modules[module.id].active == 1 ? true : false}
                 onChange={(e) =>
                   moduleActiveCheckboxHandler(modules[module.id], e)
                 }
               />
-              <label htmlFor="checkboxModule">Active? </label>
+              <label htmlFor={"checkboxModule" + module.id}>Active? </label>
             </p>
             <p>
               <button
@@ -263,28 +279,28 @@ const CustomizeModules = () => {
           />
         </p>
         <p>
-          <label for="moduleImageUpload" class="custom-file-upload">
+          <label for="newModuleImageUpload" class="custom-file-upload">
             Choose Module Image
           </label>
           <input
-            id="moduleImageUpload"
+            id="newModuleImageUpload"
             type="file"
             accept=".png, .jpeg, .jpg"
-            name="moduleImageUpload"
+            name="newModuleImageUpload"
             onChange={onChangeNewModuleImage}
           ></input>
           {newModule.image && (
-            <img src={newModule.image} style={{ width: 400 }} />
+            <img src={getImage(newModule.image)} style={{ width: 400 }} />
           )}
         </p>
         <p>
           <input
             type="checkbox"
-            id="checkboxModule"
+            id="newCheckboxModule"
             checked={newModule.active == 1 ? true : false}
             onChange={newModuleActiveCheckboxHandler}
           />
-          <label htmlFor="checkboxModule">Active? </label>
+          <label htmlFor="newCheckboxModule">Active? </label>
         </p>
         <p>
           <button
