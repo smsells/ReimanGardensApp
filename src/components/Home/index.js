@@ -37,7 +37,7 @@ const Home = () => {
         return activeModule;
       })
     );
-    setActiveModules(apiData.data.listModules.items);
+    setActiveModules(activeModulesFromAPI);
   }
   return (
     <div className="Home">

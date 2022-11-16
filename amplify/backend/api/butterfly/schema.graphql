@@ -33,8 +33,6 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   username: String
   locationCity: String
   locationState: String
-  Shipments: [Order] @hasMany
-  commonNameList: [replacementCommonName]
   headerColor: String
   sectionHeaderColor: String
   menuColor: String
@@ -44,9 +42,6 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   font: String
   logo: String
   coverMedia: String
-  activeModules: [Module]
-  inactiveModules: [Module]
-  speciesInfoList: [SpeciesInfo] @hasMany
 }
 type replacementCommonName @model @auth(rules: [{ allow: public }]) {
   butterfly: Butterfly
@@ -59,7 +54,6 @@ type Order @model @auth(rules: [{ allow: public }]) {
   shipmentDate: String
   arrivalDate: String
   supplier: String
-  packingList: [OrderItem] @hasMany
   orgID: String
 }
 

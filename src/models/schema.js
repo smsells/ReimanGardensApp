@@ -254,20 +254,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Shipments": {
-                    "name": "Shipments",
-                    "isArray": true,
-                    "type": {
-                        "model": "Order"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "organizationShipmentsId"
-                    }
-                },
                 "headerColor": {
                     "name": "headerColor",
                     "isArray": false,
@@ -331,20 +317,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "speciesInfoList": {
-                    "name": "speciesInfoList",
-                    "isArray": true,
-                    "type": {
-                        "model": "SpeciesInfo"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "organizationSpeciesInfoListId"
-                    }
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -364,6 +336,93 @@ export const schema = {
             },
             "syncable": true,
             "pluralName": "Organizations",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "allow": "public",
+                                "operations": [
+                                    "create",
+                                    "update",
+                                    "delete",
+                                    "read"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        "replacementCommonName": {
+            "name": "replacementCommonName",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "butterfly": {
+                    "name": "butterfly",
+                    "isArray": false,
+                    "type": {
+                        "model": "Butterfly"
+                    },
+                    "isRequired": false,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "replacementCommonNameButterflyId"
+                    }
+                },
+                "newName": {
+                    "name": "newName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "orgID": {
+                    "name": "orgID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "replacementCommonNameButterflyId": {
+                    "name": "replacementCommonNameButterflyId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": false,
+                    "attributes": []
+                }
+            },
+            "syncable": true,
+            "pluralName": "replacementCommonNames",
             "attributes": [
                 {
                     "type": "model",
@@ -425,20 +484,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "packingList": {
-                    "name": "packingList",
-                    "isArray": true,
-                    "type": {
-                        "model": "OrderItem"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "orderPackingListId"
-                    }
-                },
                 "orgID": {
                     "name": "orgID",
                     "isArray": false,
@@ -461,13 +506,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "organizationShipmentsId": {
-                    "name": "organizationShipmentsId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -590,104 +628,10 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "orderPackingListId": {
-                    "name": "orderPackingListId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
             "pluralName": "OrderItems",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "replacementCommonName": {
-            "name": "replacementCommonName",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "butterfly": {
-                    "name": "butterfly",
-                    "isArray": false,
-                    "type": {
-                        "model": "Butterfly"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "HAS_ONE",
-                        "associatedWith": "id",
-                        "targetName": "replacementCommonNameButterflyId"
-                    }
-                },
-                "newName": {
-                    "name": "newName",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "orgID": {
-                    "name": "orgID",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "replacementCommonNameButterflyId": {
-                    "name": "replacementCommonNameButterflyId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
-                }
-            },
-            "syncable": true,
-            "pluralName": "replacementCommonNames",
             "attributes": [
                 {
                     "type": "model",
@@ -865,13 +809,6 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
-                },
-                "organizationSpeciesInfoListId": {
-                    "name": "organizationSpeciesInfoListId",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": false,
-                    "attributes": []
                 }
             },
             "syncable": true,
@@ -968,5 +905,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "bd9e77730be2ed103de8241670051631"
+    "version": "0fa004484614a710b011bdbd436a669c"
 };

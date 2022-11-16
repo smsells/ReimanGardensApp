@@ -92,46 +92,6 @@ export const getOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        butterfly {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          etymology
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -141,41 +101,6 @@ export const getOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -194,16 +119,6 @@ export const listOrganizations = /* GraphQL */ `
         username
         locationCity
         locationState
-        Shipments {
-          nextToken
-        }
-        commonNameList {
-          newName
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
         headerColor
         sectionHeaderColor
         menuColor
@@ -213,29 +128,6 @@ export const listOrganizations = /* GraphQL */ `
         font
         logo
         coverMedia
-        activeModules {
-          title
-          content
-          image
-          active
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
-        inactiveModules {
-          title
-          content
-          image
-          active
-          orgID
-          id
-          createdAt
-          updatedAt
-        }
-        speciesInfoList {
-          nextToken
-        }
         id
         createdAt
         updatedAt
@@ -322,30 +214,10 @@ export const getOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -361,14 +233,10 @@ export const listOrders = /* GraphQL */ `
         shipmentDate
         arrivalDate
         supplier
-        packingList {
-          nextToken
-        }
         orgID
         id
         createdAt
         updatedAt
-        organizationShipmentsId
       }
       nextToken
     }
@@ -390,7 +258,6 @@ export const getOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -415,7 +282,6 @@ export const listOrderItems = /* GraphQL */ `
         id
         createdAt
         updatedAt
-        orderPackingListId
       }
       nextToken
     }
@@ -468,7 +334,6 @@ export const getSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;
@@ -489,7 +354,6 @@ export const listSpeciesInfos = /* GraphQL */ `
         id
         createdAt
         updatedAt
-        organizationSpeciesInfoListId
       }
       nextToken
     }

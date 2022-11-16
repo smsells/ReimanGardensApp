@@ -134,46 +134,6 @@ export const createOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        butterfly {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          etymology
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -183,41 +143,6 @@ export const createOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -234,46 +159,6 @@ export const updateOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        butterfly {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          etymology
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -283,41 +168,6 @@ export const updateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -334,46 +184,6 @@ export const deleteOrganization = /* GraphQL */ `
       username
       locationCity
       locationState
-      Shipments {
-        items {
-          orderNumber
-          shipmentDate
-          arrivalDate
-          supplier
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationShipmentsId
-        }
-        nextToken
-      }
-      commonNameList {
-        butterfly {
-          id
-          scientificName
-          commonName
-          image
-          family
-          subfamily
-          lifespan
-          range
-          etymology
-          hosts
-          food
-          habitat
-          flights
-          history
-          funFact
-          createdAt
-          updatedAt
-        }
-        newName
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
       headerColor
       sectionHeaderColor
       menuColor
@@ -383,41 +193,6 @@ export const deleteOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
-      activeModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      inactiveModules {
-        title
-        content
-        image
-        active
-        orgID
-        id
-        createdAt
-        updatedAt
-      }
-      speciesInfoList {
-        items {
-          name
-          numInFlight
-          totalReceived
-          firstFlown
-          lastFlown
-          orgID
-          id
-          createdAt
-          updatedAt
-          organizationSpeciesInfoListId
-        }
-        nextToken
-      }
       id
       createdAt
       updatedAt
@@ -556,7 +331,6 @@ export const createOrder = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -570,30 +344,10 @@ export const updateOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -607,30 +361,10 @@ export const deleteOrder = /* GraphQL */ `
       shipmentDate
       arrivalDate
       supplier
-      packingList {
-        items {
-          species
-          numReceived
-          emergedInTransit
-          damagedInTransit
-          diseased
-          parasites
-          poorEmerged
-          numEmerged
-          orgID
-          orderID
-          id
-          createdAt
-          updatedAt
-          orderPackingListId
-        }
-        nextToken
-      }
       orgID
       id
       createdAt
       updatedAt
-      organizationShipmentsId
     }
   }
 `;
@@ -653,7 +387,6 @@ export const createOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -676,7 +409,6 @@ export const updateOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -699,7 +431,6 @@ export const deleteOrderItem = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      orderPackingListId
     }
   }
 `;
@@ -769,7 +500,6 @@ export const createSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;
@@ -788,7 +518,6 @@ export const updateSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;
@@ -807,7 +536,6 @@ export const deleteSpeciesInfo = /* GraphQL */ `
       id
       createdAt
       updatedAt
-      organizationSpeciesInfoListId
     }
   }
 `;

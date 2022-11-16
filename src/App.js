@@ -29,6 +29,7 @@ import DisplayShipments from "./components/DisplayShipments";
 import PackingList from "./components/PackingList";
 import EditShipments from "./components/EditShipments";
 import CustomizePage from "./components/CustomizePage";
+import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
 import crypto from "crypto-js";
 
@@ -68,6 +69,11 @@ function App() {
    * Load user-specific organization or create on if user doesn't have an organization
    */
   const isLoggedIn = () => {
+    const token = localStorage.getItem("token");
+    if (token != null) {
+      setLoggedIn(true);
+      return;
+    }
     Auth.currentAuthenticatedUser()
       .then(async (user) => {
         const userName = user.username;
@@ -206,26 +212,15 @@ function App() {
         >
           Parks Around the World
         </Link>
-        {loggedIn && organization.name == null ? (
-          <Link
-            className="menu-link"
-            onClick={() => {
-              signOut();
-              handleCloseMenu();
-            }}
-          >
-            Sign out
-          </Link>
-        ) : (
-          <Link
-            className="menu-link"
-            to="/signin"
-            onClick={() => handleCloseMenu()}
-          >
-            Sign In{" "}
-          </Link>
-        )}
-        {loggedIn && organization.name != null ? (
+
+        <Link
+          className="menu-link"
+          to="/signin"
+          onClick={() => handleCloseMenu()}
+        >
+          {loggedIn ? "Admin Panel" : "Sign In"}
+        </Link>
+        {loggedIn ? (
           <Link
             className="menu-link"
             onClick={() => {
@@ -277,6 +272,7 @@ function App() {
         <Route exact path="/packingList" element={<PackingList />} />
         <Route exact path="/editShipment" element={<EditShipments />} />
         <Route exact path="/customizePage" element={<CustomizePage />} />
+        <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route
           exact
           path="/importExportShipments"

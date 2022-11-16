@@ -98,6 +98,9 @@ const SignIn = ({ onSignIn }) => {
               <Link to={"/customizePage"}>
                 <AdminButton>Customize Page</AdminButton>
               </Link>
+              <Link to={"/customizeModules"}>
+                <AdminButton>Customize Modules</AdminButton>
+              </Link>
             </div>
           </div>
 
