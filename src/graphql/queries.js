@@ -88,6 +88,8 @@ export const getOrganization = /* GraphQL */ `
     getOrganization(id: $id) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
       headerColor
@@ -99,6 +101,8 @@ export const getOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -115,6 +119,8 @@ export const listOrganizations = /* GraphQL */ `
       items {
         name
         username
+        locationAddress
+        locationZipCode
         locationCity
         locationState
         headerColor
@@ -126,6 +132,8 @@ export const listOrganizations = /* GraphQL */ `
         font
         logo
         coverMedia
+        deleted
+        suspended
         id
         createdAt
         updatedAt

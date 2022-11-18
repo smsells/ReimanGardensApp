@@ -129,6 +129,8 @@ export const createOrganization = /* GraphQL */ `
     createOrganization(input: $input, condition: $condition) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
       headerColor
@@ -140,6 +142,8 @@ export const createOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -154,6 +158,8 @@ export const updateOrganization = /* GraphQL */ `
     updateOrganization(input: $input, condition: $condition) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
       headerColor
@@ -165,6 +171,8 @@ export const updateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -179,6 +187,8 @@ export const deleteOrganization = /* GraphQL */ `
     deleteOrganization(input: $input, condition: $condition) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
       headerColor
@@ -190,6 +200,8 @@ export const deleteOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt

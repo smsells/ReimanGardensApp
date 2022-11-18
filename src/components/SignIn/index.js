@@ -35,6 +35,14 @@ const SignIn = ({ onSignIn }) => {
       .catch((err) => console.log(err));
   }
 
+  function load() {
+    const orgID = localStorage.getItem("token");
+    if (!orgID) {
+      console.log("Sign in load check");
+      navigate(0);
+    }
+  }
+
   // function testOnload(){
   //     console.log("Hey I loaded");
   // }
@@ -67,6 +75,8 @@ const SignIn = ({ onSignIn }) => {
             gridAutoColumns: "30%",
           }}
         >
+          {/* {load()} */}
+
           <div style={{ gridArea: "2 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
               <Link to={"/displayShipments"}>

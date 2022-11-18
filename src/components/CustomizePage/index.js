@@ -59,13 +59,14 @@ const CustomizePage = () => {
       query: getOrganization,
       variables: { id: sha512Hash },
     });
+
     if (org.data.getOrganization.logo) {
       const image = await Storage.get(org.data.getOrganization.logo);
-      images["logo"] = image;
+      setImages({ ...images, logo: image });
     }
     if (org.data.getOrganization.coverMedia) {
       const image = await Storage.get(org.data.getOrganization.coverMedia);
-      images["coverMedia"] = image;
+      setImages({ ...images, coverMedia: image });
     }
 
     // console.log("org", org);

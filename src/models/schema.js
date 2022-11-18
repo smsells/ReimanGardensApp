@@ -240,6 +240,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "locationAddress": {
+                    "name": "locationAddress",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationZipCode": {
+                    "name": "locationZipCode",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "locationCity": {
                     "name": "locationCity",
                     "isArray": false,
@@ -314,6 +328,20 @@ export const schema = {
                     "name": "coverMedia",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "deleted": {
+                    "name": "deleted",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "suspended": {
+                    "name": "suspended",
+                    "isArray": false,
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -905,5 +933,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "0fa004484614a710b011bdbd436a669c"
+    "version": "2628177e301cdf915ac4df5ef9e6ce30"
 };

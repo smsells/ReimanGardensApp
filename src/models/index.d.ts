@@ -72,6 +72,8 @@ export declare class Organization {
   readonly id: string;
   readonly name?: string | null;
   readonly username?: string | null;
+  readonly locationAddress?: string | null;
+  readonly locationZipCode?: string | null;
   readonly locationCity?: string | null;
   readonly locationState?: string | null;
   readonly headerColor?: string | null;
@@ -83,6 +85,8 @@ export declare class Organization {
   readonly font?: string | null;
   readonly logo?: string | null;
   readonly coverMedia?: string | null;
+  readonly deleted?: boolean | null;
+  readonly suspended?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Organization, OrganizationMetaData>);
