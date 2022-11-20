@@ -317,6 +317,7 @@ export const onCreateOrderItem = /* GraphQL */ `
   subscription OnCreateOrderItem {
     onCreateOrderItem {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -336,6 +337,7 @@ export const onUpdateOrderItem = /* GraphQL */ `
   subscription OnUpdateOrderItem {
     onUpdateOrderItem {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -355,6 +357,7 @@ export const onDeleteOrderItem = /* GraphQL */ `
   subscription OnDeleteOrderItem {
     onDeleteOrderItem {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit

@@ -121,6 +121,7 @@ export declare class Order {
 export declare class OrderItem {
   readonly id: string;
   readonly species?: string | null;
+  readonly commonName?: string | null;
   readonly numReceived?: number | null;
   readonly emergedInTransit?: number | null;
   readonly damagedInTransit?: number | null;

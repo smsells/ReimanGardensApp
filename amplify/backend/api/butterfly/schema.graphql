@@ -63,6 +63,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {
   species: String
+  commonName: String
   numReceived: Int
   emergedInTransit: Int
   damagedInTransit: Int

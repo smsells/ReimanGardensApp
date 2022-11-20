@@ -252,6 +252,7 @@ export const getOrderItem = /* GraphQL */ `
   query GetOrderItem($id: ID!) {
     getOrderItem(id: $id) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -276,6 +277,7 @@ export const listOrderItems = /* GraphQL */ `
     listOrderItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         species
+        commonName
         numReceived
         emergedInTransit
         damagedInTransit

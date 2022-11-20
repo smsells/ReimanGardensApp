@@ -578,6 +578,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "commonName": {
+                    "name": "commonName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "numReceived": {
                     "name": "numReceived",
                     "isArray": false,
@@ -933,5 +940,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "2628177e301cdf915ac4df5ef9e6ce30"
+    "version": "12502e563e49cc75b3622334cf29b11f"
 };

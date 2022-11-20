@@ -365,6 +365,7 @@ export const createOrderItem = /* GraphQL */ `
   ) {
     createOrderItem(input: $input, condition: $condition) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -387,6 +388,7 @@ export const updateOrderItem = /* GraphQL */ `
   ) {
     updateOrderItem(input: $input, condition: $condition) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -409,6 +411,7 @@ export const deleteOrderItem = /* GraphQL */ `
   ) {
     deleteOrderItem(input: $input, condition: $condition) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
