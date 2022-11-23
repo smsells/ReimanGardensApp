@@ -21,21 +21,41 @@ const Parks = () =>{
    
     const organizationFromAPI = apiData.data.listOrganizations.items;
    
-    var organizationsState= [];
-    var organizationsCity = [];
+    var organizationsLat= [];
+    var organizationsLon = [];
+    var organizationName = [];
     var i =0;
     //var organizationsCountry = []
    organizationFromAPI.forEach(element => {
-        organizationsState[i]= element.locationState;
-        organizationsCity[i]=element.locationCity;
+        organizationsLat[i]= element.lat;
+        organizationsLon[i]=element.lon;
+        //maybe use username?
+        organizationName[i]=element.name;
         //organizationsCountry[i]=element.locationCountry;
         i++;
         
    });
-   console.log(organizationsCity);
+    var latlonList = [];
+    for(var j =0; j<organizationsLat.length; i++){
+        if(organizationsLat[j]!=null|| organizationsLon[j]!=null){
+
+            object = {};
+            object['latitude']=organizationsLat[j];
+            object['longitude'] = organizationsLon[j];
+            object['name']=organizationName[j];
+            latlonList.push(object);
+        }
+       
+    }
+
+   //console.log(organizationsCity);
         
 
     }
+    function setActivePark(location){
+        console.log(location);
+    }
+    
     return(
         <div className="Parks">
             <header > Parks Page </header>
@@ -45,6 +65,19 @@ const Parks = () =>{
                  zoom={4}
                  maxZoom={18}
              >
+                {latlonList.map(location=>(
+                    <Marker
+                    key={location.name}
+                    position={[
+                        location.latitude,
+                        location.longitude
+                    ]}
+                    onClick={() => {
+                        setActivePark(location);
+                      }}
+                    ></Marker>
+
+                ))}
             <TileLayer
                  url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
