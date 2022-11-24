@@ -129,8 +129,12 @@ export const createOrganization = /* GraphQL */ `
     createOrganization(input: $input, condition: $condition) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -140,6 +144,8 @@ export const createOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -154,8 +160,12 @@ export const updateOrganization = /* GraphQL */ `
     updateOrganization(input: $input, condition: $condition) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -165,6 +175,8 @@ export const updateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -179,8 +191,12 @@ export const deleteOrganization = /* GraphQL */ `
     deleteOrganization(input: $input, condition: $condition) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -190,6 +206,8 @@ export const deleteOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -353,6 +371,7 @@ export const createOrderItem = /* GraphQL */ `
   ) {
     createOrderItem(input: $input, condition: $condition) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -375,6 +394,7 @@ export const updateOrderItem = /* GraphQL */ `
   ) {
     updateOrderItem(input: $input, condition: $condition) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -397,6 +417,7 @@ export const deleteOrderItem = /* GraphQL */ `
   ) {
     deleteOrderItem(input: $input, condition: $condition) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit

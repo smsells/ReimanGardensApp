@@ -88,8 +88,12 @@ export const getOrganization = /* GraphQL */ `
     getOrganization(id: $id) {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -99,6 +103,8 @@ export const getOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -115,8 +121,12 @@ export const listOrganizations = /* GraphQL */ `
       items {
         name
         username
+        locationAddress
+        locationZipCode
         locationCity
         locationState
+        locationLongitude
+        locationLatitude
         headerColor
         sectionHeaderColor
         menuColor
@@ -126,6 +136,8 @@ export const listOrganizations = /* GraphQL */ `
         font
         logo
         coverMedia
+        deleted
+        suspended
         id
         createdAt
         updatedAt
@@ -244,6 +256,7 @@ export const getOrderItem = /* GraphQL */ `
   query GetOrderItem($id: ID!) {
     getOrderItem(id: $id) {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -268,6 +281,7 @@ export const listOrderItems = /* GraphQL */ `
     listOrderItems(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         species
+        commonName
         numReceived
         emergedInTransit
         damagedInTransit

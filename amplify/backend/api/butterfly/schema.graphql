@@ -30,8 +30,13 @@ type Butterfly @model @auth(rules: [{ allow: public }]) {
 type Organization @model @auth(rules: [{ allow: public }]) {
   name: String
   username: String
+  locationAddress: String
+  locationZipCode: String
   locationCity: String
   locationState: String
+  locationCountry: String
+  locationLongitude: String
+  locationLatitude: String
   headerColor: String
   sectionHeaderColor: String
   menuColor: String
@@ -41,6 +46,9 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   font: String
   logo: String
   coverMedia: String
+  deleted: Boolean
+  suspended: Boolean
+  #status: Int # 0 - active, 1 - suspended, 2 - deleted
 }
 type replacementCommonName @model @auth(rules: [{ allow: public }]) {
   butterfly: Butterfly @hasOne
@@ -58,6 +66,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {
   species: String
+  commonName: String
   numReceived: Int
   emergedInTransit: Int
   damagedInTransit: Int

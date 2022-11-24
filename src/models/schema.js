@@ -240,6 +240,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "locationAddress": {
+                    "name": "locationAddress",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationZipCode": {
+                    "name": "locationZipCode",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "locationCity": {
                     "name": "locationCity",
                     "isArray": false,
@@ -249,6 +263,27 @@ export const schema = {
                 },
                 "locationState": {
                     "name": "locationState",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationCountry": {
+                    "name": "locationCountry",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationLongitude": {
+                    "name": "locationLongitude",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationLatitude": {
+                    "name": "locationLatitude",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -314,6 +349,20 @@ export const schema = {
                     "name": "coverMedia",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "deleted": {
+                    "name": "deleted",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "suspended": {
+                    "name": "suspended",
+                    "isArray": false,
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -545,6 +594,13 @@ export const schema = {
                 },
                 "species": {
                     "name": "species",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "commonName": {
+                    "name": "commonName",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -905,5 +961,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "0fa004484614a710b011bdbd436a669c"
+    "version": "163d67e094262b88df3606f558bca836"
 };
