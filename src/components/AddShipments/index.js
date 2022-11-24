@@ -1,180 +1,379 @@
-// import React from "react";
-// import { useState, useEffect } from "react";
-// import { graphqlOperation, Storage } from "aws-amplify";
-// import { useNavigate } from "react-router-dom";
-// import { API } from "aws-amplify";
-// import Grid from "@material-ui/core/Grid";
-// import { getOrder } from "../../graphql/queries";
-// import FormControlLabel from "@mui/material/FormControlLabel";
-// import FormGroup from "@mui/material/FormGroup";
+import React, { useState, useEffect } from "react";
+import "../../App.css";
+import { API, Auth } from "aws-amplify";
+import {
+  createOrderItem as createOrderItemMutation,
+  createOrder as createOrderMutation,
+} from "../../graphql/mutations";
+import {
+  listOrganizations,
+  getOrganization,
+  listOrders,
+  getOrder,
+  listOrderItems,
+} from "../../graphql/queries";
 
-// const AddShipments = () => {
-//   const navigate = useNavigate();
+//import { Storage} from 'aws-amplify';
+import Table from "react-bootstrap/Table";
+import "bootstrap/dist/css/bootstrap.min.css";
+import {
+  Navigate,
+  useNavigate,
+  createSearchParams,
+  Link,
+} from "react-router-dom";
+//import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
-//   const handleOnChange = (position) => {
-//     const updatedCheckedState = checkedState.map((item, index) =>
-//       index === position ? !item : item
-//     );
-//     setCheckedState(updatedCheckedState);
-//   };
+const AddShipments = () => {
+  /*
+    species: String
+    numReceived: Int
+    emergedInTransit: Int
+    damagedInTransit: Int
+    diseased: Int
+    parasites: Int
+    poorEmerged: Int
+    numEmerged: Int
+    orgID: String
+    orderID: String
+    */
+  const navigate = useNavigate();
+  const orgID = localStorage.getItem("token");
+  const [showNewOrderForm, setShowNewOrderForm] = useState(false);
+  const [showNewItemForm, setShowNewItemForm] = useState(false);
+  const [suuplier, setSupplier] = useState("");
+  const [shipmentDate, setShipmentDate] = useState("");
+  const [arrivalDate, setArrivalDate] = useState("");
+  const [species, setSpecies] = useState("");
+  const [numReceived, setNumReceived] = useState("");
+  const [emTransit, setEmTransit] = useState("");
+  const [damTransit, setDamTransit] = useState("");
+  const [diseased, setDiseased] = useState("");
+  const [parasites, setParasites] = useState("");
+  const [orderID, setOrderID] = useState("");
+  const [commonName, setCommonName] = useState("");
+  const [numEmerged, setNumEmerged] = useState("");
+  const [poorEmerged, setPoorEmerged] = useState("");
 
-//   useEffect(() => {}, []);
+  function handlePackingList(id, e) {
+    console.log(id);
+    navigate({
+      pathname: "/packingList",
+      search: createSearchParams({
+        id: id,
+      }).toString(),
+    });
+  }
 
-//   const [orderNumber, setOrderNumber] = useState("");
-//   const [shipmentDate, setShipmentDate] = useState("");
-//   const [arrivalDate, setArrivalDate] = useState("");
-//   const [supplier, setSupplier] = useState("");
-//   const [species, setSpecies] = useState("");
-//   const [numReceived, setNumReceived] = useState("");
-//   const [emergedInTransit, setEmergedInTransit] = useState("");
-//   const [damagedInTransit, setDamagedInTransit] = useState("");
-//   const [diseased, setDiseased] = useState("");
-//   const [parasites, setParasites] = useState("");
-//   const [poorEmerged, setPoorEmerged] = useState("");
-//   const [numEmerged, setNumEmerged] = useState("");
+  //Idea is that it will be an array of objects to populate a 2d array
+  //Will need Query Schema for all of this
 
-//   return (
-//     <>
-//       <div>
-//         <Grid
-//           container
-//           spacing={2}
-//           direction="row"
-//           alignItems="center"
-//           justifyContent="center"
-//           rowSpacing={2}
-//         >
-//           <Grid item xs={4}>
-//             <label> Order Number </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setOrderNumber(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Shipment Date </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setShipmentDate(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Arrival Date </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setArrivalDate(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Supplier </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setSupplier(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Species </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setSpecies(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Number Recieved </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setNumReceived(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Emerged in Transit </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setEmergedInTransit(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Damaged in Transit </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setDamagedInTransit(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Diseased </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setDiseased(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Parasites </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setParasites(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Poor Emerged </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setPoorEmerged(e.target.value)}
-//             />
-//           </Grid>
-//           <Grid item xs={4}>
-//             <label> Number Emerged </label>
-//           </Grid>
-//           <Grid item xs={8}>
-//             <input
-//               type="text"
-//               width={"100%"}
-//               onChange={(e) => setNumEmerged(e.target.value)}
-//             />
-//           </Grid>
-//         </Grid>
-//         <button
-//           className="form-button"
-//           type="submit"
-//           value="Submit"
-//           onClick={handleSubmit}
-//         >
-//           Save
-//         </button>
-//       </div>
-//     </>
-//   );
-// };
-// export default AddShipments;
+  //const initialFormState = { /* Object to hold how much info we need for each form*/  }
+
+  //const [formData, setFormData] = useState(initialFormState);
+  const [tableRows, setTableRows] = useState();
+
+  useEffect(() => {
+    fetchShipments();
+  }, []);
+
+  async function fetchShipments() {
+    Auth.currentAuthenticatedUser().then(async (user) => {
+      var usernameToGet = user.username;
+      console.log("Username: " + usernameToGet);
+      let filter = {
+        username: { eq: usernameToGet },
+      };
+      const apiData = await API.graphql({
+        query: listOrganizations,
+        variables: { filter: filter },
+      });
+      //check what theyre called lol
+      console.log("Here's what the query returned: " + JSON.stringify(apiData));
+      if (apiData == null) {
+        console.log("its null");
+      }
+
+      const organizationFromAPI = apiData.data.listOrganizations.items;
+      const organizationID = organizationFromAPI[0].id;
+      console.log("Organization ID: " + organizationID);
+      //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
+      //There should be only 1 organization so
+      //const shipmentsFromAPI = organizationsFromAPI.Shipments;
+      let filterShip = {
+        orgID: { eq: organizationID },
+      };
+      const shipmentsFromID = await API.graphql({
+        query: listOrders,
+        variables: { filter: filterShip },
+      });
+      console.log(
+        "Here's what the query returned (shipment): " +
+          JSON.stringify(shipmentsFromID)
+      );
+
+      //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
+      var orders = shipmentsFromID.data.listOrders.items;
+      console.log("Here is what is in the array:  " + JSON.stringify(orders));
+      var result = [];
+      for (var i in orders) result.push([i, orders[i]]);
+
+      var data = orders.map((element) => {
+        return (
+          <tr>
+            <td>{element.orderNumber}</td>
+            <td>{element.shipmentDate}</td>
+            <td>{element.arrivalDate}</td>
+            <td>{element.supplier}</td>
+            <td>
+              {" "}
+              <button onClick={(e) => addOrderItem(element, e)}>
+                {" "}
+                New Item{" "}
+              </button>
+            </td>
+          </tr>
+        );
+      });
+
+      setTableRows(data);
+    });
+
+    /*
+        
+        Not sure if this will work because the table is nested but
+              Ideas:
+              Button with the ID of the shipment on the inside to take you to another page where the order items are iterated in a similar way to this page
+              For loop to iterate over all the 
+        */
+  }
+
+  function addOrder() {
+    setShowNewOrderForm((current) => !current);
+    setSupplier("");
+    setShipmentDate("");
+    setArrivalDate("");
+  }
+
+  async function handleNewOrderSubmit() {
+    console.log("In handle new order Submit");
+    await API.graphql({
+      query: createOrderMutation,
+      variables: {
+        input: {
+          supplier: suuplier,
+          shipmentDate: shipmentDate,
+          arrivalDate: arrivalDate,
+          orgID: orgID,
+        },
+      },
+    });
+    console.log("after query in handleSubmit");
+    navigate(0);
+  }
+
+  function addOrderItem(element, e) {
+    /*
+    species: String
+    numReceived: Int
+    emergedInTransit: Int
+    damagedInTransit: Int
+    diseased: Int
+    parasites: Int
+    poorEmerged: Int
+    numEmerged: Int
+    orgID: String
+    orderID: String
+    */
+    setShowNewItemForm((current) => !current);
+    setSpecies("");
+    setDamTransit("");
+    setEmTransit("");
+    setParasites("");
+    setDiseased("");
+    setNumReceived("");
+    setPoorEmerged("");
+    setCommonName("");
+    setNumEmerged("");
+    setOrderID(element.id);
+  }
+
+  async function handleNewOrderItemSubmit() {
+    console.log("In handle new Item Submit");
+    await API.graphql({
+      query: createOrderItemMutation,
+      variables: {
+        input: {
+          orgID: orgID,
+          orderID: orderID,
+          species: species,
+          commonName: commonName,
+          numReceived: numReceived,
+          emergedInTransit: emTransit,
+          damagedInTransit: damTransit,
+          diseased: diseased,
+          parasites: parasites,
+          numEmerged: numEmerged,
+          poorEmerged: poorEmerged,
+        },
+      },
+    });
+    console.log("after query in handleSubmit");
+    navigate(0);
+  }
+
+  return (
+    //Holder for the information
+    <div className="DisplayShipments">
+      <button onClick={addOrder}>Add Order</button>
+      {showNewOrderForm && (
+        <>
+          <div>
+            <form>
+              New Order
+              <div>
+                <label htmlFor="supplier">Supplier</label>
+                <input
+                  type="text"
+                  name="supplier"
+                  id="supplier"
+                  onChange={(e) => setSupplier(e.target.value)}
+                  placeholder="Supplier"
+                ></input>
+                <br></br>
+                <label htmlFor="shipmentDate">Shipment Date</label>
+                <input
+                  type="text"
+                  name="shipmentDate"
+                  id="shipmentDate"
+                  onChange={(e) => setShipmentDate(e.target.value)}
+                  placeholder="shipmentDate"
+                ></input>
+                <br></br>
+                <label htmlFor="arrivalDate">Arrival Date</label>
+                <input
+                  type="text"
+                  name="arrivalDate"
+                  id="arrivalDate"
+                  onChange={(e) => setArrivalDate(e.target.value)}
+                  placeholder="arrivalDate"
+                ></input>
+                {/* <br></br> */}
+              </div>
+            </form>
+
+            <button onClick={handleNewOrderSubmit}>Submit</button>
+          </div>
+        </>
+      )}
+      <Table hover>
+        <thead>
+          <tr>
+            <th> Order Number</th>
+            <th>Shipment Date</th>
+            <th>Arrival Date</th>
+            <th>Supplier</th>
+
+            <th>View More</th>
+          </tr>
+        </thead>
+        <tbody>{tableRows}</tbody>
+      </Table>
+      {showNewItemForm && (
+        <>
+          <div>
+            <form>
+              New Item
+              <div>
+                {/* <p>Order ID: {orderID}</p> */}
+                <label htmlFor="species">Species</label>
+                <input
+                  type="text"
+                  name="species"
+                  id="species"
+                  onChange={(e) => setSpecies(e.target.value)}
+                  placeholder="Species"
+                ></input>
+                <br></br>
+                <label htmlFor="commonName">Common Name</label>
+                <input
+                  type="text"
+                  name="commonName"
+                  id="commonName"
+                  onChange={(e) => setCommonName(e.target.value)}
+                  placeholder="commonName"
+                ></input>
+                <br></br>
+                <label htmlFor="numReceived">Number Received</label>
+                <input
+                  type="text"
+                  name="numReceived"
+                  id="numReceived"
+                  onChange={(e) => setNumReceived(e.target.value)}
+                  placeholder="Number Received"
+                ></input>
+                <br></br>
+                <label htmlFor="emTransit">Emerged In Transit</label>
+                <input
+                  type="text"
+                  name="emTransit"
+                  id="emTransit"
+                  onChange={(e) => setEmTransit(e.target.value)}
+                  placeholder="Emerged In Transit"
+                ></input>
+                <br></br>
+                <label htmlFor="damTransit">Damaged In Transit</label>
+                <input
+                  type="text"
+                  name="damTransit"
+                  id="damTransit"
+                  onChange={(e) => setDamTransit(e.target.value)}
+                  placeholder="Damaged in Transit"
+                ></input>
+                <br></br>
+                <label htmlFor="diseased">Diseased</label>
+                <input
+                  type="text"
+                  name="diseased"
+                  id="diseased"
+                  onChange={(e) => setDiseased(e.target.value)}
+                  placeholder="Diseased"
+                ></input>
+                <br></br>
+                <label htmlFor="numEmerged">Number Emerged</label>
+                <input
+                  type="text"
+                  name="numEmerged"
+                  id="numEmerged"
+                  onChange={(e) => setNumEmerged(e.target.value)}
+                  placeholder="Number Emerged"
+                ></input>
+                <br></br>
+                <label htmlFor="poorEmerged">Poor emerged</label>
+                <input
+                  type="text"
+                  name="poorEmerged"
+                  id="poorEmerged"
+                  onChange={(e) => setPoorEmerged(e.target.value)}
+                  placeholder="Poor Emerged"
+                ></input>
+                <br></br>
+                <label htmlFor="parasites">Parasites</label>
+                <input
+                  type="text"
+                  name="parasites"
+                  id="parasites"
+                  onChange={(e) => setParasites(e.target.value)}
+                  placeholder="Parasites"
+                ></input>
+              </div>
+            </form>
+
+            <button onClick={handleNewOrderItemSubmit}>Submit</button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+export default AddShipments;

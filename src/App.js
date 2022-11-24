@@ -40,8 +40,11 @@ function App() {
 
   const initialOrganizationState = {
     name: "",
+    locationAddress: "",
+    locationZipCode: "",
     locationCity: "",
     locationState: "",
+    locationCountry: "",
     headerColor: "",
     sectionHeaderColor: "",
     menuColor: "",
@@ -51,6 +54,8 @@ function App() {
     font: "",
     logo: "",
     coverMedia: "",
+    deleted: false,
+    suspended: false,
   };
 
   const [loggedIn, setLoggedIn] = useState(false);
@@ -301,7 +306,7 @@ function App() {
         <Route exact path="/editShipment" element={<EditShipments />} />
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
-        {/* <Route exact path="/addShipments" element={<AddShipments />} /> */}
+        <Route exact path="/addShipments" element={<AddShipments />} />
         <Route
           exact
           path="/deleteOrganizations"

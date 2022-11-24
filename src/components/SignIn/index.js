@@ -1,15 +1,40 @@
-import { React } from "react";
+import { React, useState } from "react";
 import { Auth, API } from "aws-amplify";
 import { Link, useNavigate } from "react-router-dom";
 import { Authenticator } from "@aws-amplify/ui-react";
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from "../AdminButton/AdminButton";
 import { createOrganization as createOrgMutation } from "../../graphql/mutations";
+import { getOrganization } from "../../graphql/queries";
 
 // import Grid from '@mui/material/Grid';
 
 const SignIn = ({ onSignIn }) => {
   const navigate = useNavigate();
+  const orgId = localStorage.getItem("token");
+
+  const initialOrganizationState = {
+    name: "",
+    locationAddress: "",
+    locationZipCode: "",
+    locationCity: "",
+    locationState: "",
+    locationCountry: "",
+    headerColor: "",
+    sectionHeaderColor: "",
+    menuColor: "",
+    linkFontColor: "",
+    adminIconColor: "",
+    homepageBackground: "",
+    font: "",
+    logo: "",
+    coverMedia: "",
+    deleted: false,
+    suspended: false,
+  };
+
+  const [organization, setOrganization] = useState(initialOrganizationState);
+  const [images, setImages] = useState({});
 
   function navigateHome() {
     navigate("/");
@@ -41,6 +66,42 @@ const SignIn = ({ onSignIn }) => {
       console.log("Sign in load check");
       navigate(0);
     }
+  }
+
+  async function getOrg() {
+    const org = await API.graphql({
+      query: getOrganization,
+      variables: { id: orgId },
+    });
+
+    if (org.data.getOrganization.logo) {
+      const image = await Storage.get(org.data.getOrganization.logo);
+      setImages({ ...images, logo: image });
+    }
+    if (org.data.getOrganization.coverMedia) {
+      const image = await Storage.get(org.data.getOrganization.coverMedia);
+      setImages({ ...images, coverMedia: image });
+    }
+
+    setOrganization({
+      name: org.data.getOrganization.name,
+      locationAddress: org.data.getOrganization.locationAddress,
+      locationZipCode: org.data.getOrganization.locationZipCode,
+      locationCity: org.data.getOrganization.locationCity,
+      locationState: org.data.getOrganization.locationState,
+      locationCountry: org.data.getOrganization.locationCountry,
+      headerColor: org.data.getOrganization.headerColor,
+      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
+      menuColor: org.data.getOrganization.menuColor,
+      linkFontColor: org.data.getOrganization.linkFontColor,
+      adminIconColor: org.data.getOrganization.adminIconColor,
+      homepageBackground: org.data.getOrganization.homepageBackground,
+      font: org.data.getOrganization.font,
+      logo: org.data.getOrganization.logo,
+      coverMedia: org.data.getOrganization.coverMedia,
+      deleted: org.data.getOrganization.deleted,
+      suspended: org.data.getOrganization.suspended,
+    });
   }
 
   // function testOnload(){
@@ -75,10 +136,33 @@ const SignIn = ({ onSignIn }) => {
             gridAutoColumns: "30%",
           }}
         >
-          {/* {load()} */}
+          {({ signOut, user }) => (
+            <main>
+              <h1>Hello {user.username}</h1>
+              <button
+                onClick={(e) => {
+                  console.log("Auth", user.name);
+                }}
+              >
+                Sign out
+              </button>
+            </main>
+          )}
 
           <div style={{ gridArea: "2 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
+              {({ signOut, user }) => (
+                <main>
+                  <h1>Hello {user.username}</h1>
+                  <button
+                    onClick={(e) => {
+                      console.log("Auth", user.name);
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </main>
+              )}
               <Link to={"/displayShipments"}>
                 <AdminButton>View Shipments</AdminButton>
               </Link>
