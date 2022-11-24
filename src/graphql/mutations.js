@@ -133,6 +133,8 @@ export const createOrganization = /* GraphQL */ `
       locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -162,6 +164,8 @@ export const updateOrganization = /* GraphQL */ `
       locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -191,6 +195,8 @@ export const deleteOrganization = /* GraphQL */ `
       locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor

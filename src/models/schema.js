@@ -268,6 +268,27 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "locationCountry": {
+                    "name": "locationCountry",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationLongitude": {
+                    "name": "locationLongitude",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "locationLatitude": {
+                    "name": "locationLatitude",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "headerColor": {
                     "name": "headerColor",
                     "isArray": false,
@@ -940,5 +961,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "12502e563e49cc75b3622334cf29b11f"
+    "version": "163d67e094262b88df3606f558bca836"
 };

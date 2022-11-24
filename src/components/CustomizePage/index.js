@@ -15,8 +15,11 @@ const CustomizePage = () => {
   const initialCustomizeState = {
     id: sha512Hash,
     name: "",
+    locationAddress: "",
+    locationZipCode: "",
     locationCity: "",
     locationState: "",
+    locationCountry: "",
     headerColor: "",
     sectionHeaderColor: "",
     menuColor: "",
@@ -26,6 +29,8 @@ const CustomizePage = () => {
     font: "",
     logo: "",
     coverMedia: "",
+    deleted: false,
+    suspended: false,
   };
 
   const navigate = useNavigate();
@@ -72,8 +77,11 @@ const CustomizePage = () => {
     // console.log("org", org);
     setFormData({
       name: org.data.getOrganization.name,
+      locationAddress: org.data.getOrganization.locationAddress,
+      locationZipCode: org.data.getOrganization.locationZipCode,
       locationCity: org.data.getOrganization.locationCity,
       locationState: org.data.getOrganization.locationState,
+      locationCountry: org.data.getOrganization.locationCountry,
       headerColor: org.data.getOrganization.headerColor,
       sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
       menuColor: org.data.getOrganization.menuColor,
@@ -83,6 +91,8 @@ const CustomizePage = () => {
       font: org.data.getOrganization.font,
       logo: org.data.getOrganization.logo,
       coverMedia: org.data.getOrganization.coverMedia,
+      deleted: org.data.getOrganization.deleted,
+      suspended: org.data.getOrganization.suspended,
     });
   }
 
@@ -209,6 +219,30 @@ const CustomizePage = () => {
             />
           </Grid>
           <Grid item xs={4}>
+            <label> Address </label>
+          </Grid>
+          <Grid item xs={8}>
+            <input
+              onChange={(e) =>
+                setFormData({ ...formData, locationAddress: e.target.value })
+              }
+              placeholder="Address"
+              value={formData.locationAddress}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Zip Code/P.O. Box </label>
+          </Grid>
+          <Grid item xs={8}>
+            <input
+              onChange={(e) =>
+                setFormData({ ...formData, locationZipCode: e.target.value })
+              }
+              placeholder="Zip code or P.O. Box"
+              value={formData.locationZipCode}
+            />
+          </Grid>
+          <Grid item xs={4}>
             <label> Location City </label>
           </Grid>
           <Grid item xs={8}>
@@ -230,6 +264,18 @@ const CustomizePage = () => {
               }
               placeholder="Location state"
               value={formData.locationState}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Country </label>
+          </Grid>
+          <Grid item xs={8}>
+            <input
+              onChange={(e) =>
+                setFormData({ ...formData, locationCountry: e.target.value })
+              }
+              placeholder="Country"
+              value={formData.locationCountry}
             />
           </Grid>
           <Grid item xs={4}>

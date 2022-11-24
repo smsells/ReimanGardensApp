@@ -167,6 +167,7 @@ function App() {
       locationZipCode: org.data.getOrganization.locationZipCode,
       locationCity: org.data.getOrganization.locationCity,
       locationState: org.data.getOrganization.locationState,
+      locationCountry: org.data.getOrganization.locationCountry,
       headerColor: org.data.getOrganization.headerColor,
       sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
       menuColor: org.data.getOrganization.menuColor,

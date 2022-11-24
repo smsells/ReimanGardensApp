@@ -92,6 +92,8 @@ export const getOrganization = /* GraphQL */ `
       locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -123,6 +125,8 @@ export const listOrganizations = /* GraphQL */ `
         locationZipCode
         locationCity
         locationState
+        locationLongitude
+        locationLatitude
         headerColor
         sectionHeaderColor
         menuColor

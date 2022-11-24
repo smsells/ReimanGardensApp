@@ -76,6 +76,9 @@ export declare class Organization {
   readonly locationZipCode?: string | null;
   readonly locationCity?: string | null;
   readonly locationState?: string | null;
+  readonly locationCountry?: string | null;
+  readonly locationLongitude?: string | null;
+  readonly locationLatitude?: string | null;
   readonly headerColor?: string | null;
   readonly sectionHeaderColor?: string | null;
   readonly menuColor?: string | null;

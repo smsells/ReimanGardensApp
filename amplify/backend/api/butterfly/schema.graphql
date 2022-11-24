@@ -34,6 +34,9 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   locationZipCode: String
   locationCity: String
   locationState: String
+  locationCountry: String
+  locationLongitude: String
+  locationLatitude: String
   headerColor: String
   sectionHeaderColor: String
   menuColor: String
