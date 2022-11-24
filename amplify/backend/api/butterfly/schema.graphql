@@ -96,4 +96,4 @@ type Image @model @auth(rules: [{ allow: public }]) {
   id: ID!
   butterflyName: String
   imageAddress: String
-}
+}  
