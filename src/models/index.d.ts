@@ -71,6 +71,7 @@ export declare class Butterfly {
 export declare class Organization {
   readonly id: string;
   readonly name?: string | null;
+  readonly url?: string | null;
   readonly username?: string | null;
   readonly locationAddress?: string | null;
   readonly locationZipCode?: string | null;

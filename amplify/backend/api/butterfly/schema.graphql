@@ -29,6 +29,7 @@ type Butterfly @model @auth(rules: [{ allow: public }]) {
 
 type Organization @model @auth(rules: [{ allow: public }]) {
   name: String
+  url: String
   username: String
   locationAddress: String
   locationZipCode: String

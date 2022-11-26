@@ -33,6 +33,7 @@ import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
 import DeleteOrganizations from "./components/DeleteOrganizations";
 import AddShipments from "./components/AddShipments";
+import AdminPanel from "./components/AdminPanel";
 import crypto from "crypto-js";
 
 function App() {
@@ -168,6 +169,7 @@ function App() {
 
     setOrganization({
       name: org.data.getOrganization.name,
+      url: org.data.getOrganization.url,
       locationAddress: org.data.getOrganization.locationAddress,
       locationZipCode: org.data.getOrganization.locationZipCode,
       locationCity: org.data.getOrganization.locationCity,
@@ -212,35 +214,35 @@ function App() {
         <Link
           className="menu-link"
           style={{ color: organization.menuColor }}
-          to={"/"}
+          to={"/" + organization.url + "/"}
           onClick={() => handleCloseMenu()}
         >
           Home
         </Link>
         <Link
           className="menu-link"
-          to={"/notes"}
+          to={"/" + organization.url + "/notes"}
           onClick={() => handleCloseMenu()}
         >
           NoteList
         </Link>
         <Link
           className="menu-link"
-          to={"/stats"}
+          to={"/" + organization.url + "/stats"}
           onClick={() => handleCloseMenu()}
         >
           Stats
         </Link>
         <Link
           className="menu-link"
-          to={"/gallery"}
+          to={"/" + organization.url + "/gallery"}
           onClick={() => handleCloseMenu()}
         >
           Gallery
         </Link>
         <Link
           className="menu-link"
-          to={"/parks"}
+          to={"/" + organization.url + "/parks"}
           onClick={() => handleCloseMenu()}
         >
           Parks Around the World
@@ -289,16 +291,33 @@ function App() {
         <h1>Welcome to {organization.name || "Reiman Garden"}</h1>
       </header>
       <Routes>
-        <Route exact path="/" element={<Home />} />
+        <Route exact path={organization.url + "/"} element={<Home />} />
         <Route
           exact
           path="/signin"
           element={<SignIn onSignIn={isLoggedIn} />}
         />
-        <Route exact path="/notes" element={<NoteList />} />
-        <Route exact path="/stats" element={<Stats />} />
-        <Route exact path="/gallery" element={<Gallery />} />
-        <Route exact path="/parks" element={<Parks />} />
+        <Route exact path="/adminPanel" element={<AdminPanel />} />
+        <Route
+          exact
+          path={"/" + organization.url + "/notes"}
+          element={<NoteList />}
+        />
+        <Route
+          exact
+          path={"/" + organization.url + "/stats"}
+          element={<Stats />}
+        />
+        <Route
+          exact
+          path={"/" + organization.url + "/gallery"}
+          element={<Gallery />}
+        />
+        <Route
+          exact
+          path={"/" + organization.url + "/parks"}
+          element={<Parks />}
+        />
         <Route exact path="/addButterfly" element={<AddButterfly />} />
         <Route exact path="/editButterfly" element={<EditButterfly />} />
         <Route exact path="/displayShipments" element={<DisplayShipments />} />

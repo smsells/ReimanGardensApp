@@ -1,10 +1,19 @@
 import { React, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { API } from "aws-amplify";
 import { Storage } from "aws-amplify";
-import { listModules } from "../../graphql/queries";
+import {
+  listModules,
+  listOrganizations,
+  getOrganization,
+  listOrders,
+} from "../../graphql/queries";
 
 const Home = () => {
-  const sha512Hash = localStorage.getItem("token");
+  // const [orgID, setOrgID] = useState("");
+  const location = useLocation();
+  const pathName = location.pathname.split("/");
+  const orgURL = pathName[1];
   const [activeModules, setActiveModules] = useState([]);
 
   useEffect(() => {
@@ -12,10 +21,26 @@ const Home = () => {
   }, []);
 
   async function getActiveModules() {
+    let filterOrg = {
+      url: { eq: orgURL },
+    };
+    const apiDataOrg = await API.graphql({
+      query: listOrganizations,
+      variables: { filter: filterOrg },
+    });
+    if (apiDataOrg == null) {
+      console.log("its null");
+    }
+
+    const organizationFromAPI = apiDataOrg.data.listOrganizations.items;
+    const organizationID = organizationFromAPI[0].id;
+    // setOrgID(organizationID);
+    const organizationName = organizationFromAPI[0].name;
+
     let filter = {
       and: [
         {
-          orgID: { eq: sha512Hash },
+          orgID: { eq: organizationID },
         },
         {
           active: { eq: 1 },
@@ -26,7 +51,6 @@ const Home = () => {
       query: listModules,
       variables: { filter: filter },
     });
-    console.log("active Modules", apiData.data.listModules.items);
     const activeModulesFromAPI = apiData.data.listModules.items;
     await Promise.all(
       activeModulesFromAPI.map(async (activeModule) => {

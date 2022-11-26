@@ -87,11 +87,13 @@ export const getOrganization = /* GraphQL */ `
   query GetOrganization($id: ID!) {
     getOrganization(id: $id) {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor
@@ -120,11 +122,13 @@ export const listOrganizations = /* GraphQL */ `
     listOrganizations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
+        url
         username
         locationAddress
         locationZipCode
         locationCity
         locationState
+        locationCountry
         locationLongitude
         locationLatitude
         headerColor

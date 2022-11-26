@@ -1,17 +1,16 @@
-import { React, useState } from "react";
-import { Auth, API } from "aws-amplify";
+import { React, useEffect, useState } from "react";
+import { Auth, API, navRight } from "aws-amplify";
+import { Storage } from "aws-amplify";
 import { Link, useNavigate } from "react-router-dom";
 import { Authenticator } from "@aws-amplify/ui-react";
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from "../AdminButton/AdminButton";
-import { Storage } from "aws-amplify";
-import { createOrganization as createOrganizationMutation } from "../../graphql/mutations";
 import { getOrganization } from "../../graphql/queries";
-import crypto from "crypto-js";
+import AppHeader from "../Header/AppHeader";
 
 // import Grid from '@mui/material/Grid';
 
-const SignIn = ({ onSignIn }) => {
+const AdminPanel = () => {
   const navigate = useNavigate();
   const orgId = localStorage.getItem("token");
 
@@ -36,32 +35,17 @@ const SignIn = ({ onSignIn }) => {
     suspended: false,
   };
 
-  const [organization, setOrganization] = useState(initialOrganizationState);
-  const [images, setImages] = useState({});
+  const initialImages = {
+    logo: "",
+    coverMedia: "",
+  };
 
-  function navigateHome() {
-    navigate("/");
-    //window.location.reload(false);
-    onSignIn();
-  }
-  // function pullUser() {
-  //   Auth.currentAuthenticatedUser({
-  //     bypassCache: false,
-  //   })
-  //     .then((user) => {
-  //       console.log("User ", user);
-  //       console.log("User Pool", user.pool);
-  //       if (user.pool.userPoolId === "us-east-2_tyNlmQmJu") {
-  //         console.log("success");
-  //         API.graphql({
-  //           query: createOrgMutation,
-  //           variables: { input: user.username },
-  //         });
-  //         //can redirect in here
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
+  const [organization, setOrganization] = useState(initialOrganizationState);
+  const [images, setImages] = useState(initialImages);
+
+  useEffect(() => {
+    getOrg();
+  }, []);
 
   function load() {
     const orgID = localStorage.getItem("token");
@@ -70,55 +54,6 @@ const SignIn = ({ onSignIn }) => {
       navigate(0);
     }
   }
-
-  const logIN = () => {
-    Auth.currentAuthenticatedUser()
-      .then(async (user) => {
-        console.log("user email", user.username);
-        let out = false;
-        const userName = user.username;
-        const sha512Hash = crypto.SHA512(userName).toString();
-        console.log("result1: ", userName);
-
-        const res = await API.graphql({
-          query: getOrganization,
-          variables: { id: sha512Hash },
-        });
-        console.log("try", res.data.getOrganization);
-        if (res.data.getOrganization === null) {
-          const cat = await API.graphql({
-            query: createOrganizationMutation,
-            variables: {
-              input: {
-                id: sha512Hash,
-                username: userName,
-                deleted: false,
-                suspended: false,
-              },
-            },
-          });
-          // if (cat === null) {
-
-          // }
-          console.log("catch", cat);
-        } else {
-          if (
-            res.data.getOrganization.deleted ||
-            res.data.getOrganization.suspended
-          ) {
-            out = true;
-            signOut();
-          }
-        }
-        if (!out) {
-          localStorage.setItem("token", sha512Hash);
-          console.log("done");
-          out = false;
-          navigate("/adminPanel");
-        }
-      })
-      .catch(() => {});
-  };
 
   async function getOrg() {
     const org = await API.graphql({
@@ -174,6 +109,11 @@ const SignIn = ({ onSignIn }) => {
 
   return (
     <Authenticator>
+      {/* <AppHeader
+        menuProp={<button onClick={() => signOut()}>Sign Out</button>}
+        organizationProp={organization}
+        imagesProp={images}
+      ></AppHeader> */}
       <div
         className="SignIn"
         slot="sign-in"
@@ -200,16 +140,47 @@ const SignIn = ({ onSignIn }) => {
             gridAutoColumns: "30%",
           }}
         >
-          <div style={{ gridArea: "3 / 1 / span 1 / span 3" }}>
+          {load()}
+          <div style={{ gridArea: "2 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
-              <button onClick={() => logIN()} className="admin-button">
-                Admin Panel
-              </button>
-              <button onClick={() => signOut()} className="admin-button">
-                Sign Out
-              </button>
+              <Link to={"/displayShipments"}>
+                <AdminButton>View Shipments</AdminButton>
+              </Link>
+              <Link to={"/addShipments"}>
+                <AdminButton>Add Shipment</AdminButton>
+              </Link>
+              <Link to={"/importExportShipments"}>
+                <AdminButton>Import/Export Shipments</AdminButton>
+              </Link>
             </div>
           </div>
+          <div style={{ gridArea: "3 / 1 / span 1 / span 3" }}>
+            <div className="grid-item">
+              <Link to={"/addButterfly"}>
+                <AdminButton>Add Butterfly</AdminButton>
+              </Link>
+              <Link to={"/editButterfly"}>
+                <AdminButton>Edit Butterfly</AdminButton>
+              </Link>
+              <Link to={"/notes"}>
+                <AdminButton>Add/Edit Notes</AdminButton>
+              </Link>
+            </div>
+          </div>
+          <div style={{ gridArea: "4 / 1 / span 1 / span 3" }}>
+            <div className="grid-item">
+              <Link to={"/customizePage"}>
+                <AdminButton>Customize Page</AdminButton>
+              </Link>
+              <Link to={"/customizeModules"}>
+                <AdminButton>Customize Modules</AdminButton>
+              </Link>
+              <Link to={"/deleteOrganizations"}>
+                <AdminButton>Delete Organizations</AdminButton>
+              </Link>
+            </div>
+          </div>
+
           <div
             style={{
               display: "-ms-inline-grid",
@@ -223,38 +194,4 @@ const SignIn = ({ onSignIn }) => {
   );
 };
 
-export default SignIn;
-
-/*
-const [user, setUser] = useState('');
-    const [pass, setPass] = useState('');
-     const navigate = useNavigate();
-
-    const signIn = async () => {
-        try{
-            const awaitingUser = await Auth.signIn(user, pass);
-            navigate('/');
-            onSignIn();
-
-
-        } catch(error){
-            console.log(error);
-
-        }
-    }
-
-
-<input
-                onChange={e => setUser(e.target.value )}
-                placeholder="Username"
-
-              />
-              <input
-                onChange={e => setPass(e.target.value )}
-                placeholder="Pass"
-
-              />
-            <button  onClick={signIn}>Sign in</button>
-*/
-//might be easiest to just have a navigation page kinda thing after sign in and the normal page just loads the reiman gardens thing
-//Navigating from the navbar to home currently doesn't auto refresh the page so the signout button switch is broken.
+export default AdminPanel;

@@ -128,11 +128,13 @@ export const createOrganization = /* GraphQL */ `
   ) {
     createOrganization(input: $input, condition: $condition) {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor
@@ -159,11 +161,13 @@ export const updateOrganization = /* GraphQL */ `
   ) {
     updateOrganization(input: $input, condition: $condition) {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor
@@ -190,11 +194,13 @@ export const deleteOrganization = /* GraphQL */ `
   ) {
     deleteOrganization(input: $input, condition: $condition) {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor

@@ -107,11 +107,13 @@ export const onCreateOrganization = /* GraphQL */ `
   subscription OnCreateOrganization {
     onCreateOrganization {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor
@@ -135,11 +137,13 @@ export const onUpdateOrganization = /* GraphQL */ `
   subscription OnUpdateOrganization {
     onUpdateOrganization {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor
@@ -163,11 +167,13 @@ export const onDeleteOrganization = /* GraphQL */ `
   subscription OnDeleteOrganization {
     onDeleteOrganization {
       name
+      url
       username
       locationAddress
       locationZipCode
       locationCity
       locationState
+      locationCountry
       locationLongitude
       locationLatitude
       headerColor

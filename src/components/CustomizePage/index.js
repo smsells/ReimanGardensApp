@@ -15,6 +15,7 @@ const CustomizePage = () => {
   const initialCustomizeState = {
     id: sha512Hash,
     name: "",
+    url: "",
     locationAddress: "",
     locationZipCode: "",
     locationCity: "",
@@ -77,6 +78,7 @@ const CustomizePage = () => {
     // console.log("org", org);
     setFormData({
       name: org.data.getOrganization.name,
+      url: org.data.getOrganization.url,
       locationAddress: org.data.getOrganization.locationAddress,
       locationZipCode: org.data.getOrganization.locationZipCode,
       locationCity: org.data.getOrganization.locationCity,
@@ -197,6 +199,11 @@ const CustomizePage = () => {
 
   return (
     <>
+      {/* <AppHeader
+        menuProp={<button onClick={() => signOut()}>Sign Out</button>}
+        organizationProp={organization}
+        imagesProp={images}
+      ></AppHeader> */}
       <div>
         <Grid
           container
@@ -216,6 +223,18 @@ const CustomizePage = () => {
               }
               placeholder="Butterfly house name"
               value={formData.name}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <label> Url </label>
+          </Grid>
+          <Grid item xs={8}>
+            <input
+              onChange={(e) =>
+                setFormData({ ...formData, url: e.target.value })
+              }
+              placeholder="Butterfly house url"
+              value={formData.url}
             />
           </Grid>
           <Grid item xs={4}>
