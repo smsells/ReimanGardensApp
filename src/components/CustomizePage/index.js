@@ -180,21 +180,68 @@ const CustomizePage = () => {
    * - refresh page to show changes
    */
   async function handleSubmit() {
-    await API.graphql({
-      query: updateOrgMutation,
-      variables: {
-        input: {
-          id: sha512Hash,
-          ...formData,
-        },
+
+const Nominatim = require('nominatim-geocoder')
+const geocoder = new Nominatim()
+var city = ""
+if(formData.locationCity){
+  city = formData.locationCity;
+}
+var country = "";
+if(formData.locationCountry){
+  country = formData.locationCountry;
+}
+var address = "";
+if(formData.locationAddress){
+  var address = formData.locationAddress
+}
+
+var query = address + " "+city+", "+country;
+var latitude;
+var longitude;
+if(!city&&!address&&!country){
+  console.log("No Query");
+  await API.graphql({
+    query: updateOrgMutation,
+    variables: {
+      input: {
+        id: sha512Hash,
+        ...formData,
       },
-    });
-    // if (formData.logo) {
-    //   const image = await Storage.get(formData.logo);
-    //   formData.logo = image;
-    // }
-    // // console.log("form data", formData);
-    navigate(0);
+    },
+  });
+  navigate(0);
+}
+else{
+  console.log("query");
+  console.log(query);
+  await geocoder.search( { q: query } )
+    .then((response) => {
+        latitude = response[0].lat;
+        longitude = response[0].lon;
+        console.log(latitude + " "+ longitude)
+
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+    console.log("I am outside of the query now");
+
+  await API.graphql({
+        query: updateOrgMutation,
+        variables: {
+          input: {
+            id: sha512Hash,
+            locationLatitude: latitude,
+            locationLongitude: longitude,
+            ...formData,
+          },
+        },
+      });
+      //navigate(0);
+
+}
+
   }
 
   return (

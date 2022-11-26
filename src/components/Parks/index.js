@@ -10,6 +10,7 @@ import 'leaflet/dist/leaflet.css';
 
 
 const Parks = () =>{
+    var latlonList =[];
 
     useEffect(()=>{
         fetchOrganizations();
@@ -27,46 +28,54 @@ const Parks = () =>{
     var i =0;
     //var organizationsCountry = []
    organizationFromAPI.forEach(element => {
-        organizationsLat[i]= element.lat;
-        organizationsLon[i]=element.lon;
+        organizationsLat[i]= element.locationLatitude;
+        organizationsLon[i]=element.locationLongitude;
         //maybe use username?
         organizationName[i]=element.name;
         //organizationsCountry[i]=element.locationCountry;
         i++;
         
    });
-    var latlonList = [];
-    for(var j =0; j<organizationsLat.length; i++){
-        if(organizationsLat[j]!=null|| organizationsLon[j]!=null){
-
-            object = {};
-            object['latitude']=organizationsLat[j];
-            object['longitude'] = organizationsLon[j];
-            object['name']=organizationName[j];
-            latlonList.push(object);
-        }
+  
+    for(var j=0 ; j<organizationsLat.length; j++){
+    if(organizationsLat[j]!=null|| organizationsLon[j]!=null){
        
-    }
+        var object = {};
+        
+        object['latitude']=organizationsLat[j];
+         object['longitude'] = organizationsLon[j];
+         object['name']=organizationName[j];
+         console.log(object);
+         latlonList.push(object);
 
-   //console.log(organizationsCity);
+    }
+    
+    
+    
+   }
+
+   
+   console.log(latlonList);
         
 
     }
     function setActivePark(location){
         console.log(location);
     }
-    
+
     return(
         <div className="Parks">
             <header > Parks Page </header>
             <MapContainer
                  style={{ height: "450px", width: "100%" }}
-                 center={[51.0, 19.0]}
+                 center={[42.0, -93.6]}
                  zoom={4}
                  maxZoom={18}
              >
+               
                 {latlonList.map(location=>(
                     <Marker
+                    
                     key={location.name}
                     position={[
                         location.latitude,
@@ -75,7 +84,7 @@ const Parks = () =>{
                     onClick={() => {
                         setActivePark(location);
                       }}
-                    ></Marker>
+                    />
 
                 ))}
             <TileLayer
