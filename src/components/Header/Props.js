@@ -19,6 +19,7 @@ export default async function getProps(orgURL) {
   if (apiDataOrg == null) {
     console.log("its null");
   }
+  // console.log("in props apiDataOrg", apiDataOrg);
 
   const organizationFromAPI = apiDataOrg.data.listOrganizations.items;
   const organizationID = organizationFromAPI[0].id;
@@ -30,13 +31,22 @@ export default async function getProps(orgURL) {
 
   let images = {};
   if (org.data.getOrganization.logo) {
-    const image = await Storage.get(org.data.getOrganization.logo);
-    images = { ...images, logo: image };
+    try {
+      const image = await Storage.get(org.data.getOrganization.logo);
+      images = { ...images, logo: image };
+    } catch (error) {
+      console.log("in props storage get error", error);
+    }
   }
   if (org.data.getOrganization.coverMedia) {
-    const image = await Storage.get(org.data.getOrganization.coverMedia);
-    images = { ...images, coverMedia: image };
+    try {
+      const image = await Storage.get(org.data.getOrganization.coverMedia);
+      images = { ...images, coverMedia: image };
+    } catch (error) {
+      console.log("in props storage get error", error);
+    }
   }
+  console.log("in props images", images);
 
   const organization = {
     name: org.data.getOrganization.name,
@@ -58,6 +68,7 @@ export default async function getProps(orgURL) {
     deleted: org.data.getOrganization.deleted,
     suspended: org.data.getOrganization.suspended,
   };
+  console.log("in props", organization);
 
   return {
     organizationProp: organization,

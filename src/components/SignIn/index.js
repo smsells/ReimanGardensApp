@@ -8,6 +8,7 @@ import { Storage } from "aws-amplify";
 import { createOrganization as createOrganizationMutation } from "../../graphql/mutations";
 import { getOrganization } from "../../graphql/queries";
 import crypto from "crypto-js";
+import { initialOrganizationState } from "../utils/initialStates";
 
 // import Grid from '@mui/material/Grid';
 
@@ -15,61 +16,8 @@ const SignIn = () => {
   const navigate = useNavigate();
   const orgId = localStorage.getItem("token");
 
-  const initialOrganizationState = {
-    name: "",
-    url: "",
-    locationAddress: "",
-    locationZipCode: "",
-    locationCity: "",
-    locationState: "",
-    locationCountry: "",
-    headerColor: "",
-    sectionHeaderColor: "",
-    menuColor: "",
-    linkFontColor: "",
-    adminIconColor: "",
-    homepageBackground: "",
-    font: "",
-    logo: "",
-    coverMedia: "",
-    deleted: false,
-    suspended: false,
-  };
-
   const [organization, setOrganization] = useState(initialOrganizationState);
   const [images, setImages] = useState({});
-
-  function navigateHome() {
-    navigate("/");
-    //window.location.reload(false);
-    // onSignIn();
-  }
-  // function pullUser() {
-  //   Auth.currentAuthenticatedUser({
-  //     bypassCache: false,
-  //   })
-  //     .then((user) => {
-  //       console.log("User ", user);
-  //       console.log("User Pool", user.pool);
-  //       if (user.pool.userPoolId === "us-east-2_tyNlmQmJu") {
-  //         console.log("success");
-  //         API.graphql({
-  //           query: createOrgMutation,
-  //           variables: { input: user.username },
-  //         });
-  //         //can redirect in here
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // }
-
-  function load() {
-    const orgID = localStorage.getItem("token");
-    if (!orgID) {
-      console.log("Sign in load check");
-      navigate(0);
-    }
-  }
 
   const logIN = () => {
     Auth.currentAuthenticatedUser()
@@ -120,42 +68,6 @@ const SignIn = () => {
       .catch(() => {});
   };
 
-  async function getOrg() {
-    const org = await API.graphql({
-      query: getOrganization,
-      variables: { id: orgId },
-    });
-
-    if (org.data.getOrganization.logo) {
-      const image = await Storage.get(org.data.getOrganization.logo);
-      setImages({ ...images, logo: image });
-    }
-    if (org.data.getOrganization.coverMedia) {
-      const image = await Storage.get(org.data.getOrganization.coverMedia);
-      setImages({ ...images, coverMedia: image });
-    }
-
-    setOrganization({
-      name: org.data.getOrganization.name,
-      locationAddress: org.data.getOrganization.locationAddress,
-      locationZipCode: org.data.getOrganization.locationZipCode,
-      locationCity: org.data.getOrganization.locationCity,
-      locationState: org.data.getOrganization.locationState,
-      locationCountry: org.data.getOrganization.locationCountry,
-      headerColor: org.data.getOrganization.headerColor,
-      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
-      menuColor: org.data.getOrganization.menuColor,
-      linkFontColor: org.data.getOrganization.linkFontColor,
-      adminIconColor: org.data.getOrganization.adminIconColor,
-      homepageBackground: org.data.getOrganization.homepageBackground,
-      font: org.data.getOrganization.font,
-      logo: org.data.getOrganization.logo,
-      coverMedia: org.data.getOrganization.coverMedia,
-      deleted: org.data.getOrganization.deleted,
-      suspended: org.data.getOrganization.suspended,
-    });
-  }
-
   async function signOut() {
     console.log("in the signoutFunction");
     localStorage.removeItem("token");
@@ -167,10 +79,6 @@ const SignIn = () => {
     }
     navigate(0);
   }
-
-  // function testOnload(){
-  //     console.log("Hey I loaded");
-  // }
 
   return (
     <Authenticator>

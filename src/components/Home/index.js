@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import { Storage } from "aws-amplify";
 import {
   listModules,
@@ -18,15 +18,21 @@ const Home = () => {
   const location = useLocation();
   const pathName = location.pathname.split("/");
   const orgURL = pathName[1];
+  // console.log("orgURL", orgURL);
   const [activeModules, setActiveModules] = useState([]);
   const [images, setImages] = useState({});
   const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
     async function fetchProps() {
+      console.log("before props");
+
+      await Auth.signIn("dummy1234", "dummy1234");
       const props = await getProps(orgURL);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
+      // console.log("props", props);
+      await Auth.signOut();
     }
     fetchProps();
     getActiveModules();
@@ -62,6 +68,8 @@ const Home = () => {
       query: listModules,
       variables: { filter: filter },
     });
+    // await Auth.signIn("dummy1234", "dummy1234");
+
     const activeModulesFromAPI = apiData.data.listModules.items;
     await Promise.all(
       activeModulesFromAPI.map(async (activeModule) => {
@@ -73,6 +81,7 @@ const Home = () => {
       })
     );
     setActiveModules(activeModulesFromAPI);
+    // await Auth.signOut();
   }
   return (
     <div className="Home">

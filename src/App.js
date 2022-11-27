@@ -46,7 +46,10 @@ function App() {
   useEffect(() => {
     // isLoggedIn();
     // getOrg();
-    getOrganizationList();
+    async function fetchData() {
+      await getOrganizationList();
+    }
+    fetchData();
   }, []);
   // console.log("Organization", organization);
 
@@ -143,30 +146,24 @@ function App() {
 
   return (
     <div className="App" style={{ backgroundColor: "#BC6C25", height: "100%" }}>
-      {organizationList.map((org) => (
+      {organizationList.map((org, index) => (
         // <div key={org.url}>
         <Routes key={org.orgURL}>
-          <Route exact path={"/" + org.orgURL || "" + "/"} element={<Home />} />
+          {/* {console.log("in routes", org)}
+          {console.log("in routes index", index)} */}
+          <Route exact path={"/" + org.orgURL + "/"} element={<Home />} />
           <Route
             exact
-            path={"/" + org.orgURL || "" + "/notes"}
+            path={"/" + org.orgURL + "/notes"}
             element={<NoteList />}
           />
+          <Route exact path={"/" + org.orgURL + "/stats"} element={<Stats />} />
           <Route
             exact
-            path={"/" + org.orgURL || "" + "/stats"}
-            element={<Stats />}
-          />
-          <Route
-            exact
-            path={"/" + org.orgURL || "" + "/gallery"}
+            path={"/" + org.orgURL + "/gallery"}
             element={<Gallery />}
           />
-          <Route
-            exact
-            path={"/" + org.orgURL || "" + "/parks"}
-            element={<Parks />}
-          />
+          <Route exact path={"/" + org.orgURL + "/parks"} element={<Parks />} />
         </Routes>
         // </div>
       ))}
