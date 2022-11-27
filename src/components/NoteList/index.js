@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../App.css";
-import { API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import { listNotes } from "../../graphql/queries";
 import { Storage } from "aws-amplify";
 import { useLocation } from "react-router-dom";
@@ -25,12 +25,14 @@ const NoteList = () => {
 
   useEffect(() => {
     async function fetchProps() {
+      await Auth.signIn("dummy1234", "dummy1234");
+
       const props = await getProps(orgURL);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
+      fetchNotes();
     }
     fetchProps();
-    fetchNotes();
   }, []);
 
   async function onChange(e) {

@@ -31,11 +31,12 @@ const Home = () => {
       const props = await getProps(orgURL);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
+      getActiveModules();
+
       // console.log("props", props);
-      await Auth.signOut();
+      // await Auth.signOut();
     }
     fetchProps();
-    getActiveModules();
   }, []);
 
   async function getActiveModules() {

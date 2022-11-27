@@ -27,15 +27,17 @@ const Parks = () => {
     async function fetchProps() {
       console.log("before props");
 
+      // if you are going to use storage, keep your function here please
       await Auth.signIn("dummy1234", "dummy1234");
       const props = await getProps(orgURL);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
+      fetchOrganizations();
+
       // console.log("props", props);
-      await Auth.signOut();
+      //   await Auth.signOut();
     }
     fetchProps();
-    fetchOrganizations();
   }, []);
 
   async function fetchOrganizations() {

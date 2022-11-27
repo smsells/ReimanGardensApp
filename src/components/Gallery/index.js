@@ -1,15 +1,36 @@
-import React from 'react'
+import { React, useEffect, useState } from "react";
+import { Auth, API } from "aws-amplify";
+import AppHeader from "../Header/AppHeader";
+import AppMenu from "../Header/AppMenu";
+import getProps from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import { useLocation } from "react-router-dom";
 
+const Gallery = () => {
+  const location = useLocation();
+  const pathName = location.pathname.split("/");
+  const orgURL = pathName[1];
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
-
-
-const Gallery = () =>{
-    return(
-        <div className="Gallery">
-            <header > Gallery Page </header>
-            
-
-        </div>
-    )
-}
+  useEffect(() => {
+    async function fetchProps() {
+      await Auth.signIn("dummy1234", "dummy1234");
+      const props = await getProps(orgURL);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
+  }, []);
+  return (
+    <div className="Stats">
+      <AppHeader
+        organizationProp={organization}
+        imagesProp={images}
+        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+      />
+      <header> Gallery Page </header>
+    </div>
+  );
+};
 export default Gallery;
