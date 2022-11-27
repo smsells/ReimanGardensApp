@@ -7,44 +7,31 @@ import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from "../AdminButton/AdminButton";
 import { getOrganization } from "../../graphql/queries";
 import AppHeader from "../Header/AppHeader";
+import AppMenu from "../Header/AppMenu";
+import {
+  initialImages,
+  initialOrganizationState,
+} from "../utils/initialStates";
+import { getPropsID } from "../Header/Props";
 
 // import Grid from '@mui/material/Grid';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
-  const orgId = localStorage.getItem("token");
-
-  const initialOrganizationState = {
-    name: "",
-    url: "",
-    locationAddress: "",
-    locationZipCode: "",
-    locationCity: "",
-    locationState: "",
-    locationCountry: "",
-    headerColor: "",
-    sectionHeaderColor: "",
-    menuColor: "",
-    linkFontColor: "",
-    adminIconColor: "",
-    homepageBackground: "",
-    font: "",
-    logo: "",
-    coverMedia: "",
-    deleted: false,
-    suspended: false,
-  };
-
-  const initialImages = {
-    logo: "",
-    coverMedia: "",
-  };
+  const orgID = localStorage.getItem("token");
+  const masterID = "";
 
   const [organization, setOrganization] = useState(initialOrganizationState);
   const [images, setImages] = useState(initialImages);
 
   useEffect(() => {
-    getOrg();
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
   }, []);
 
   function load() {
@@ -53,42 +40,6 @@ const AdminPanel = () => {
       console.log("Sign in load check");
       navigate(0);
     }
-  }
-
-  async function getOrg() {
-    const org = await API.graphql({
-      query: getOrganization,
-      variables: { id: orgId },
-    });
-
-    if (org.data.getOrganization.logo) {
-      const image = await Storage.get(org.data.getOrganization.logo);
-      setImages({ ...images, logo: image });
-    }
-    if (org.data.getOrganization.coverMedia) {
-      const image = await Storage.get(org.data.getOrganization.coverMedia);
-      setImages({ ...images, coverMedia: image });
-    }
-
-    setOrganization({
-      name: org.data.getOrganization.name,
-      locationAddress: org.data.getOrganization.locationAddress,
-      locationZipCode: org.data.getOrganization.locationZipCode,
-      locationCity: org.data.getOrganization.locationCity,
-      locationState: org.data.getOrganization.locationState,
-      locationCountry: org.data.getOrganization.locationCountry,
-      headerColor: org.data.getOrganization.headerColor,
-      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
-      menuColor: org.data.getOrganization.menuColor,
-      linkFontColor: org.data.getOrganization.linkFontColor,
-      adminIconColor: org.data.getOrganization.adminIconColor,
-      homepageBackground: org.data.getOrganization.homepageBackground,
-      font: org.data.getOrganization.font,
-      logo: org.data.getOrganization.logo,
-      coverMedia: org.data.getOrganization.coverMedia,
-      deleted: org.data.getOrganization.deleted,
-      suspended: org.data.getOrganization.suspended,
-    });
   }
 
   async function signOut() {
@@ -109,11 +60,11 @@ const AdminPanel = () => {
 
   return (
     <Authenticator>
-      {/* <AppHeader
-        menuProp={<button onClick={() => signOut()}>Sign Out</button>}
+      <AppHeader
+        menuProp={<AppMenu organizationProp={organization} admin={true} />}
         organizationProp={organization}
         imagesProp={images}
-      ></AppHeader> */}
+      ></AppHeader>
       <div
         className="SignIn"
         slot="sign-in"
@@ -162,7 +113,7 @@ const AdminPanel = () => {
               <Link to={"/editButterfly"}>
                 <AdminButton>Edit Butterfly</AdminButton>
               </Link>
-              <Link to={"/notes"}>
+              <Link to={"/" + organization.orgURL + "/notes"}>
                 <AdminButton>Add/Edit Notes</AdminButton>
               </Link>
             </div>
@@ -175,9 +126,13 @@ const AdminPanel = () => {
               <Link to={"/customizeModules"}>
                 <AdminButton>Customize Modules</AdminButton>
               </Link>
-              <Link to={"/deleteOrganizations"}>
-                <AdminButton>Delete Organizations</AdminButton>
-              </Link>
+              {orgID !== masterID && true ? (
+                <Link to={"/manageOrganizations"}>
+                  <AdminButton>Delete Organizations</AdminButton>
+                </Link>
+              ) : (
+                ""
+              )}
             </div>
           </div>
 

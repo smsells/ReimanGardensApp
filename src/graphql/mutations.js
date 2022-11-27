@@ -128,7 +128,7 @@ export const createOrganization = /* GraphQL */ `
   ) {
     createOrganization(input: $input, condition: $condition) {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode
@@ -161,7 +161,7 @@ export const updateOrganization = /* GraphQL */ `
   ) {
     updateOrganization(input: $input, condition: $condition) {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode
@@ -194,7 +194,7 @@ export const deleteOrganization = /* GraphQL */ `
   ) {
     deleteOrganization(input: $input, condition: $condition) {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode

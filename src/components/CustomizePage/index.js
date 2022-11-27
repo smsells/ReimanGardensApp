@@ -1,6 +1,5 @@
 import { React, useEffect, useState } from "react";
-import { API } from "aws-amplify";
-import { getOrganization } from "../../graphql/queries";
+import { Auth, API } from "aws-amplify";
 import { updateOrganization as updateOrgMutation } from "../../graphql/mutations";
 import Grid from "@material-ui/core/Grid";
 import { useNavigate } from "react-router-dom";
@@ -8,38 +7,34 @@ import { ColorPicker, useColor } from "react-color-palette";
 import { Storage } from "aws-amplify";
 
 import "react-color-palette/lib/css/styles.css";
+import AppHeader from "../Header/AppHeader";
+
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AppMenu from "../Header/AppMenu";
 
 const CustomizePage = () => {
-  const sha512Hash = localStorage.getItem("token");
+  const orgID = localStorage.getItem("token");
 
   const initialCustomizeState = {
-    id: sha512Hash,
-    name: "",
-    url: "",
-    locationAddress: "",
-    locationZipCode: "",
-    locationCity: "",
-    locationState: "",
-    locationCountry: "",
-    headerColor: "",
-    sectionHeaderColor: "",
-    menuColor: "",
-    linkFontColor: "",
-    adminIconColor: "",
-    homepageBackground: "",
-    font: "",
-    logo: "",
-    coverMedia: "",
-    deleted: false,
-    suspended: false,
+    id: orgID,
+    ...initialOrganizationState,
   };
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialCustomizeState);
   const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
-    getOrg();
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setFormData(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
   }, []);
 
   const [headerColor, setHeaderColor] = useColor("hex", formData.headerColor);
@@ -57,46 +52,17 @@ const CustomizePage = () => {
     formData.adminIconColor
   );
 
-  /**
-   * @description Load organization using organization id
-   */
-  async function getOrg() {
-    const org = await API.graphql({
-      query: getOrganization,
-      variables: { id: sha512Hash },
-    });
-
-    if (org.data.getOrganization.logo) {
-      const image = await Storage.get(org.data.getOrganization.logo);
-      setImages({ ...images, logo: image });
+  const signOut = async () => {
+    console.log("in the signoutFunction");
+    localStorage.removeItem("token");
+    try {
+      await Auth.signOut();
+      navigate("/signin");
+    } catch (error) {
+      console.log("error signing out " + error);
     }
-    if (org.data.getOrganization.coverMedia) {
-      const image = await Storage.get(org.data.getOrganization.coverMedia);
-      setImages({ ...images, coverMedia: image });
-    }
-
-    // console.log("org", org);
-    setFormData({
-      name: org.data.getOrganization.name,
-      url: org.data.getOrganization.url,
-      locationAddress: org.data.getOrganization.locationAddress,
-      locationZipCode: org.data.getOrganization.locationZipCode,
-      locationCity: org.data.getOrganization.locationCity,
-      locationState: org.data.getOrganization.locationState,
-      locationCountry: org.data.getOrganization.locationCountry,
-      headerColor: org.data.getOrganization.headerColor,
-      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
-      menuColor: org.data.getOrganization.menuColor,
-      linkFontColor: org.data.getOrganization.linkFontColor,
-      adminIconColor: org.data.getOrganization.adminIconColor,
-      homepageBackground: org.data.getOrganization.homepageBackground,
-      font: org.data.getOrganization.font,
-      logo: org.data.getOrganization.logo,
-      coverMedia: org.data.getOrganization.coverMedia,
-      deleted: org.data.getOrganization.deleted,
-      suspended: org.data.getOrganization.suspended,
-    });
-  }
+    navigate(0);
+  };
 
   /**
    *
@@ -180,58 +146,56 @@ const CustomizePage = () => {
    * - refresh page to show changes
    */
   async function handleSubmit() {
+    const Nominatim = require("nominatim-geocoder");
+    const geocoder = new Nominatim();
+    var city = "";
+    if (formData.locationCity) {
+      city = formData.locationCity;
+    }
+    var country = "";
+    if (formData.locationCountry) {
+      country = formData.locationCountry;
+    }
+    var address = "";
+    if (formData.locationAddress) {
+      var address = formData.locationAddress;
+    }
 
-const Nominatim = require('nominatim-geocoder')
-const geocoder = new Nominatim()
-var city = ""
-if(formData.locationCity){
-  city = formData.locationCity;
-}
-var country = "";
-if(formData.locationCountry){
-  country = formData.locationCountry;
-}
-var address = "";
-if(formData.locationAddress){
-  var address = formData.locationAddress
-}
-
-var query = address + " "+city+", "+country;
-var latitude;
-var longitude;
-if(!city&&!address&&!country){
-  console.log("No Query");
-  await API.graphql({
-    query: updateOrgMutation,
-    variables: {
-      input: {
-        id: sha512Hash,
-        ...formData,
-      },
-    },
-  });
-  navigate(0);
-}
-else{
-  console.log("query");
-  console.log(query);
-  await geocoder.search( { q: query } )
-    .then((response) => {
-        latitude = response[0].lat;
-        longitude = response[0].lon;
-        console.log(latitude + " "+ longitude)
-
-    })
-    .catch((error) => {
-        console.log(error)
-    })
-    console.log("I am outside of the query now");
-
-  await API.graphql({
+    var query = address + " " + city + ", " + country;
+    var latitude;
+    var longitude;
+    if (!city && !address && !country) {
+      console.log("No Query");
+      await API.graphql({
         query: updateOrgMutation,
         variables: {
           input: {
-            id: sha512Hash,
+            id: orgID,
+            ...formData,
+          },
+        },
+      });
+      navigate(0);
+    } else {
+      console.log("query");
+      console.log(query);
+      await geocoder
+        .search({ q: query })
+        .then((response) => {
+          latitude = response[0].lat;
+          longitude = response[0].lon;
+          console.log(latitude + " " + longitude);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      console.log("I am outside of the query now");
+
+      await API.graphql({
+        query: updateOrgMutation,
+        variables: {
+          input: {
+            id: orgID,
             locationLatitude: latitude,
             locationLongitude: longitude,
             ...formData,
@@ -239,18 +203,16 @@ else{
         },
       });
       //navigate(0);
-
-}
-
+    }
   }
 
   return (
     <>
-      {/* <AppHeader
-        menuProp={<button onClick={() => signOut()}>Sign Out</button>}
+      <AppHeader
+        menuProp={<AppMenu organizationProp={organization} admin={true} />}
         organizationProp={organization}
         imagesProp={images}
-      ></AppHeader> */}
+      />
       <div>
         <Grid
           container
@@ -273,15 +235,15 @@ else{
             />
           </Grid>
           <Grid item xs={4}>
-            <label> Url </label>
+            <label> Organization Url </label>
           </Grid>
           <Grid item xs={8}>
             <input
               onChange={(e) =>
-                setFormData({ ...formData, url: e.target.value })
+                setFormData({ ...formData, orgURL: e.target.value })
               }
               placeholder="Butterfly house url"
-              value={formData.url}
+              value={formData.orgURL}
             />
           </Grid>
           <Grid item xs={4}>

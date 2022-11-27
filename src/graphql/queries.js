@@ -87,7 +87,7 @@ export const getOrganization = /* GraphQL */ `
   query GetOrganization($id: ID!) {
     getOrganization(id: $id) {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode
@@ -122,7 +122,7 @@ export const listOrganizations = /* GraphQL */ `
     listOrganizations(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         name
-        url
+        orgURL
         username
         locationAddress
         locationZipCode

@@ -233,8 +233,8 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "url": {
-                    "name": "url",
+                "orgURL": {
+                    "name": "orgURL",
                     "isArray": false,
                     "type": "String",
                     "isRequired": false,
@@ -968,5 +968,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "a237a3d0875ad507d5990af7f7ae7449"
+    "version": "b97ad48a7ef7030bcb7d16544f779e9c"
 };

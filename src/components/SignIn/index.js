@@ -11,7 +11,7 @@ import crypto from "crypto-js";
 
 // import Grid from '@mui/material/Grid';
 
-const SignIn = ({ onSignIn }) => {
+const SignIn = () => {
   const navigate = useNavigate();
   const orgId = localStorage.getItem("token");
 
@@ -42,7 +42,7 @@ const SignIn = ({ onSignIn }) => {
   function navigateHome() {
     navigate("/");
     //window.location.reload(false);
-    onSignIn();
+    // onSignIn();
   }
   // function pullUser() {
   //   Auth.currentAuthenticatedUser({

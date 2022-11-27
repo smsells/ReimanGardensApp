@@ -107,7 +107,7 @@ export const onCreateOrganization = /* GraphQL */ `
   subscription OnCreateOrganization {
     onCreateOrganization {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode
@@ -137,7 +137,7 @@ export const onUpdateOrganization = /* GraphQL */ `
   subscription OnUpdateOrganization {
     onUpdateOrganization {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode
@@ -167,7 +167,7 @@ export const onDeleteOrganization = /* GraphQL */ `
   subscription OnDeleteOrganization {
     onDeleteOrganization {
       name
-      url
+      orgURL
       username
       locationAddress
       locationZipCode

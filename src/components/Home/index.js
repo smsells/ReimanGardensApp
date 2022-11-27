@@ -8,6 +8,10 @@ import {
   getOrganization,
   listOrders,
 } from "../../graphql/queries";
+import AppHeader from "../Header/AppHeader";
+import AppMenu from "../Header/AppMenu";
+import getProps from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
 
 const Home = () => {
   // const [orgID, setOrgID] = useState("");
@@ -15,14 +19,23 @@ const Home = () => {
   const pathName = location.pathname.split("/");
   const orgURL = pathName[1];
   const [activeModules, setActiveModules] = useState([]);
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    async function fetchProps() {
+      const props = await getProps(orgURL);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     getActiveModules();
   }, []);
 
   async function getActiveModules() {
+    // get organization id
     let filterOrg = {
-      url: { eq: orgURL },
+      orgURL: { eq: orgURL },
     };
     const apiDataOrg = await API.graphql({
       query: listOrganizations,
@@ -34,8 +47,6 @@ const Home = () => {
 
     const organizationFromAPI = apiDataOrg.data.listOrganizations.items;
     const organizationID = organizationFromAPI[0].id;
-    // setOrgID(organizationID);
-    const organizationName = organizationFromAPI[0].name;
 
     let filter = {
       and: [
@@ -65,6 +76,11 @@ const Home = () => {
   }
   return (
     <div className="Home">
+      <AppHeader
+        organizationProp={organization}
+        imagesProp={images}
+        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+      />
       {activeModules.map((module) => (
         <div key={module.id || module.title}>
           <h1>{module.title}</h1>

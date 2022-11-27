@@ -8,15 +8,20 @@ import {
   createModule as createModuleMutation,
 } from "../../graphql/mutations";
 import { useNavigate } from "react-router-dom";
+import AppHeader from "../Header/AppHeader";
+
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AppMenu from "../Header/AppMenu";
 
 const CustomizeModules = () => {
-  const sha512Hash = localStorage.getItem("token");
+  const orgID = localStorage.getItem("token");
 
   const initialModule = {
     title: "",
     content: "",
     image: "",
-    orgID: sha512Hash,
+    orgID: orgID,
     active: 0,
   };
 
@@ -26,8 +31,17 @@ const CustomizeModules = () => {
   const [newModule, setNewModule] = useState(initialModule);
 
   const navigate = useNavigate();
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     getModules();
   }, []);
 
@@ -38,7 +52,7 @@ const CustomizeModules = () => {
     let filter = {
       and: [
         {
-          orgID: { eq: sha512Hash },
+          orgID: { eq: orgID },
         },
       ],
     };
@@ -179,6 +193,11 @@ const CustomizeModules = () => {
 
   return (
     <>
+      <AppHeader
+        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        organizationProp={organization}
+        imagesProp={images}
+      />
       <div className="Home">
         {modulesList.map((module) => (
           <div key={module.id}>
