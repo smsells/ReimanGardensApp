@@ -34,26 +34,6 @@ const AdminPanel = () => {
     fetchProps();
   }, []);
 
-  function load() {
-    const orgID = localStorage.getItem("token");
-    if (!orgID) {
-      console.log("Sign in load check");
-      navigate(0);
-    }
-  }
-
-  async function signOut() {
-    console.log("in the signoutFunction");
-    localStorage.removeItem("token");
-    try {
-      await Auth.signOut();
-      navigate("/signin");
-    } catch (error) {
-      console.log("error signing out " + error);
-    }
-    navigate(0);
-  }
-
   // function testOnload(){
   //     console.log("Hey I loaded");
   // }
@@ -74,6 +54,7 @@ const AdminPanel = () => {
           alignItems: "center",
           height: "100vh",
           backgroundImage:
+            images.coverMedia ||
             "url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)",
           backgroundSize: "cover",
           maxHeight: "height",
@@ -91,11 +72,12 @@ const AdminPanel = () => {
             gridAutoColumns: "30%",
           }}
         >
-          {load()}
           <div style={{ gridArea: "2 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
               <Link to={"/displayShipments"}>
-                <AdminButton>View Shipments</AdminButton>
+                <AdminButton backgroundColor={organization.sectionHeaderColor}>
+                  View Shipments
+                </AdminButton>
               </Link>
               <Link to={"/addShipments"}>
                 <AdminButton>Add Shipment</AdminButton>

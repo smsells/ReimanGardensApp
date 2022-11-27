@@ -286,7 +286,7 @@ const EditButterfly = () => {
   }
 
   function cancelEdit() {
-    navigate("/signin");
+    navigate("/adminPanel");
   }
 
   async function deleteImage(index) {

@@ -146,29 +146,25 @@ function App() {
       {organizationList.map((org) => (
         // <div key={org.url}>
         <Routes key={org.orgURL}>
+          <Route exact path={"/" + org.orgURL || "" + "/"} element={<Home />} />
           <Route
             exact
-            path={"/" + org.orgURL.toString() + "/"}
-            element={<Home />}
-          />
-          <Route
-            exact
-            path={"/" + org.orgURL.toString() + "/notes"}
+            path={"/" + org.orgURL || "" + "/notes"}
             element={<NoteList />}
           />
           <Route
             exact
-            path={"/" + org.orgURL.toString() + "/stats"}
+            path={"/" + org.orgURL || "" + "/stats"}
             element={<Stats />}
           />
           <Route
             exact
-            path={"/" + org.orgURL.toString() + "/gallery"}
+            path={"/" + org.orgURL || "" + "/gallery"}
             element={<Gallery />}
           />
           <Route
             exact
-            path={"/" + org.orgURL.toString() + "/parks"}
+            path={"/" + org.orgURL || "" + "/parks"}
             element={<Parks />}
           />
         </Routes>
