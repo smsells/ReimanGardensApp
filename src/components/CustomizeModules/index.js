@@ -17,7 +17,6 @@ import { initialOrganizationState } from "../utils/initialStates";
 import AppMenu from "../Header/AppMenu";
 
 const CustomizeModules = () => {
-  var moduleObject;
   const orgID = localStorage.getItem("token");
 
   const initialModule = {
@@ -29,8 +28,6 @@ const CustomizeModules = () => {
     active: 0,
   };
 
-  const [modules, setModules] = useState({});
-  const [modulesImages, setModulesImages] = useState({});
   const [modulesList, setModulesList] = useState([]);
   const [module, setModule] = useState(initialModule);
 
@@ -68,15 +65,9 @@ const CustomizeModules = () => {
     });
     // console.log("Modules", apiData.data.listModules.items);
     const modulesFromAPI = apiData.data.listModules.items;
-    const modulesData = {};
     const moduleObjList = [];
     await Promise.all(
       modulesFromAPI.map(async (module) => {
-        if (module.image) {
-          const image = await Storage.get(module.image);
-          modulesImages[module.id] = image;
-        }
-
         let moduleObj = {
           id: module.id,
           title: module.title,
@@ -86,7 +77,6 @@ const CustomizeModules = () => {
           orgID: module.orgID,
         };
 
-        modulesData[module.id] = moduleObj;
         moduleObjList.push(moduleObj);
 
         // console.log("Module Data id", modulesData[id]);
@@ -98,7 +88,6 @@ const CustomizeModules = () => {
     // console.log("Modules from API", moduleObjList);
 
     setModulesList(moduleObjList);
-    setModules(modulesData);
   }
 
   //Populate the edit form with the selected butterfly object
@@ -108,7 +97,7 @@ const CustomizeModules = () => {
     });
     setModule({
       ...module,
-      id: module.id,
+      id: found.id,
       title: found.title,
       content: found.content,
       image: found.image,
@@ -130,17 +119,14 @@ const CustomizeModules = () => {
           },
         },
       });
-      // if (module.image) {
-      //   const image = await Storage.get(module.image);
-      //   module.image = image;
-      // }
 
       console.log("editing...");
-      module = initialModule;
+      setModule(initialModule);
     } catch (error) {
+      console.log("edit error module", module);
       console.log("edit error", error);
     }
-    // navigate("/signin");
+    navigate(0);
   }
 
   async function getImage(name) {
@@ -154,7 +140,7 @@ const CustomizeModules = () => {
   async function onChangeModuleImage(e) {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
-    setNewModule({ ...module, image: file.name });
+    setModule({ ...module, image: file.name });
     await Storage.put(file.name, file);
     // getModules();
   }
@@ -169,20 +155,6 @@ const CustomizeModules = () => {
 
   function cancelEdit() {
     navigate(0);
-  }
-
-  async function handleSave(e) {
-    console.log("Submitting", module);
-    await API.graphql({
-      query: updateModuleMutation,
-      variables: {
-        input: {
-          id: module.id,
-          ...module,
-        },
-      },
-    });
-    // navigate(0);
   }
 
   async function handleDelete(e) {
@@ -218,7 +190,7 @@ const CustomizeModules = () => {
    * @description checkbox handler for active field in newly created module
    */
   function newModuleActiveCheckboxHandler() {
-    if (newModule.active == 1) {
+    if (newModule.active === 1) {
       setNewModule({ ...newModule, active: 0 });
     } else {
       setNewModule({ ...newModule, active: 1 });
@@ -226,15 +198,15 @@ const CustomizeModules = () => {
   }
 
   function moduleActiveCheckboxHandler(e) {
-    if (module.active == 1) {
-      setModules({
-        ...modules,
-        [module.id]: { ...module, active: 0 },
+    if (module.active === 1) {
+      setModule({
+        ...module,
+        active: 0,
       });
     } else {
-      setModules({
-        ...modules,
-        [module.id]: { ...module, active: 1 },
+      setModule({
+        ...module,
+        active: 1,
       });
     }
   }
@@ -332,7 +304,7 @@ const CustomizeModules = () => {
             <input
               type="checkbox"
               id="checkboxModule"
-              checked={module.active == 1 ? true : false}
+              checked={module.active === 1 ? true : false}
               onChange={(e) => moduleActiveCheckboxHandler(e)}
             />
           </Grid>
@@ -371,85 +343,6 @@ const CustomizeModules = () => {
           </Grid>
         </Grid>
       </form>
-      {/* <div className="Home">
-        {modulesList.map((module) => (
-          <div key={module.id}>
-            <p>
-              {"Title: "}
-              <input
-                onChange={(e) => {
-                  setModules({
-                    ...modules,
-                    [module.id]: { ...module, title: e.target.value },
-                  });
-                }}
-                placeholder="Title"
-                value={modules[module.id].title}
-              />
-            </p>
-            <p>
-              {"Content: "}
-              <input
-                onChange={(e) =>
-                  setModules({
-                    ...modules,
-                    [module.id]: { ...module, content: e.target.value },
-                  })
-                }
-                placeholder="Content"
-                value={modules[module.id].content}
-              />
-            </p>
-            <p>
-              <label
-                for={"moduleImageUpload" + module.id}
-                class="custom-file-upload"
-              >
-                Choose Module Image
-              </label>
-              <input
-                id={"moduleImageUpload" + module.id}
-                type="file"
-                accept=".png, .jpeg, .jpg"
-                name={"moduleImageUpload" + module.id}
-                onChange={(e) => onChangeModuleImage(modules[module.id], e)}
-              ></input>
-              {modulesImages[module.id] && (
-                <img src={modulesImages[module.id]} style={{ width: 100 }} />
-              )}
-            </p>
-            <p>
-              <input
-                type="checkbox"
-                id={"checkboxModule" + module.id}
-                checked={modules[module.id].active == 1 ? true : false}
-                onChange={(e) =>
-                  moduleActiveCheckboxHandler(modules[module.id], e)
-                }
-              />
-              <label htmlFor={"checkboxModule" + module.id}>Active? </label>
-            </p>
-            <p>
-              <button
-                className="form-button"
-                type="submit"
-                value="Submit"
-                onClick={(e) => handleSave(modules[module.id], e)}
-              >
-                Save Changes
-              </button>
-              <button
-                className="form-button"
-                type="submit"
-                value="Submit"
-                onClick={(e) => handleDelete(modules[module.id], e)}
-              >
-                Delete Module
-              </button>
-            </p>
-          </div>
-        ))}
-      </div> */}
       <div>
         <h1>Add New Modules</h1>
         <p>
@@ -489,7 +382,7 @@ const CustomizeModules = () => {
           <input
             type="checkbox"
             id="newCheckboxModule"
-            checked={newModule.active == 1 ? true : false}
+            checked={newModule.active === 1 ? true : false}
             onChange={newModuleActiveCheckboxHandler}
           />
           <label htmlFor="newCheckboxModule">Active? </label>
