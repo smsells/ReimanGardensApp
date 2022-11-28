@@ -34,6 +34,7 @@ import ImportExportShipments from "./components/ImportExportShipments";
 import DeleteOrganizations from "./components/DeleteOrganizations";
 import AddShipments from "./components/AddShipments";
 import crypto from "crypto-js";
+import ButterflyDetail from "./components/Gallery/ButterflyDetail";
 
 function App() {
   const orgId = localStorage.getItem("token");
@@ -307,16 +308,9 @@ function App() {
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route exact path="/addShipments" element={<AddShipments />} />
-        <Route
-          exact
-          path="/deleteOrganizations"
-          element={<DeleteOrganizations />}
-        />
-        <Route
-          exact
-          path="/importExportShipments"
-          element={<ImportExportShipments />}
-        />
+        <Route exact path="/deleteOrganizations" element={<DeleteOrganizations />}/>
+        <Route exact path="/importExportShipments" element={<ImportExportShipments />}/>
+        <Route exact path="/butterfly/:id" element={<ButterflyDetail/>}/>
       </Routes>
     </div>
   );

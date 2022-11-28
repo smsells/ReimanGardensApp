@@ -1,0 +1,8 @@
+.gallery-item{
+    width: 300px;
+    height: 300px;
+    font-size: 30px;
+    padding: 5% ;
+    border-radius: 50px;
+    border: white;
+}
