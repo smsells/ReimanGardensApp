@@ -1,4 +1,11 @@
-import * as React from 'react';
+import * as  React from "react";
+import {useEffect, useState } from "react";
+import { Auth, API } from "aws-amplify";
+import AppHeader from "../Header/AppHeader";
+import AppMenu from "../Header/AppMenu";
+import getProps from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import { useLocation } from "react-router-dom";;
 import { useState, useEffect } from "react";
 import { API, graphqlOperation, Storage } from 'aws-amplify';
 import { listImages, listButterflies } from '../../graphql/queries';
@@ -18,8 +25,22 @@ const Gallery = () => {
     const [displayNameType, setDisplayNameType] = useState('scientificName');
     const [butterflyList, setButterflyList] = useState([]);
 
+
+  const location = useLocation();
+  const pathName = location.pathname.split("/");
+  const orgURL = pathName[1];
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
+
     useEffect(() => {
         fetchData();
+        async function fetchProps() {
+            await Auth.signIn("dummy1234", "dummy1234");
+            const props = await getProps(orgURL);
+            setOrganization(props.organizationProp);
+            setImages(props.imagesProp);
+          }
+          fetchProps();
     });
 
     async function fetchData() {
@@ -79,6 +100,12 @@ const Gallery = () => {
 
     return (
         <div className="Gallery">
+            <AppHeader
+        organizationProp={organization}
+        imagesProp={images}
+        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+      />
+      <header> Gallery Page </header>
             <Grid container spacing={2} direction="row" alignItems="center" justifyContent="center" rowSpacing={2}>
                 <Grid item xs={12}>
                     <ToggleButtonGroup exclusive onChange={handleToggleChange} value={displayNameType}>

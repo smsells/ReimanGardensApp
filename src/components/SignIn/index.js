@@ -4,109 +4,81 @@ import { Link, useNavigate } from "react-router-dom";
 import { Authenticator } from "@aws-amplify/ui-react";
 import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from "../AdminButton/AdminButton";
-import { createOrganization as createOrgMutation } from "../../graphql/mutations";
+import { Storage } from "aws-amplify";
+import { createOrganization as createOrganizationMutation } from "../../graphql/mutations";
 import { getOrganization } from "../../graphql/queries";
+import crypto from "crypto-js";
+import { initialOrganizationState } from "../utils/initialStates";
 
 // import Grid from '@mui/material/Grid';
 
-const SignIn = ({ onSignIn }) => {
+const SignIn = () => {
   const navigate = useNavigate();
   const orgId = localStorage.getItem("token");
-
-  const initialOrganizationState = {
-    name: "",
-    locationAddress: "",
-    locationZipCode: "",
-    locationCity: "",
-    locationState: "",
-    locationCountry: "",
-    headerColor: "",
-    sectionHeaderColor: "",
-    menuColor: "",
-    linkFontColor: "",
-    adminIconColor: "",
-    homepageBackground: "",
-    font: "",
-    logo: "",
-    coverMedia: "",
-    deleted: false,
-    suspended: false,
-  };
 
   const [organization, setOrganization] = useState(initialOrganizationState);
   const [images, setImages] = useState({});
 
-  function navigateHome() {
-    navigate("/");
-    //window.location.reload(false);
-    onSignIn();
-  }
-  function pullUser() {
-    Auth.currentAuthenticatedUser({
-      bypassCache: false,
-    })
-      .then((user) => {
-        console.log("User ", user);
-        console.log("User Pool", user.pool);
-        if (user.pool.userPoolId === "us-east-2_tyNlmQmJu") {
-          console.log("success");
-          API.graphql({
-            query: createOrgMutation,
-            variables: { input: user.username },
+  const logIN = () => {
+    Auth.currentAuthenticatedUser()
+      .then(async (user) => {
+        console.log("user email", user.username);
+        let out = false;
+        const userName = user.username;
+        const sha512Hash = crypto.SHA512(userName).toString();
+        console.log("result1: ", userName);
+
+        const res = await API.graphql({
+          query: getOrganization,
+          variables: { id: sha512Hash },
+        });
+        console.log("try", res.data.getOrganization);
+        if (res.data.getOrganization === null) {
+          const cat = await API.graphql({
+            query: createOrganizationMutation,
+            variables: {
+              input: {
+                id: sha512Hash,
+                username: userName,
+                deleted: false,
+                suspended: false,
+              },
+            },
           });
-          //can redirect in here
+          // if (cat === null) {
+
+          // }
+          console.log("catch", cat);
+        } else {
+          if (
+            res.data.getOrganization.deleted ||
+            res.data.getOrganization.suspended
+          ) {
+            out = true;
+            signOut();
+          }
+        }
+        if (!out) {
+          localStorage.setItem("token", sha512Hash);
+          console.log("done");
+          out = false;
+          navigate("/adminPanel");
         }
       })
-      .catch((err) => console.log(err));
-  }
+      .catch(() => {});
+  };
 
-  function load() {
-    const orgID = localStorage.getItem("token");
-    if (!orgID) {
-      console.log("Sign in load check");
-      navigate(0);
+  async function signOut() {
+    console.log("in the signoutFunction");
+    localStorage.removeItem("token");
+    try {
+      await Auth.signOut();
+      navigate("/signin");
+    } catch (error) {
+      console.log("error signing out " + error);
     }
+    navigate(0);
   }
-
-  async function getOrg() {
-    const org = await API.graphql({
-      query: getOrganization,
-      variables: { id: orgId },
-    });
-
-    if (org.data.getOrganization.logo) {
-      const image = await Storage.get(org.data.getOrganization.logo);
-      setImages({ ...images, logo: image });
-    }
-    if (org.data.getOrganization.coverMedia) {
-      const image = await Storage.get(org.data.getOrganization.coverMedia);
-      setImages({ ...images, coverMedia: image });
-    }
-
-    setOrganization({
-      name: org.data.getOrganization.name,
-      locationAddress: org.data.getOrganization.locationAddress,
-      locationZipCode: org.data.getOrganization.locationZipCode,
-      locationCity: org.data.getOrganization.locationCity,
-      locationState: org.data.getOrganization.locationState,
-      locationCountry: org.data.getOrganization.locationCountry,
-      headerColor: org.data.getOrganization.headerColor,
-      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
-      menuColor: org.data.getOrganization.menuColor,
-      linkFontColor: org.data.getOrganization.linkFontColor,
-      adminIconColor: org.data.getOrganization.adminIconColor,
-      homepageBackground: org.data.getOrganization.homepageBackground,
-      font: org.data.getOrganization.font,
-      logo: org.data.getOrganization.logo,
-      coverMedia: org.data.getOrganization.coverMedia,
-      deleted: org.data.getOrganization.deleted,
-      suspended: org.data.getOrganization.suspended,
-    });
-  }
-
-  // function testOnload(){
-  //     console.log("Hey I loaded");
-  // }
 
   return (
     <Authenticator>
@@ -136,71 +108,16 @@ const SignIn = ({ onSignIn }) => {
             gridAutoColumns: "30%",
           }}
         >
-          {({ signOut, user }) => (
-            <main>
-              <h1>Hello {user.username}</h1>
-              <button
-                onClick={(e) => {
-                  console.log("Auth", user.name);
-                }}
-              >
-                Sign out
-              </button>
-            </main>
-          )}
-
-          <div style={{ gridArea: "2 / 1 / span 1 / span 3" }}>
-            <div className="grid-item">
-              {({ signOut, user }) => (
-                <main>
-                  <h1>Hello {user.username}</h1>
-                  <button
-                    onClick={(e) => {
-                      console.log("Auth", user.name);
-                    }}
-                  >
-                    Sign out
-                  </button>
-                </main>
-              )}
-              <Link to={"/displayShipments"}>
-                <AdminButton>View Shipments</AdminButton>
-              </Link>
-              <Link to={"/addShipments"}>
-                <AdminButton>Add Shipment</AdminButton>
-              </Link>
-              <Link to={"/importExportShipments"}>
-                <AdminButton>Import/Export Shipments</AdminButton>
-              </Link>
-            </div>
-          </div>
           <div style={{ gridArea: "3 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
-              <Link to={"/addButterfly"}>
-                <AdminButton>Add Butterfly</AdminButton>
-              </Link>
-              <Link to={"/editButterfly"}>
-                <AdminButton>Edit Butterfly</AdminButton>
-              </Link>
-              <Link to={"/notes"}>
-                <AdminButton>Add/Edit Notes</AdminButton>
-              </Link>
+              <button onClick={() => logIN()} className="admin-button">
+                Admin Panel
+              </button>
+              <button onClick={() => signOut()} className="admin-button">
+                Sign Out
+              </button>
             </div>
           </div>
-          <div style={{ gridArea: "4 / 1 / span 1 / span 3" }}>
-            <div className="grid-item">
-              <Link to={"/customizePage"}>
-                <AdminButton>Customize Page</AdminButton>
-              </Link>
-              <Link to={"/customizeModules"}>
-                <AdminButton>Customize Modules</AdminButton>
-              </Link>
-              <Link to={"/deleteOrganizations"}>
-                <AdminButton>Delete Organizations</AdminButton>
-              </Link>
-            </div>
-          </div>
-
           <div
             style={{
               display: "-ms-inline-grid",

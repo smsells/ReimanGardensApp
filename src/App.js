@@ -6,7 +6,7 @@ import "@aws-amplify/ui-react/styles.css";
 import { Auth, API } from "aws-amplify";
 import { Storage } from "aws-amplify";
 import { createOrganization as createOrganizationMutation } from "./graphql/mutations";
-import { getOrganization } from ".//graphql/queries";
+import { getOrganization, listOrganizations } from ".//graphql/queries";
 
 import { Routes, Route, Link } from "react-router-dom";
 import NoteList from "./components/NoteList";
@@ -31,275 +31,152 @@ import EditShipments from "./components/EditShipments";
 import CustomizePage from "./components/CustomizePage";
 import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
-import DeleteOrganizations from "./components/DeleteOrganizations";
+import ManageOrganizations from "./components/ManageOrganizations";
 import AddShipments from "./components/AddShipments";
+import AdminPanel from "./components/AdminPanel";
 import crypto from "crypto-js";
 import ButterflyDetail from "./components/Gallery/ButterflyDetail";
 
 function App() {
   const orgId = localStorage.getItem("token");
 
-  const initialOrganizationState = {
-    name: "",
-    locationAddress: "",
-    locationZipCode: "",
-    locationCity: "",
-    locationState: "",
-    locationCountry: "",
-    headerColor: "",
-    sectionHeaderColor: "",
-    menuColor: "",
-    linkFontColor: "",
-    adminIconColor: "",
-    homepageBackground: "",
-    font: "",
-    logo: "",
-    coverMedia: "",
-    deleted: false,
-    suspended: false,
-  };
-
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const [organization, setOrganization] = useState(initialOrganizationState);
-  const [images, setImages] = useState({});
+  const [organizationList, setOrganizationList] = useState([]);
 
   useEffect(() => {
-    isLoggedIn();
-    getOrg();
+    // isLoggedIn();
+    // getOrg();
+    async function fetchData() {
+      await getOrganizationList();
+    }
+    fetchData();
   }, []);
   // console.log("Organization", organization);
 
-  const menuStyle = {
-    backgroundColor: organization.menuColor || "",
-  };
+  // const menuStyle = {
+  //   backgroundColor: organization.menuColor || "",
+  // };
 
   /**
    * Load user-specific organization or create on if user doesn't have an organization
    */
-  const isLoggedIn = () => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setLoggedIn(true);
-      return;
-    }
-    Auth.currentAuthenticatedUser()
-      .then(async (user) => {
-        console.log("user email", user.email);
-        let out = false;
-        const userName = user.username;
-        const sha512Hash = crypto.SHA512(userName).toString();
-        console.log("result1: ", userName);
+  // const isLoggedIn = () => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     setLoggedIn(true);
+  //     return;
+  //   }
+  //   console.log("auth does not work");
+  //   Auth.currentAuthenticatedUser()
+  //     .then(async (user) => {
+  //       console.log("user email", user.email);
+  //       let out = false;
+  //       const userName = "try"; //user.username;
+  //       console.log("result1: ", userName);
 
-        const res = await API.graphql({
-          query: getOrganization,
-          variables: { id: sha512Hash },
-        });
-        console.log("try", res.data.getOrganization);
-        if (res.data.getOrganization === null) {
-          const cat = await API.graphql({
-            query: createOrganizationMutation,
-            variables: {
-              input: {
-                id: sha512Hash,
-                username: userName,
-                deleted: false,
-                suspended: false,
-              },
-            },
-          });
-          // if (cat === null) {
+  //       const sha512Hash = crypto.SHA512(userName).toString();
 
-          // }
-          console.log("catch", cat);
-        } else {
-          if (
-            res.data.getOrganization.deleted ||
-            res.data.getOrganization.suspended
-          ) {
-            out = true;
-            setLoggedIn(false);
-            signOut();
-            setLoggedIn(false);
-          }
-        }
-        if (!out) {
-          localStorage.setItem("token", sha512Hash);
-          console.log("done");
-          out = false;
-          setLoggedIn(true);
-        }
-      })
-      .catch(() => {
-        setLoggedIn(false);
-      });
-  };
+  //       const res = await API.graphql({
+  //         query: getOrganization,
+  //         variables: { id: sha512Hash },
+  //       });
+  //       console.log("try", res.data.getOrganization);
+  //       if (res.data.getOrganization === null) {
+  //         const cat = await API.graphql({
+  //           query: createOrganizationMutation,
+  //           variables: {
+  //             input: {
+  //               id: sha512Hash,
+  //               username: userName,
+  //               deleted: false,
+  //               suspended: false,
+  //             },
+  //           },
+  //         });
+  //         // if (cat === null) {
+
+  //         // }
+  //         console.log("catch", cat);
+  //       } else {
+  //         if (
+  //           res.data.getOrganization.deleted ||
+  //           res.data.getOrganization.suspended
+  //         ) {
+  //           out = true;
+  //           setLoggedIn(false);
+  //           signOut();
+  //           setLoggedIn(false);
+  //         }
+  //       }
+  //       if (!out) {
+  //         localStorage.setItem("token", sha512Hash);
+  //         console.log("done");
+  //         out = false;
+  //         setLoggedIn(true);
+  //       }
+  //     })
+  //     .catch(() => {
+  //       console.log("auth catch");
+  //       setLoggedIn(false);
+  //     });
+  // };
 
   const onSignIn = () => {
     setLoggedIn(true);
   };
 
-  const signOut = async () => {
-    console.log("in the signoutFunction");
-    localStorage.removeItem("token");
-    try {
-      await Auth.signOut();
-      setLoggedIn(false);
-      navigate("/signin");
-    } catch (error) {
-      console.log("error signing out " + error);
-    }
-    navigate(0);
-  };
-
-  async function getOrg() {
-    const org = await API.graphql({
-      query: getOrganization,
-      variables: { id: orgId },
+  async function getOrganizationList() {
+    const apiData = await API.graphql({
+      query: listOrganizations,
     });
-
-    if (org.data.getOrganization.logo) {
-      const image = await Storage.get(org.data.getOrganization.logo);
-      setImages({ ...images, logo: image });
-    }
-    if (org.data.getOrganization.coverMedia) {
-      const image = await Storage.get(org.data.getOrganization.coverMedia);
-      setImages({ ...images, coverMedia: image });
-    }
-
-    setOrganization({
-      name: org.data.getOrganization.name,
-      locationAddress: org.data.getOrganization.locationAddress,
-      locationZipCode: org.data.getOrganization.locationZipCode,
-      locationCity: org.data.getOrganization.locationCity,
-      locationState: org.data.getOrganization.locationState,
-      locationCountry: org.data.getOrganization.locationCountry,
-      headerColor: org.data.getOrganization.headerColor,
-      sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
-      menuColor: org.data.getOrganization.menuColor,
-      linkFontColor: org.data.getOrganization.linkFontColor,
-      adminIconColor: org.data.getOrganization.adminIconColor,
-      homepageBackground: org.data.getOrganization.homepageBackground,
-      font: org.data.getOrganization.font,
-      logo: org.data.getOrganization.logo,
-      coverMedia: org.data.getOrganization.coverMedia,
-      deleted: org.data.getOrganization.deleted,
-      suspended: org.data.getOrganization.suspended,
-    });
+    // console.log("api organization list", apiData);
+    const organizationsFromAPI = apiData.data.listOrganizations.items;
+    let orgList = [];
+    await Promise.all(
+      organizationsFromAPI.map((organization) => {
+        if (organization.orgURL) {
+          orgList.push(organization);
+        }
+        return organization;
+      })
+    );
+    console.log("organization list with url", orgList);
+    setOrganizationList(orgList);
   }
-
-  //used for closing hamburger menu
-  const [isMenuOpen, handleMenu] = useState(false);
-
-  const handleCloseMenu = () => {
-    // navigate(0);
-    handleMenu(false);
-  };
-
-  const handleStateChange = (state) => {
-    handleMenu(state.isOpen);
-  };
 
   return (
     <div className="App" style={{ backgroundColor: "#BC6C25", height: "100%" }}>
-      <Menu
-        disableAutoFocus
-        right
-        // style={menuStyle}
-        style={{ color: organization.menuColor }}
-        isOpen={isMenuOpen}
-        onStateChange={handleStateChange}
-      >
-        <Link
-          className="menu-link"
-          style={{ color: organization.menuColor }}
-          to={"/"}
-          onClick={() => handleCloseMenu()}
-        >
-          Home
-        </Link>
-        <Link
-          className="menu-link"
-          to={"/notes"}
-          onClick={() => handleCloseMenu()}
-        >
-          NoteList
-        </Link>
-        <Link
-          className="menu-link"
-          to={"/stats"}
-          onClick={() => handleCloseMenu()}
-        >
-          Stats
-        </Link>
-        <Link
-          className="menu-link"
-          to={"/gallery"}
-          onClick={() => handleCloseMenu()}
-        >
-          Gallery
-        </Link>
-        <Link
-          className="menu-link"
-          to={"/parks"}
-          onClick={() => handleCloseMenu()}
-        >
-          Parks Around the World
-        </Link>
-
-        <Link
-          className="menu-link"
-          to="/signin"
-          onClick={() => handleCloseMenu()}
-        >
-          {loggedIn ? "Admin Panel" : "Sign In"}
-        </Link>
-        {loggedIn ? (
-          <Link
-            className="menu-link"
-            onClick={() => {
-              signOut();
-              handleCloseMenu();
-            }}
-          >
-            Sign out
-          </Link>
-        ) : (
-          ""
-        )}
-      </Menu>
-
-      <Navbar
-        style={{ backgroundColor: organization.headerColor || "#2C678E" }}
-        expand="lg"
-      >
-        <Container>
-          <Navbar.Brand href="#home" style={{ color: "#FEFAE0" }}>
-            {images.logo && <img src={images.logo || logo} />}
-          </Navbar.Brand>
-        </Container>
-      </Navbar>
-
-      <header
-        className="header"
-        style={{
-          backgroundColor: organization.sectionHeaderColor || "#2C678E",
-          fontSize: organization.font + "px" || "50px",
-        }}
-      >
-        <h1>Welcome to {organization.name || "Reiman Garden"}</h1>
-      </header>
+      {organizationList.map((org, index) => (
+        // <div key={org.url}>
+        <Routes key={org.orgURL}>
+          {/* {console.log("in routes", org)}
+          {console.log("in routes index", index)} */}
+          <Route exact path={"/" + org.orgURL + "/"} element={<Home />} />
+          <Route
+            exact
+            path={"/" + org.orgURL + "/notes"}
+            element={<NoteList />}
+          />
+          <Route exact path={"/" + org.orgURL + "/stats"} element={<Stats />} />
+          <Route
+            exact
+            path={"/" + org.orgURL + "/gallery"}
+            element={<Gallery />}
+          />
+          <Route exact path={"/" + org.orgURL + "/parks"} element={<Parks />} />
+        </Routes>
+        // </div>
+      ))}
       <Routes>
-        <Route exact path="/" element={<Home />} />
         <Route
           exact
           path="/signin"
-          element={<SignIn onSignIn={isLoggedIn} />}
+          // element={<SignIn onSignIn={isLoggedIn} />}
+          element={<SignIn />}
         />
-        <Route exact path="/notes" element={<NoteList />} />
-        <Route exact path="/stats" element={<Stats />} />
-        <Route exact path="/gallery" element={<Gallery />} />
-        <Route exact path="/parks" element={<Parks />} />
+        <Route exact path="/adminPanel" element={<AdminPanel />} />
+
         <Route exact path="/addButterfly" element={<AddButterfly />} />
         <Route exact path="/editButterfly" element={<EditButterfly />} />
         <Route exact path="/displayShipments" element={<DisplayShipments />} />
@@ -308,7 +185,7 @@ function App() {
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route exact path="/addShipments" element={<AddShipments />} />
-        <Route exact path="/deleteOrganizations" element={<DeleteOrganizations />}/>
+        <Route exact path="/manageOrganizations" element={<ManageOrganizations />}/>
         <Route exact path="/importExportShipments" element={<ImportExportShipments />}/>
         <Route exact path="/butterfly/:id" element={<ButterflyDetail/>}/>
       </Routes>

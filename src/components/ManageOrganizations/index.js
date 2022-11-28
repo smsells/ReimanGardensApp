@@ -9,16 +9,31 @@ import {
   deleteOrganization as deleteOrganizationMutation,
   updateOrganization as updateOrganizationMutation,
 } from "../../graphql/mutations";
+import AppHeader from "../Header/AppHeader";
 
-const DeleteOrganizations = () => {
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AppMenu from "../Header/AppMenu";
+
+const ManageOrganizations = () => {
+  const orgID = localStorage.getItem("token");
   const [organizations, setOrganizations] = useState([]);
   const [tableRows, setTableRows] = useState();
   const [formData, setFormData] = useState({});
   const navigate = useNavigate();
 
-  //const [formData, setFormData] = useState(initialFormState);
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setFormData(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     fetchOrganizations();
   }, []);
 
@@ -123,6 +138,11 @@ const DeleteOrganizations = () => {
 
   return (
     <div className="DeleteOrganizations">
+      <AppHeader
+        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        organizationProp={organization}
+        imagesProp={images}
+      />
       <Table hover>
         <thead>
           <tr>
@@ -144,4 +164,4 @@ const DeleteOrganizations = () => {
   );
 };
 
-export default DeleteOrganizations;
+export default ManageOrganizations;

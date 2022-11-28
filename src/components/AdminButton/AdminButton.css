@@ -1,14 +1,14 @@
-.admin-button{
-    background-color: #DDA15E;
-    color: #FEFAE0;
-    width: 20%;
-    font-size: 30px;
-    padding: 5% ;
-    border-radius: 12px;
-    margin: 10px 5%;
-    border: white;
+.admin-button {
+  background-color: #dda15e;
+  color: #fefae0;
+  width: 20%;
+  font-size: 30px;
+  padding: 5%;
+  border-radius: 12px;
+  margin: 10px 5%;
+  border: white;
 }
 .admin-button:hover {
-    color:#BC6C25;
-    background-color: #FEFAE0;
+  color: #bc6c25;
+  background-color: #fefae0;
 }

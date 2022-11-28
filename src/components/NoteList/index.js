@@ -1,22 +1,38 @@
 import React, { useState, useEffect } from "react";
 import "../../App.css";
-import { API } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
 import { listNotes } from "../../graphql/queries";
 import { Storage } from "aws-amplify";
-
+import { useLocation } from "react-router-dom";
 import {
   createNote as createNoteMutation,
   deleteNote as deleteNoteMutation,
 } from "../../graphql/mutations";
+import { initialOrganizationState } from "../utils/initialStates";
+import AppHeader from "../Header/AppHeader";
+import AppMenu from "../Header/AppMenu";
+import getProps from "../Header/Props";
 
 const NoteList = () => {
+  const location = useLocation();
+  const pathName = location.pathname.split("/");
+  const orgURL = pathName[1];
   const [notes, setNotes] = useState([]);
   const initialFormState = { name: "", description: "" };
-
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
   const [formData, setFormData] = useState(initialFormState);
 
   useEffect(() => {
-    fetchNotes();
+    async function fetchProps() {
+      await Auth.signIn("dummy1234", "dummy1234");
+
+      const props = await getProps(orgURL);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+      fetchNotes();
+    }
+    fetchProps();
   }, []);
 
   async function onChange(e) {
@@ -67,6 +83,11 @@ const NoteList = () => {
 
   return (
     <div className="NoteList">
+      <AppHeader
+        organizationProp={organization}
+        imagesProp={images}
+        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+      />
       <input
         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
         placeholder="Note name"
