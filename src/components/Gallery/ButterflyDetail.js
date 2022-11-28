@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { API, graphqlOperation, Storage } from 'aws-amplify';
-import { listImages, listButterflies } from '../../graphql/queries';
+import { listImages, getButterfly } from '../../graphql/queries';
 import { useParams } from "react-router-dom";
 import Grid from '@material-ui/core/Grid';
 
@@ -16,21 +16,23 @@ const ButterflyDetail = () => {
 
     useEffect(() => {
         fetchButterfly();
+        console.log("id", butterflyID);
     });
 
     async function fetchButterfly() {
 
         try {
             if (!haveQueriedButterfly) {
-                const apiButterflyData = await API.graphql(graphqlOperation(listButterflies));
-                const butterfliesFromAPI = apiButterflyData.data.listButterflies.items;
-                var filteredButterflies = butterfliesFromAPI.filter(butterfly => {
-                    return butterfly.id === butterflyID;
-                });
+                const apiButterflyData = await API.graphql({
+                    query: getButterfly,
+                    variables:{
+                        id: butterflyID
+                    }});
+                const butterfliesFromAPI = apiButterflyData.data.getButterfly;
+            
+                setButterflyObj(butterfliesFromAPI);
 
-                setButterflyObj(filteredButterflies[0]);
-
-                if (Object.keys(butterflyObj).length != 0) {
+                if (Object.keys(butterflyObj).length !== 0) {
                     setHaveQueriedButterfly(true);
                     console.log("filtered butterfly object", butterflyObj);
                     fetchImages();
