@@ -50,6 +50,7 @@ const Parks = () => {
     var organizationsLat = [];
     var organizationsLon = [];
     var organizationID = [];
+    var organizationURL = [];
     var i = 0;
     //var organizationsCountry = []
     organizationFromAPI.forEach((element) => {
@@ -57,6 +58,7 @@ const Parks = () => {
       organizationsLon[i] = element.locationLongitude;
       //maybe use username?
       organizationID[i] = element.id;
+      organizationURL[i]=element.orgURL;
       //organizationsCountry[i]=element.locationCountry;
       i++;
     });
@@ -68,10 +70,13 @@ const Parks = () => {
         object["latitude"] = organizationsLat[j];
         object["longitude"] = organizationsLon[j];
         object["ID"] = organizationID[j];
+        object["url"]=organizationURL[j]
+        console.log("This is the URL that I got: "+organizationURL[j]);
 
         latlonList.push(object);
       }
     }
+   
 
     var data = latlonList.map((element) => (
       <Marker
@@ -80,7 +85,8 @@ const Parks = () => {
           click: (e) => {
             console.log(element);
             localStorage.setItem("token", element.ID);
-            navigate("/");
+            var toNavigate = "/"+element.url;
+            navigate(toNavigate);
           },
         }}
         icon={
