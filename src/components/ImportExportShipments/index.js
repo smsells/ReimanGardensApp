@@ -93,8 +93,8 @@ function ImportExportShipments() {
         const orderToken = order.data.createOrder.id;
         // console.log("orders created", order);
 
-        for (i = 1; i < results.data.length; i++) {
-          // for (i = 1; i < 25; i++) {
+        // for (i = 1; i < results.data.length; i++) {
+        for (i = 1; i < 25; i++) {
           let orderItem = {};
           orderItem["orgID"] = token;
           orderItem["orderID"] = orderToken;

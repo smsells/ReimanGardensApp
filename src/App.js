@@ -37,99 +37,19 @@ import AdminPanel from "./components/AdminPanel";
 import crypto from "crypto-js";
 
 function App() {
-  const orgId = localStorage.getItem("token");
-
-  const [loggedIn, setLoggedIn] = useState(false);
-  const navigate = useNavigate();
   const [organizationList, setOrganizationList] = useState([]);
 
   useEffect(() => {
-    // isLoggedIn();
-    // getOrg();
     async function fetchData() {
       await getOrganizationList();
     }
     fetchData();
   }, []);
-  // console.log("Organization", organization);
-
-  // const menuStyle = {
-  //   backgroundColor: organization.menuColor || "",
-  // };
-
-  /**
-   * Load user-specific organization or create on if user doesn't have an organization
-   */
-  // const isLoggedIn = () => {
-  //   const token = localStorage.getItem("token");
-  //   if (token) {
-  //     setLoggedIn(true);
-  //     return;
-  //   }
-  //   console.log("auth does not work");
-  //   Auth.currentAuthenticatedUser()
-  //     .then(async (user) => {
-  //       console.log("user email", user.email);
-  //       let out = false;
-  //       const userName = "try"; //user.username;
-  //       console.log("result1: ", userName);
-
-  //       const sha512Hash = crypto.SHA512(userName).toString();
-
-  //       const res = await API.graphql({
-  //         query: getOrganization,
-  //         variables: { id: sha512Hash },
-  //       });
-  //       console.log("try", res.data.getOrganization);
-  //       if (res.data.getOrganization === null) {
-  //         const cat = await API.graphql({
-  //           query: createOrganizationMutation,
-  //           variables: {
-  //             input: {
-  //               id: sha512Hash,
-  //               username: userName,
-  //               deleted: false,
-  //               suspended: false,
-  //             },
-  //           },
-  //         });
-  //         // if (cat === null) {
-
-  //         // }
-  //         console.log("catch", cat);
-  //       } else {
-  //         if (
-  //           res.data.getOrganization.deleted ||
-  //           res.data.getOrganization.suspended
-  //         ) {
-  //           out = true;
-  //           setLoggedIn(false);
-  //           signOut();
-  //           setLoggedIn(false);
-  //         }
-  //       }
-  //       if (!out) {
-  //         localStorage.setItem("token", sha512Hash);
-  //         console.log("done");
-  //         out = false;
-  //         setLoggedIn(true);
-  //       }
-  //     })
-  //     .catch(() => {
-  //       console.log("auth catch");
-  //       setLoggedIn(false);
-  //     });
-  // };
-
-  const onSignIn = () => {
-    setLoggedIn(true);
-  };
 
   async function getOrganizationList() {
     const apiData = await API.graphql({
       query: listOrganizations,
     });
-    // console.log("api organization list", apiData);
     const organizationsFromAPI = apiData.data.listOrganizations.items;
     let orgList = [];
     await Promise.all(
@@ -140,17 +60,14 @@ function App() {
         return organization;
       })
     );
-    console.log("organization list with url", orgList);
+    // console.log("organization list with url", orgList);
     setOrganizationList(orgList);
   }
 
   return (
     <div className="App" style={{ backgroundColor: "#BC6C25", height: "100%" }}>
       {organizationList.map((org, index) => (
-        // <div key={org.url}>
         <Routes key={org.orgURL}>
-          {/* {console.log("in routes", org)}
-          {console.log("in routes index", index)} */}
           <Route exact path={"/" + org.orgURL + "/"} element={<Home />} />
           <Route
             exact
@@ -165,15 +82,9 @@ function App() {
           />
           <Route exact path={"/" + org.orgURL + "/parks"} element={<Parks />} />
         </Routes>
-        // </div>
       ))}
       <Routes>
-        <Route
-          exact
-          path="/signin"
-          // element={<SignIn onSignIn={isLoggedIn} />}
-          element={<SignIn />}
-        />
+        <Route exact path="/signin" element={<SignIn />} />
         <Route exact path="/adminPanel" element={<AdminPanel />} />
 
         <Route exact path="/addButterfly" element={<AddButterfly />} />
@@ -200,6 +111,3 @@ function App() {
 }
 
 export default App;
-
-//TODO problems
-//Probs will need to send function that keeps track of current park to dynamically load all the park info
