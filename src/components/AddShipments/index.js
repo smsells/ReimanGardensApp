@@ -12,7 +12,6 @@ import {
   getOrder,
   listOrderItems,
 } from "../../graphql/queries";
-
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -22,6 +21,10 @@ import {
   createSearchParams,
   Link,
 } from "react-router-dom";
+import AppHeader from "../Header/AppHeader";
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AppMenu from "../Header/AppMenu";
 //import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
 const AddShipments = () => {
@@ -55,16 +58,6 @@ const AddShipments = () => {
   const [numEmerged, setNumEmerged] = useState("");
   const [poorEmerged, setPoorEmerged] = useState("");
 
-  function handlePackingList(id, e) {
-    console.log(id);
-    navigate({
-      pathname: "/packingList",
-      search: createSearchParams({
-        id: id,
-      }).toString(),
-    });
-  }
-
   //Idea is that it will be an array of objects to populate a 2d array
   //Will need Query Schema for all of this
 
@@ -72,8 +65,17 @@ const AddShipments = () => {
 
   //const [formData, setFormData] = useState(initialFormState);
   const [tableRows, setTableRows] = useState();
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     fetchShipments();
   }, []);
 
@@ -225,6 +227,11 @@ const AddShipments = () => {
   return (
     //Holder for the information
     <div className="DisplayShipments">
+      <AppHeader
+        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        organizationProp={organization}
+        imagesProp={images}
+      />
       <button onClick={addOrder}>Add Order</button>
       {showNewOrderForm && (
         <>

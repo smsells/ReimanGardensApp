@@ -308,7 +308,7 @@ const EditButterfly = () => {
         menuProp={<AppMenu organizationProp={organization} admin={true} />}
         organizationProp={organization}
         imagesProp={organizationImages}
-      ></AppHeader>
+      />
       <form
         style={{
           fontSize: "x-large",

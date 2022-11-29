@@ -52,18 +52,6 @@ const CustomizePage = () => {
     formData.adminIconColor
   );
 
-  const signOut = async () => {
-    console.log("in the signoutFunction");
-    localStorage.removeItem("token");
-    try {
-      await Auth.signOut();
-      navigate("/signin");
-    } catch (error) {
-      console.log("error signing out " + error);
-    }
-    navigate(0);
-  };
-
   /**
    *
    * @param {*} e

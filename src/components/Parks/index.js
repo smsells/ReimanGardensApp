@@ -25,7 +25,7 @@ const Parks = () => {
 
   useEffect(() => {
     async function fetchProps() {
-      console.log("before props");
+      // console.log("before props");
 
       // if you are going to use storage, keep your function here please
       await Auth.signIn("dummy1234", "dummy1234");

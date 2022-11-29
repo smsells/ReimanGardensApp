@@ -27,7 +27,13 @@ const Home = () => {
     async function fetchProps() {
       console.log("before props");
 
-      await Auth.signIn("dummy1234", "dummy1234");
+      await Auth.signIn("dummy1234", "dummy1234")
+        .then(() => {
+          console.log("user signed in");
+        })
+        .catch(() => {
+          console.log("signin error");
+        });
       const props = await getProps(orgURL);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);

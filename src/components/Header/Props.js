@@ -46,7 +46,7 @@ export default async function getProps(orgURL) {
       console.log("in props storage get error", error);
     }
   }
-  console.log("in props images", images);
+  // console.log("in props images", images);
 
   const organization = {
     name: org.data.getOrganization.name,
@@ -68,7 +68,7 @@ export default async function getProps(orgURL) {
     deleted: org.data.getOrganization.deleted,
     suspended: org.data.getOrganization.suspended,
   };
-  console.log("in props", organization);
+  // console.log("in props", organization);
 
   return {
     organizationProp: organization,
