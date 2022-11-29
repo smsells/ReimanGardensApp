@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Navigate, useSearchParams } from "react-router-dom";
 import { a, API } from "aws-amplify";
-import { getOrder, listOrderItems } from "../../graphql/queries";
+import { getOrder, listOrderItems, listOrderItemsByID } from "../../graphql/queries";
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -96,15 +96,22 @@ const PackingList = () => {
 
   }
   async function fetchShipments() {
+    var param = searchparams.get("id");
    
-    let filter = {
-      orderID: {eq: searchparams.get("id")},
+   /* let filterOrders = {
+      orderID: {eq: param},
     }
     const apiData = await API.graphql({
       query: listOrderItems,
-      variables: { filter: filter},
+      variables: { filter: filterOrders},
     });
     //check what theyre called lol
+    */
+   const apiData = await API.graphql({
+    query: listOrderItems,
+    variables: {orderID: param},
+
+   });
     console.log("id query data: " + JSON.stringify(apiData));
 
     const packingListFromAPI = apiData.data.listOrderItems.items;

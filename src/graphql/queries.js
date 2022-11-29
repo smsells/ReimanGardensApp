@@ -375,6 +375,26 @@ export const listSpeciesInfos = /* GraphQL */ `
     }
   }
 `;
+export const listOrderItemsByID = /* GraphQl*/`
+query QueryOrderItemsForOrderID($orderID: String!) {
+  listOrderItemsByID(orderID: $orderID) {
+    orderItems {
+      items {
+        species
+        commonName
+        numReceived
+        emergedInTransit
+        damagedInTransit
+        diseased
+        parasites
+        poorEmerged
+        numEmerged
+        id
+      }
+    }
+  }
+}
+`;
 export const getImage = /* GraphQL */ `
   query GetImage($id: ID!) {
     getImage(id: $id) {
