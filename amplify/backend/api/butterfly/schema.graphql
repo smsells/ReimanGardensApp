@@ -62,7 +62,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
   shipmentDate: String
   arrivalDate: String
   supplier: String
-  orgID: String
+  orgID: String @index
 }
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {

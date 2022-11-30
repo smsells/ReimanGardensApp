@@ -303,6 +303,27 @@ export const listOrderItems = /* GraphQL */ `
     }
   }
 `;
+export const listOrderItemsByID = `
+query QueryListOrderItemsByID($orderID: String!) {
+  listOrdersByID(orderID:  $orderID) {
+    listORders {
+      items {
+        species
+        commonName
+        numReceived
+        emergedInTransit
+        damagedInTransit
+        diseased
+        parasites
+        poorEmerged
+        numEmerged
+        id 
+      }
+    }
+  }
+}
+`;
+
 export const getModule = /* GraphQL */ `
   query GetModule($id: ID!) {
     getModule(id: $id) {
@@ -374,26 +395,6 @@ export const listSpeciesInfos = /* GraphQL */ `
       nextToken
     }
   }
-`;
-export const listOrderItemsByID = /* GraphQl*/`
-query QueryOrderItemsForOrderID($orderID: String!) {
-  listOrderItemsByID(orderID: $orderID) {
-    orderItems {
-      items {
-        species
-        commonName
-        numReceived
-        emergedInTransit
-        damagedInTransit
-        diseased
-        parasites
-        poorEmerged
-        numEmerged
-        id
-      }
-    }
-  }
-}
 `;
 export const getImage = /* GraphQL */ `
   query GetImage($id: ID!) {
