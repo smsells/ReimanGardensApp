@@ -14,6 +14,7 @@ import AppHeader from "../Header/AppHeader";
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
 import AdminMenu from "../Header/AdminMenu";
+import { dateCompare } from "../utils/sort";
 
 //npm install --save react-csv
 function exportUserInfo(file) {
@@ -47,6 +48,8 @@ function ImportExportShipments() {
     { label: "No. emerged", key: "numEmerged" },
     { label: "Poor emerged", key: "poorEmerged" },
   ]);
+  const [formData, setFormData] = useState({ from: "", to: "" });
+  const [shipmentRange, setShipmentRange] = useState([]);
   const [images, setImages] = useState({});
   const [organization, setOrganization] = useState(initialOrganizationState);
 
@@ -175,11 +178,15 @@ function ImportExportShipments() {
     });
 
     var orders = shipmentsFromID.data.listOrders.items;
-    console.log("Here is what is in the array:  " + JSON.stringify(orders));
+    // console.log("Here is what is in the array:  " + JSON.stringify(orders));
     var result = [];
     for (var i in orders) result.push([i, orders[i]]);
 
-    var data = orders.map((element) => {
+    const ordersAscending = [...orders].sort(
+      (a, b) => -1 * dateCompare(a.arrivalDate, b.arrivalDate)
+    );
+
+    var data = ordersAscending.map((element) => {
       return (
         <tr>
           <td>{element.orderNumber}</td>
@@ -200,6 +207,74 @@ function ImportExportShipments() {
     setTableRows(data);
   }
 
+  async function exportShipmentRange(e) {
+    let filterShip = {
+      orgID: { eq: orgID },
+    };
+    const shipmentsFromID = await API.graphql({
+      query: listOrders,
+      variables: { filter: filterShip },
+    });
+    var orders = shipmentsFromID.data.listOrders.items;
+    var shipmentList = [];
+    for (var i = 0; i < orders.length; i++) {
+      if (
+        dateCompare(formData.from, orders[i].arrivalDate) >= 0 &&
+        dateCompare(formData.to, orders[i].arrivalDate) <= 0
+      ) {
+        // console.log("order", orders[i]);
+        // console.log(
+        //   "from to order",
+        //   dateCompare(formData.from, orders[i].arrivalDate)
+        // );
+        setShipmentRange([...shipmentRange, orders[i]]);
+        shipmentList = [...shipmentList, orders[i]];
+      }
+    }
+
+    // console.log("from", formData.from);
+    // console.log("to", formData.to);
+    // console.log("here is the range of orders", shipmentRange);
+    console.log("here is the range of list", shipmentList);
+    let exportJSON = [];
+
+    for (var j = 0; j < shipmentList.length; j++) {
+      let filterShip = {
+        orderID: { eq: shipmentList[j].id },
+      };
+      const shipmentItemsFromID = await API.graphql({
+        query: listOrderItems,
+        variables: { filter: filterShip },
+      });
+      console.log("api items data", shipmentItemsFromID);
+
+      var orderItems = shipmentItemsFromID.data.listOrderItems.items;
+      console.log("order items", orderItems);
+
+      let i = 0;
+      for (i = 0; i < orderItems.length; i++) {
+        let itemRow = {};
+        itemRow["species"] = orderItems[i].species;
+        itemRow["commonName"] = orderItems[i].commonName;
+        itemRow["numReceived"] = orderItems[i].numReceived;
+        itemRow["supplier"] = shipmentList[j].supplier;
+        itemRow["shipmentDate"] = shipmentList[j].shipmentDate;
+        itemRow["arrivalDate"] = shipmentList[j].arrivalDate;
+        itemRow["emergedInTransit"] = orderItems[i].emergedInTransit;
+        console.log("Export emergedInTransit", orderItems[i].emergedInTransit);
+        itemRow["damagedInTransit"] = orderItems[i].damagedInTransit;
+        itemRow["diseased"] = orderItems[i].diseased;
+        itemRow["parasites"] = orderItems[i].parasites;
+        itemRow["numEmerged"] = orderItems[i].numEmerged;
+        itemRow["poorEmerged"] = orderItems[i].poorEmerged;
+        exportJSON.push(itemRow);
+      }
+    }
+    console.log("export json", exportJSON);
+    setExportData(exportJSON);
+    setPopupVisibility(true);
+  }
+
   async function exportShipment(order, e) {
     let filterShip = {
       orderID: { eq: order.id },
@@ -210,7 +285,7 @@ function ImportExportShipments() {
     });
 
     var orderItems = shipmentItemsFromID.data.listOrderItems.items;
-    console.log("order items", orderItems);
+    // console.log("order items", orderItems);
 
     let exportJSON = [];
     let i = 0;
@@ -250,6 +325,28 @@ function ImportExportShipments() {
         organizationProp={organization}
         imagesProp={images}
       />
+      <p>
+        From
+        <input
+          onChange={(e) => setFormData({ ...formData, from: e.target.value })}
+          placeholder="MM/DD/YY"
+          value={formData.name}
+        />{" "}
+        To{" "}
+        <input
+          onChange={(e) => setFormData({ ...formData, to: e.target.value })}
+          placeholder="MM/DD/YY"
+          value={formData.name}
+        />{" "}
+        <button
+          onClick={(e) => {
+            exportShipmentRange(e);
+          }}
+        >
+          {" "}
+          Export Shipment{" "}
+        </button>
+      </p>
       <Table hover>
         <thead>
           <tr>

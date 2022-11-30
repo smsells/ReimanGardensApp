@@ -20,7 +20,7 @@ import AppHeader from "../Header/AppHeader";
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
 import AdminMenu from "../Header/AdminMenu";
-import { dateSort } from "../utils/sort";
+import { dateCompare } from "../utils/sort";
 //import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
 const DisplayShipments = () => {
@@ -99,7 +99,7 @@ const DisplayShipments = () => {
       var result = [];
       for (var i in orders) result.push([i, orders[i]]);
       const ordersAscending = [...orders].sort(
-        (a, b) => -1 * dateSort(a.arrivalDate, b.arrivalDate)
+        (a, b) => -1 * dateCompare(a.arrivalDate, b.arrivalDate)
       );
 
       var data = ordersAscending.map((element) => {

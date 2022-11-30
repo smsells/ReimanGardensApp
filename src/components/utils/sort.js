@@ -1,4 +1,4 @@
-export function dateSort(date1, date2) {
+export function dateCompare(date1, date2) {
   const date1Arr = date1.split("/");
   const date1Obj = {
     month: parseInt(date1Arr[0], 10),

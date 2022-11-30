@@ -22,6 +22,8 @@ import AppHeader from "../Header/AppHeader";
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
 import AdminMenu from "../Header/AdminMenu";
+import { dateCompare } from "../utils/sort";
+
 //import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
 const AddShipments = () => {
@@ -99,7 +101,11 @@ const AddShipments = () => {
       var result = [];
       for (var i in orders) result.push([i, orders[i]]);
 
-      var data = orders.map((element) => {
+      const ordersAscending = [...orders].sort(
+        (a, b) => -1 * dateCompare(a.arrivalDate, b.arrivalDate)
+      );
+
+      var data = ordersAscending.map((element) => {
         return (
           <tr>
             <td>{element.orderNumber}</td>
