@@ -108,8 +108,12 @@ export const onCreateOrganization = /* GraphQL */ `
     onCreateOrganization {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -119,6 +123,8 @@ export const onCreateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -130,8 +136,12 @@ export const onUpdateOrganization = /* GraphQL */ `
     onUpdateOrganization {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -141,6 +151,8 @@ export const onUpdateOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -152,8 +164,12 @@ export const onDeleteOrganization = /* GraphQL */ `
     onDeleteOrganization {
       name
       username
+      locationAddress
+      locationZipCode
       locationCity
       locationState
+      locationLongitude
+      locationLatitude
       headerColor
       sectionHeaderColor
       menuColor
@@ -163,6 +179,8 @@ export const onDeleteOrganization = /* GraphQL */ `
       font
       logo
       coverMedia
+      deleted
+      suspended
       id
       createdAt
       updatedAt
@@ -305,6 +323,7 @@ export const onCreateOrderItem = /* GraphQL */ `
   subscription OnCreateOrderItem {
     onCreateOrderItem {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -324,6 +343,7 @@ export const onUpdateOrderItem = /* GraphQL */ `
   subscription OnUpdateOrderItem {
     onUpdateOrderItem {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit
@@ -343,6 +363,7 @@ export const onDeleteOrderItem = /* GraphQL */ `
   subscription OnDeleteOrderItem {
     onDeleteOrderItem {
       species
+      commonName
       numReceived
       emergedInTransit
       damagedInTransit

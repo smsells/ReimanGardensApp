@@ -23,7 +23,7 @@ const SignIn = ({ onSignIn }) => {
       .then((user) => {
         console.log("User ", user);
         console.log("User Pool", user.pool);
-        if (user.pool.userPoolId == "us-east-2_tyNlmQmJu") {
+        if (user.pool.userPoolId === "us-east-2_tyNlmQmJu") {
           console.log("success");
           API.graphql({
             query: createOrgMutation,
@@ -33,6 +33,14 @@ const SignIn = ({ onSignIn }) => {
         }
       })
       .catch((err) => console.log(err));
+  }
+
+  function load() {
+    const orgID = localStorage.getItem("token");
+    if (!orgID) {
+      console.log("Sign in load check");
+      navigate(0);
+    }
   }
 
   // function testOnload(){
@@ -67,12 +75,14 @@ const SignIn = ({ onSignIn }) => {
             gridAutoColumns: "30%",
           }}
         >
+          {/* {load()} */}
+
           <div style={{ gridArea: "2 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
               <Link to={"/displayShipments"}>
                 <AdminButton>View Shipments</AdminButton>
               </Link>
-              <Link to={"/"}>
+              <Link to={"/addShipments"}>
                 <AdminButton>Add Shipment</AdminButton>
               </Link>
               <Link to={"/importExportShipments"}>
@@ -100,6 +110,9 @@ const SignIn = ({ onSignIn }) => {
               </Link>
               <Link to={"/customizeModules"}>
                 <AdminButton>Customize Modules</AdminButton>
+              </Link>
+              <Link to={"/deleteOrganizations"}>
+                <AdminButton>Delete Organizations</AdminButton>
               </Link>
             </div>
           </div>

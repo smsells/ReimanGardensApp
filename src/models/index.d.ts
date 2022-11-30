@@ -72,8 +72,13 @@ export declare class Organization {
   readonly id: string;
   readonly name?: string | null;
   readonly username?: string | null;
+  readonly locationAddress?: string | null;
+  readonly locationZipCode?: string | null;
   readonly locationCity?: string | null;
   readonly locationState?: string | null;
+  readonly locationCountry?: string | null;
+  readonly locationLongitude?: string | null;
+  readonly locationLatitude?: string | null;
   readonly headerColor?: string | null;
   readonly sectionHeaderColor?: string | null;
   readonly menuColor?: string | null;
@@ -83,6 +88,8 @@ export declare class Organization {
   readonly font?: string | null;
   readonly logo?: string | null;
   readonly coverMedia?: string | null;
+  readonly deleted?: boolean | null;
+  readonly suspended?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Organization, OrganizationMetaData>);
@@ -117,6 +124,7 @@ export declare class Order {
 export declare class OrderItem {
   readonly id: string;
   readonly species?: string | null;
+  readonly commonName?: string | null;
   readonly numReceived?: number | null;
   readonly emergedInTransit?: number | null;
   readonly damagedInTransit?: number | null;

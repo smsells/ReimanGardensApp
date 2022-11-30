@@ -31,6 +31,8 @@ import EditShipments from "./components/EditShipments";
 import CustomizePage from "./components/CustomizePage";
 import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
+import DeleteOrganizations from "./components/DeleteOrganizations";
+import AddShipments from "./components/AddShipments";
 import crypto from "crypto-js";
 
 function App() {
@@ -71,12 +73,14 @@ function App() {
    */
   const isLoggedIn = () => {
     const token = localStorage.getItem("token");
-    if (token != null) {
+    if (token) {
       setLoggedIn(true);
       return;
     }
     Auth.currentAuthenticatedUser()
       .then(async (user) => {
+        console.log("user email", user.email);
+        let out = false;
         const userName = user.username;
         const sha512Hash = crypto.SHA512(userName).toString();
         console.log("result1: ", userName);
@@ -86,21 +90,39 @@ function App() {
           variables: { id: sha512Hash },
         });
         console.log("try", res.data.getOrganization);
-        if (res.data.getOrganization == null) {
+        if (res.data.getOrganization === null) {
           const cat = await API.graphql({
             query: createOrganizationMutation,
             variables: {
               input: {
                 id: sha512Hash,
                 username: userName,
+                deleted: false,
+                suspended: false,
               },
             },
           });
+          // if (cat === null) {
+
+          // }
           console.log("catch", cat);
+        } else {
+          if (
+            res.data.getOrganization.deleted ||
+            res.data.getOrganization.suspended
+          ) {
+            out = true;
+            setLoggedIn(false);
+            signOut();
+            setLoggedIn(false);
+          }
         }
-        localStorage.setItem("token", sha512Hash);
-        console.log("done");
-        setLoggedIn(true);
+        if (!out) {
+          localStorage.setItem("token", sha512Hash);
+          console.log("done");
+          out = false;
+          setLoggedIn(true);
+        }
       })
       .catch(() => {
         setLoggedIn(false);
@@ -117,7 +139,7 @@ function App() {
     try {
       await Auth.signOut();
       setLoggedIn(false);
-      navigate("/");
+      navigate("/signin");
     } catch (error) {
       console.log("error signing out " + error);
     }
@@ -132,17 +154,20 @@ function App() {
 
     if (org.data.getOrganization.logo) {
       const image = await Storage.get(org.data.getOrganization.logo);
-      images["logo"] = image;
+      setImages({ ...images, logo: image });
     }
     if (org.data.getOrganization.coverMedia) {
       const image = await Storage.get(org.data.getOrganization.coverMedia);
-      images["coverMedia"] = image;
+      setImages({ ...images, coverMedia: image });
     }
 
     setOrganization({
       name: org.data.getOrganization.name,
+      locationAddress: org.data.getOrganization.locationAddress,
+      locationZipCode: org.data.getOrganization.locationZipCode,
       locationCity: org.data.getOrganization.locationCity,
       locationState: org.data.getOrganization.locationState,
+      locationCountry: org.data.getOrganization.locationCountry,
       headerColor: org.data.getOrganization.headerColor,
       sectionHeaderColor: org.data.getOrganization.sectionHeaderColor,
       menuColor: org.data.getOrganization.menuColor,
@@ -152,6 +177,8 @@ function App() {
       font: org.data.getOrganization.font,
       logo: org.data.getOrganization.logo,
       coverMedia: org.data.getOrganization.coverMedia,
+      deleted: org.data.getOrganization.deleted,
+      suspended: org.data.getOrganization.suspended,
     });
   }
 
@@ -274,6 +301,12 @@ function App() {
         <Route exact path="/editShipment" element={<EditShipments />} />
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
+        {/* <Route exact path="/addShipments" element={<AddShipments />} /> */}
+        <Route
+          exact
+          path="/deleteOrganizations"
+          element={<DeleteOrganizations />}
+        />
         <Route
           exact
           path="/importExportShipments"
