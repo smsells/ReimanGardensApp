@@ -6,7 +6,7 @@ import AppHeader from "../Header/AppHeader";
 
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 
 const EditShipments = () => {
   const orgID = localStorage.getItem("token");

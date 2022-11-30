@@ -19,7 +19,8 @@ import AppHeader from "../Header/AppHeader";
 
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
+import { dateSort } from "../utils/sort";
 //import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
 const DisplayShipments = () => {
@@ -97,8 +98,11 @@ const DisplayShipments = () => {
       console.log("Here is what is in the array:  " + JSON.stringify(orders));
       var result = [];
       for (var i in orders) result.push([i, orders[i]]);
+      const ordersAscending = [...orders].sort(
+        (a, b) => -1 * dateSort(a.arrivalDate, b.arrivalDate)
+      );
 
-      var data = orders.map((element) => {
+      var data = ordersAscending.map((element) => {
         return (
           <tr>
             <td>{element.orderNumber}</td>
@@ -132,7 +136,7 @@ const DisplayShipments = () => {
     //Holder for the information
     <div className="DisplayShipments">
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={images}
       />

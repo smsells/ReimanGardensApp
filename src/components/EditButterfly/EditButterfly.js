@@ -28,7 +28,7 @@ import {
   initialOrganizationState,
   initialButterflyObjectState,
 } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 
 const EditButterfly = () => {
   var butterflyObject;
@@ -305,7 +305,7 @@ const EditButterfly = () => {
   return (
     <>
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={organizationImages}
       />

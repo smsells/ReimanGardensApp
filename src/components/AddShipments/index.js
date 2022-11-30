@@ -4,6 +4,8 @@ import { API, Auth } from "aws-amplify";
 import {
   createOrderItem as createOrderItemMutation,
   createOrder as createOrderMutation,
+  deleteOrder as deleteOrderMutation,
+  deleteOrderItem as deleteOrderItemMutation,
 } from "../../graphql/mutations";
 import {
   listOrganizations,
@@ -15,16 +17,11 @@ import {
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Navigate,
-  useNavigate,
-  createSearchParams,
-  Link,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AppHeader from "../Header/AppHeader";
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 //import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
 const AddShipments = () => {
@@ -81,42 +78,24 @@ const AddShipments = () => {
 
   async function fetchShipments() {
     Auth.currentAuthenticatedUser().then(async (user) => {
-      var usernameToGet = user.username;
-      console.log("Username: " + usernameToGet);
-      let filter = {
-        username: { eq: usernameToGet },
-      };
-      const apiData = await API.graphql({
-        query: listOrganizations,
-        variables: { filter: filter },
-      });
-      //check what theyre called lol
-      console.log("Here's what the query returned: " + JSON.stringify(apiData));
-      if (apiData == null) {
-        console.log("its null");
-      }
-
-      const organizationFromAPI = apiData.data.listOrganizations.items;
-      const organizationID = organizationFromAPI[0].id;
-      console.log("Organization ID: " + organizationID);
       //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
       //There should be only 1 organization so
       //const shipmentsFromAPI = organizationsFromAPI.Shipments;
       let filterShip = {
-        orgID: { eq: organizationID },
+        orgID: { eq: orgID },
       };
       const shipmentsFromID = await API.graphql({
         query: listOrders,
         variables: { filter: filterShip },
       });
-      console.log(
-        "Here's what the query returned (shipment): " +
-          JSON.stringify(shipmentsFromID)
-      );
+      // console.log(
+      //   "Here's what the query returned (shipment): " +
+      //     JSON.stringify(shipmentsFromID)
+      // );
 
       //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
       var orders = shipmentsFromID.data.listOrders.items;
-      console.log("Here is what is in the array:  " + JSON.stringify(orders));
+      // console.log("Here is what is in the array:  " + JSON.stringify(orders));
       var result = [];
       for (var i in orders) result.push([i, orders[i]]);
 
@@ -134,6 +113,13 @@ const AddShipments = () => {
                 New Item{" "}
               </button>
             </td>
+            <td>
+              {" "}
+              <button onClick={(e) => deleteOrder(element, e)}>
+                {" "}
+                Delete Order{" "}
+              </button>
+            </td>
           </tr>
         );
       });
@@ -148,6 +134,53 @@ const AddShipments = () => {
               Button with the ID of the shipment on the inside to take you to another page where the order items are iterated in a similar way to this page
               For loop to iterate over all the 
         */
+  }
+
+  async function deleteAll() {
+    let filterShip = {
+      orgID: { eq: orgID },
+    };
+    const shipmentsFromID = await API.graphql({
+      query: listOrders,
+      variables: { filter: filterShip },
+    });
+    var order = shipmentsFromID.data.listOrders.items;
+    for (var i = 0; i < order.length; i++) {
+      const item = order[i];
+      await deleteOrder(item);
+    }
+
+    navigate(0);
+  }
+
+  async function deleteOrder(element, e) {
+    let filterShip = {
+      orderID: { eq: element.id },
+    };
+    const shipmentItemsFromID = await API.graphql({
+      query: listOrderItems,
+      variables: { filter: filterShip },
+    });
+
+    console.log("shipment items", shipmentItemsFromID);
+    try {
+      var orderItems = shipmentItemsFromID.data.listOrderItems.items;
+      for (var i = 0; i < orderItems.length; i++) {
+        const item = orderItems[i];
+        console.log("deleted item", item);
+
+        await API.graphql({
+          query: deleteOrderItemMutation,
+          variables: { input: { id: item.id } },
+        });
+      }
+    } catch (error) {}
+
+    await API.graphql({
+      query: deleteOrderMutation,
+      variables: { input: { id: element.id } },
+    });
+    // navigate(0);
   }
 
   function addOrder() {
@@ -228,11 +261,12 @@ const AddShipments = () => {
     //Holder for the information
     <div className="DisplayShipments">
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={images}
       />
       <button onClick={addOrder}>Add Order</button>
+      <button onClick={deleteAll}>Delete All</button>
       {showNewOrderForm && (
         <>
           <div>
@@ -269,7 +303,13 @@ const AddShipments = () => {
               </div>
             </form>
 
-            <button onClick={handleNewOrderSubmit}>Submit</button>
+            <button
+              onClick={(e) => {
+                handleNewOrderSubmit();
+              }}
+            >
+              Submit
+            </button>
           </div>
         </>
       )}
@@ -281,7 +321,8 @@ const AddShipments = () => {
             <th>Arrival Date</th>
             <th>Supplier</th>
 
-            <th>View More</th>
+            <th>Add Item</th>
+            <th>Delete Order</th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>

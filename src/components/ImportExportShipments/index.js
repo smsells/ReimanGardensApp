@@ -10,6 +10,10 @@ import Table from "react-bootstrap/Table";
 import { useNavigate } from "react-router-dom";
 import { getOrder, listOrders, listOrderItems } from "../../graphql/queries";
 import { DownloadPopUp } from "./DownloadPopUp";
+import AppHeader from "../Header/AppHeader";
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AdminMenu from "../Header/AdminMenu";
 
 //npm install --save react-csv
 function exportUserInfo(file) {
@@ -43,9 +47,17 @@ function ImportExportShipments() {
     { label: "No. emerged", key: "numEmerged" },
     { label: "Poor emerged", key: "poorEmerged" },
   ]);
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
-    console.log("orgID", orgID);
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     fetchShipments();
   }, []);
 
@@ -70,19 +82,20 @@ function ImportExportShipments() {
    *  11: poor emerged
    */
   async function csvToJson(files) {
-    const token = localStorage.getItem("token");
-
     Papa.parse(files[0], {
       complete: async function (results) {
         let reqArray = [];
         let orderItemList = [];
         let i = 0;
-
+        let shipmentDate = "";
+        let arrivalDate = "";
+        let supplier = "";
+        if (results.data.length === 0) return;
         let order = await API.graphql({
           query: createOrderMutation,
           variables: {
             input: {
-              orgID: token,
+              orgID: orgID,
               shipmentDate: results.data[1][4],
               arrivalDate: results.data[1][5],
               supplier: results.data[1][3],
@@ -90,14 +103,44 @@ function ImportExportShipments() {
             },
           },
         });
-        const orderToken = order.data.createOrder.id;
-        // console.log("orders created", order);
+        let orderID = order.data.createOrder.id;
+        console.log("New shipment date", shipmentDate);
+        console.log("New arrival date", arrivalDate);
+        console.log("New supplier", supplier);
 
         // for (i = 1; i < results.data.length; i++) {
-        for (i = 1; i < 25; i++) {
+        for (i = 1; i < 300; i++) {
+          if (
+            shipmentDate !== results.data[i][4] ||
+            arrivalDate !== results.data[i][5] ||
+            supplier !== results.data[i][3]
+          ) {
+            shipmentDate = results.data[i][4];
+            arrivalDate = results.data[i][5];
+            supplier = results.data[i][3];
+            order = await API.graphql({
+              query: createOrderMutation,
+              variables: {
+                input: {
+                  orgID: orgID,
+                  shipmentDate: results.data[i][4],
+                  arrivalDate: results.data[i][5],
+                  supplier: results.data[i][3],
+                  // packingList: orderItemList[0],
+                },
+              },
+            });
+            console.log("New shipment date", shipmentDate);
+            console.log("New arrival date", arrivalDate);
+            console.log("New supplier", supplier);
+          }
+
+          orderID = order.data.createOrder.id;
+          // console.log("orders created", order);
+
           let orderItem = {};
-          orderItem["orgID"] = token;
-          orderItem["orderID"] = orderToken;
+          orderItem["orgID"] = orgID;
+          orderItem["orderID"] = orderID;
           orderItem["species"] = results.data[i][0];
           orderItem["commonName"] = results.data[i][1];
           orderItem["numReceived"] = results.data[i][2] || 0;
@@ -108,7 +151,7 @@ function ImportExportShipments() {
           orderItem["parasites"] = results.data[i][9] || 0;
           orderItem["numEmerged"] = results.data[i][10] || 0;
           orderItem["poorEmerged"] = results.data[i][11] || 0;
-          let item = await API.graphql({
+          await API.graphql({
             query: createOrderItemMutation,
             variables: {
               input: orderItem,
@@ -202,6 +245,11 @@ function ImportExportShipments() {
 
   return (
     <div className="ImportExportShipment">
+      <AppHeader
+        menuProp={<AdminMenu organizationProp={organization} />}
+        organizationProp={organization}
+        imagesProp={images}
+      />
       <Table hover>
         <thead>
           <tr>

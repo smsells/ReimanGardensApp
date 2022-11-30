@@ -93,6 +93,7 @@ export async function getPropsID(orgID) {
   }
 
   const organization = {
+    id: org.data.getOrganization.id,
     name: org.data.getOrganization.name,
     orgURL: org.data.getOrganization.orgURL,
     locationAddress: org.data.getOrganization.locationAddress,
