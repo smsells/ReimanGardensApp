@@ -1,15 +1,13 @@
 import * as  React from "react";
-import {useEffect, useState } from "react";
-import { Auth, API } from "aws-amplify";
+import { useEffect, useState } from "react";
+import { Auth, API, graphqlOperation, Storage } from "aws-amplify";
 import AppHeader from "../Header/AppHeader";
 import AppMenu from "../Header/AppMenu";
 import getProps from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import { useLocation } from "react-router-dom";;
-import { useState, useEffect } from "react";
-import { API, graphqlOperation, Storage } from 'aws-amplify';
+import { useLocation } from "react-router-dom";
 import { listImages, listButterflies } from '../../graphql/queries';
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 import './Gallery.css';
 import { CustomHeaderLarge } from '../Fonts/CustomFonts';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -22,15 +20,15 @@ const Gallery = () => {
     const [filteredImages, setFilteredImages] = useState([]);
     const [haveQueried, setHaveQueried] = useState(false);
     const [haveFiltered, setHaveFiltered] = useState(false);
-    const [displayNameType, setDisplayNameType] = useState('scientificName');
+    const [displayNameType, setDisplayNameType] = useState('commonName');
     const [butterflyList, setButterflyList] = useState([]);
 
 
-  const location = useLocation();
-  const pathName = location.pathname.split("/");
-  const orgURL = pathName[1];
-  const [images, setImages] = useState({});
-  const [organization, setOrganization] = useState(initialOrganizationState);
+    const location = useLocation();
+    const pathName = location.pathname.split("/");
+    const orgURL = pathName[1];
+    const [images, setImages] = useState({});
+    const [organization, setOrganization] = useState(initialOrganizationState);
 
     useEffect(() => {
         fetchData();
@@ -39,8 +37,8 @@ const Gallery = () => {
             const props = await getProps(orgURL);
             setOrganization(props.organizationProp);
             setImages(props.imagesProp);
-          }
-          fetchProps();
+        }
+        fetchProps();
     });
 
     async function fetchData() {
@@ -84,16 +82,16 @@ const Gallery = () => {
         }
     }
 
-    function handleToggleChange (event){
+    function handleToggleChange(event) {
         setDisplayNameType(event.target.value);
     };
 
-    function findCommonName(sName){
+    function findCommonName(sName) {
         var cName = butterflyList.find(butterfly => (butterfly.scientificName === sName)).commonName;
         return cName;
     }
 
-    function findID(sName){
+    function findID(sName) {
         var id = butterflyList.find(butterfly => (butterfly.scientificName === sName)).id;
         return id;
     }
@@ -101,31 +99,35 @@ const Gallery = () => {
     return (
         <div className="Gallery">
             <AppHeader
-        organizationProp={organization}
-        imagesProp={images}
-        menuProp={<AppMenu organizationProp={organization} admin={false} />}
-      />
-      <header> Gallery Page </header>
+                organizationProp={organization}
+                imagesProp={images}
+                menuProp={<AppMenu organizationProp={organization} admin={false} />}
+            />
+
             <Grid container spacing={2} direction="row" alignItems="center" justifyContent="center" rowSpacing={2}>
+                <Grid item xs={12}>
+                    <h4> Gallery </h4>
+                </Grid>
+                {filteredImages.map((image, index) => {
+                    return (
+                        <div className="gallery">
+                            {image &&
+                                <Link to={`/butterfly/${findID(image.butterflyName)}`}>
+                                    <img src={image.imageAddress} key={"image" + index} style={{ borderRadius: "50px" }} />
+                                </Link>
+                            }
+                            <h4 className="divtext">
+                                {displayNameType === "scientificName" ? image.butterflyName : findCommonName(image.butterflyName)}
+                            </h4>
+                        </div>
+                    );
+                })}
                 <Grid item xs={12}>
                     <ToggleButtonGroup exclusive onChange={handleToggleChange} value={displayNameType}>
                         <ToggleButton value="scientificName">Scientific Name</ToggleButton>
                         <ToggleButton value="commonName">Common Name</ToggleButton>
                     </ToggleButtonGroup>
                 </Grid>
-                {filteredImages.map((image, index) => {
-                    return (
-                        <Grid item xs={3} key={image.id}>
-                            <div style={{ backgroundColor: "rgba(222, 184, 135, 0.5)", borderRadius: "50px" }}>
-                                {image && <Link to={`/butterfly/${findID(image.butterflyName)}`}><img src={image.imageAddress} className="gallery-item" key={"image" + index} /></Link>}
-                                <CustomHeaderLarge>
-                                    {displayNameType === "scientificName" ? image.butterflyName : findCommonName(image.butterflyName) }
-                                </CustomHeaderLarge>
-                            </div>
-
-                        </Grid>
-                    );
-                })}
             </Grid>
         </div>
     )

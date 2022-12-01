@@ -165,6 +165,7 @@ function App() {
             element={<Gallery />}
           />
           <Route exact path={"/" + org.orgURL + "/parks"} element={<Parks />} />
+          <Route exact path={"/" + org.orgURL + "/butterfly/:id"} element={<ButterflyDetail/>}/>
         </Routes>
         // </div>
       ))}
@@ -176,7 +177,6 @@ function App() {
           element={<SignIn />}
         />
         <Route exact path="/adminPanel" element={<AdminPanel />} />
-
         <Route exact path="/addButterfly" element={<AddButterfly />} />
         <Route exact path="/editButterfly" element={<EditButterfly />} />
         <Route exact path="/displayShipments" element={<DisplayShipments />} />
@@ -187,7 +187,6 @@ function App() {
         <Route exact path="/addShipments" element={<AddShipments />} />
         <Route exact path="/manageOrganizations" element={<ManageOrganizations />}/>
         <Route exact path="/importExportShipments" element={<ImportExportShipments />}/>
-        <Route exact path="/butterfly/:id" element={<ButterflyDetail/>}/>
       </Routes>
     </div>
   );

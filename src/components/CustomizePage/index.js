@@ -1,7 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { Auth, API } from "aws-amplify";
 import { updateOrganization as updateOrgMutation } from "../../graphql/mutations";
-import Grid from "@material-ui/core/Grid";
+import Grid from '@mui/material/Grid';
 import { useNavigate } from "react-router-dom";
 import { ColorPicker, useColor } from "react-color-palette";
 import { Storage } from "aws-amplify";
