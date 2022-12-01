@@ -8083,17 +8083,6 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
-<<<<<<< HEAD
-        "name" : "ModelSubscriptionNoteFilterInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "id",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionIDInput",
-=======
         "name" : "ModelFloatInput",
         "description" : null,
         "fields" : null,
@@ -8103,78 +8092,37 @@
           "type" : {
             "kind" : "SCALAR",
             "name" : "Float",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
         }, {
-<<<<<<< HEAD
-          "name" : "name",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-=======
           "name" : "eq",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
             "name" : "Float",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
         }, {
-<<<<<<< HEAD
-          "name" : "description",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-=======
           "name" : "le",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
             "name" : "Float",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
         }, {
-<<<<<<< HEAD
-          "name" : "image",
-          "description" : null,
-          "type" : {
-            "kind" : "INPUT_OBJECT",
-            "name" : "ModelSubscriptionStringInput",
-=======
           "name" : "lt",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
             "name" : "Float",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
         }, {
-<<<<<<< HEAD
-          "name" : "and",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionNoteFilterInput",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "or",
-=======
           "name" : "ge",
           "description" : null,
           "type" : {
@@ -8194,25 +8142,17 @@
           "defaultValue" : null
         }, {
           "name" : "between",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
           "description" : null,
           "type" : {
             "kind" : "LIST",
             "name" : null,
             "ofType" : {
-<<<<<<< HEAD
-              "kind" : "INPUT_OBJECT",
-              "name" : "ModelSubscriptionNoteFilterInput",
-=======
               "kind" : "SCALAR",
               "name" : "Float",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
               "ofType" : null
             }
           },
           "defaultValue" : null
-<<<<<<< HEAD
-=======
         }, {
           "name" : "attributeExists",
           "description" : null,
@@ -8231,16 +8171,11 @@
             "ofType" : null
           },
           "defaultValue" : null
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
         } ],
         "interfaces" : null,
         "enumValues" : null,
         "possibleTypes" : null
       }, {
-<<<<<<< HEAD
-        "kind" : "INPUT_OBJECT",
-        "name" : "ModelSubscriptionIDInput",
-=======
         "kind" : "SCALAR",
         "name" : "Float",
         "description" : "Built-in Float",
@@ -8252,7 +8187,78 @@
       }, {
         "kind" : "INPUT_OBJECT",
         "name" : "ModelSubscriptionIntInput",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
+        "name" : "ModelSubscriptionNoteFilterInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "id",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionIDInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "name",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "description",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "image",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelSubscriptionStringInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "and",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionNoteFilterInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "or",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "INPUT_OBJECT",
+              "name" : "ModelSubscriptionNoteFilterInput",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
+        "name" : "ModelSubscriptionIDInput",
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -8509,6 +8515,25 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
+        "kind" : "ENUM",
+        "name" : "ModelSortDirection",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : null,
+        "interfaces" : null,
+        "enumValues" : [ {
+          "name" : "ASC",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "DESC",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        } ],
+        "possibleTypes" : null
+      }, {
         "kind" : "INPUT_OBJECT",
         "name" : "ModelSubscriptionButterflyFilterInput",
         "description" : null,
@@ -8671,6 +8696,7 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
+        "name" : "ModelSubscriptionIDInput",
         "name" : "ModelSubscriptionOrganizationFilterInput",
         "description" : null,
         "fields" : null,
@@ -8903,7 +8929,7 @@
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "Boolean",
+            "name" : "ID",
             "ofType" : null
           },
           "defaultValue" : null
@@ -9068,7 +9094,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "eq",
+          "name" : "beginsWith",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -9370,25 +9396,6 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
-        "kind" : "ENUM",
-        "name" : "ModelSortDirection",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : null,
-        "interfaces" : null,
-        "enumValues" : [ {
-          "name" : "ASC",
-          "description" : null,
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        }, {
-          "name" : "DESC",
-          "description" : null,
-          "isDeprecated" : false,
-          "deprecationReason" : null
-        } ],
-        "possibleTypes" : null
-      }, {
         "kind" : "INPUT_OBJECT",
         "name" : "ModelSubscriptionSpeciesInfoFilterInput",
         "description" : null,
@@ -9403,37 +9410,11 @@
           },
           "defaultValue" : null
         }, {
-<<<<<<< HEAD
           "name" : "numInFlight",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelSubscriptionIntInput",
-=======
-          "name" : "eq",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Boolean",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "ModelSubscriptionIDInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "ne",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
@@ -9441,13 +9422,8 @@
           "name" : "totalReceived",
           "description" : null,
           "type" : {
-<<<<<<< HEAD
             "kind" : "INPUT_OBJECT",
             "name" : "ModelSubscriptionIntInput",
-=======
-            "kind" : "SCALAR",
-            "name" : "ID",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
@@ -9455,13 +9431,8 @@
           "name" : "firstFlown",
           "description" : null,
           "type" : {
-<<<<<<< HEAD
             "kind" : "INPUT_OBJECT",
             "name" : "ModelSubscriptionStringInput",
-=======
-            "kind" : "SCALAR",
-            "name" : "ID",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
@@ -9469,13 +9440,8 @@
           "name" : "lastFlown",
           "description" : null,
           "type" : {
-<<<<<<< HEAD
             "kind" : "INPUT_OBJECT",
             "name" : "ModelSubscriptionStringInput",
-=======
-            "kind" : "SCALAR",
-            "name" : "ID",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
@@ -9483,13 +9449,8 @@
           "name" : "orgID",
           "description" : null,
           "type" : {
-<<<<<<< HEAD
             "kind" : "INPUT_OBJECT",
             "name" : "ModelSubscriptionStringInput",
-=======
-            "kind" : "SCALAR",
-            "name" : "ID",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
@@ -9497,7 +9458,6 @@
           "name" : "and",
           "description" : null,
           "type" : {
-<<<<<<< HEAD
             "kind" : "LIST",
             "name" : null,
             "ofType" : {
@@ -9624,28 +9584,24 @@
           "type" : {
             "kind" : "SCALAR",
             "name" : "Float",
-=======
-            "kind" : "SCALAR",
-            "name" : "ID",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
             "ofType" : null
           },
           "defaultValue" : null
         }, {
-          "name" : "contains",
+          "name" : "ge",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "ID",
+            "name" : "Float",
             "ofType" : null
           },
           "defaultValue" : null
         }, {
-          "name" : "notContains",
+          "name" : "gt",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
-            "name" : "ID",
+            "name" : "Float",
             "ofType" : null
           },
           "defaultValue" : null
@@ -9657,18 +9613,9 @@
             "name" : null,
             "ofType" : {
               "kind" : "SCALAR",
-              "name" : "ID",
+              "name" : "Float",
               "ofType" : null
             }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "beginsWith",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "ID",
-            "ofType" : null
           },
           "defaultValue" : null
         }, {
@@ -9679,7 +9626,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "SCALAR",
-              "name" : "ID",
+              "name" : "Float",
               "ofType" : null
             }
           },
@@ -9692,7 +9639,7 @@
             "name" : null,
             "ofType" : {
               "kind" : "SCALAR",
-              "name" : "ID",
+              "name" : "Float",
               "ofType" : null
             }
           },
@@ -9702,7 +9649,6 @@
         "enumValues" : null,
         "possibleTypes" : null
       }, {
-<<<<<<< HEAD
         "kind" : "SCALAR",
         "name" : "Float",
         "description" : "Built-in Float",
@@ -9714,10 +9660,6 @@
       }, {
         "kind" : "INPUT_OBJECT",
         "name" : "ModelFloatInput",
-=======
-        "kind" : "INPUT_OBJECT",
-        "name" : "ModelSubscriptionFloatInput",
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
@@ -9788,7 +9730,6 @@
           },
           "defaultValue" : null
         }, {
-<<<<<<< HEAD
           "name" : "attributeExists",
           "description" : null,
           "type" : {
@@ -9804,31 +9745,6 @@
             "kind" : "ENUM",
             "name" : "ModelAttributeTypes",
             "ofType" : null
-=======
-          "name" : "in",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "Float",
-              "ofType" : null
-            }
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "notIn",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "Float",
-              "ofType" : null
-            }
->>>>>>> 0976d9c77f850e73de0ed788f055db774ecdb25f
           },
           "defaultValue" : null
         } ],
