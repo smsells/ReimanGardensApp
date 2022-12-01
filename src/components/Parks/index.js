@@ -25,7 +25,7 @@ const Parks = () => {
 
   useEffect(() => {
     async function fetchProps() {
-      console.log("before props");
+      // console.log("before props");
 
       // if you are going to use storage, keep your function here please
       await Auth.signIn("dummy1234", "dummy1234");
@@ -58,7 +58,7 @@ const Parks = () => {
       organizationsLon[i] = element.locationLongitude;
       //maybe use username?
       organizationID[i] = element.id;
-      organizationURL[i]=element.orgURL;
+      organizationURL[i] = element.orgURL;
       //organizationsCountry[i]=element.locationCountry;
       i++;
     });
@@ -70,13 +70,12 @@ const Parks = () => {
         object["latitude"] = organizationsLat[j];
         object["longitude"] = organizationsLon[j];
         object["ID"] = organizationID[j];
-        object["url"]=organizationURL[j]
-        console.log("This is the URL that I got: "+organizationURL[j]);
+        object["url"] = organizationURL[j];
+        console.log("This is the URL that I got: " + organizationURL[j]);
 
         latlonList.push(object);
       }
     }
-   
 
     var data = latlonList.map((element) => (
       <Marker
@@ -84,8 +83,7 @@ const Parks = () => {
         eventHandlers={{
           click: (e) => {
             console.log(element);
-            localStorage.setItem("token", element.ID);
-            var toNavigate = "/"+element.url;
+            var toNavigate = "/" + element.url;
             navigate(toNavigate);
           },
         }}

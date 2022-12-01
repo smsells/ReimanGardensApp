@@ -4,6 +4,8 @@ import { API, Auth } from "aws-amplify";
 import {
   createOrderItem as createOrderItemMutation,
   createOrder as createOrderMutation,
+  deleteOrder as deleteOrderMutation,
+  deleteOrderItem as deleteOrderItemMutation,
 } from "../../graphql/mutations";
 import {
   listOrganizations,
@@ -12,16 +14,16 @@ import {
   getOrder,
   listOrderItems,
 } from "../../graphql/queries";
-
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
-import {
-  Navigate,
-  useNavigate,
-  createSearchParams,
-  Link,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import AppHeader from "../Header/AppHeader";
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AdminMenu from "../Header/AdminMenu";
+import { dateCompare } from "../utils/sort";
+
 //import { createShipment as createShipmentMutation } from '../../graphql/mutations';
 
 const AddShipments = () => {
@@ -55,16 +57,6 @@ const AddShipments = () => {
   const [numEmerged, setNumEmerged] = useState("");
   const [poorEmerged, setPoorEmerged] = useState("");
 
-  function handlePackingList(id, e) {
-    console.log(id);
-    navigate({
-      pathname: "/packingList",
-      search: createSearchParams({
-        id: id,
-      }).toString(),
-    });
-  }
-
   //Idea is that it will be an array of objects to populate a 2d array
   //Will need Query Schema for all of this
 
@@ -72,53 +64,48 @@ const AddShipments = () => {
 
   //const [formData, setFormData] = useState(initialFormState);
   const [tableRows, setTableRows] = useState();
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     fetchShipments();
   }, []);
 
   async function fetchShipments() {
     Auth.currentAuthenticatedUser().then(async (user) => {
-      var usernameToGet = user.username;
-      console.log("Username: " + usernameToGet);
-      let filter = {
-        username: { eq: usernameToGet },
-      };
-      const apiData = await API.graphql({
-        query: listOrganizations,
-        variables: { filter: filter },
-      });
-      //check what theyre called lol
-      console.log("Here's what the query returned: " + JSON.stringify(apiData));
-      if (apiData == null) {
-        console.log("its null");
-      }
-
-      const organizationFromAPI = apiData.data.listOrganizations.items;
-      const organizationID = organizationFromAPI[0].id;
-      console.log("Organization ID: " + organizationID);
       //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
       //There should be only 1 organization so
       //const shipmentsFromAPI = organizationsFromAPI.Shipments;
       let filterShip = {
-        orgID: { eq: organizationID },
+        orgID: { eq: orgID },
       };
       const shipmentsFromID = await API.graphql({
         query: listOrders,
         variables: { filter: filterShip },
       });
-      console.log(
-        "Here's what the query returned (shipment): " +
-          JSON.stringify(shipmentsFromID)
-      );
+      // console.log(
+      //   "Here's what the query returned (shipment): " +
+      //     JSON.stringify(shipmentsFromID)
+      // );
 
       //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
       var orders = shipmentsFromID.data.listOrders.items;
-      console.log("Here is what is in the array:  " + JSON.stringify(orders));
+      // console.log("Here is what is in the array:  " + JSON.stringify(orders));
       var result = [];
       for (var i in orders) result.push([i, orders[i]]);
 
-      var data = orders.map((element) => {
+      const ordersAscending = [...orders].sort(
+        (a, b) => -1 * dateCompare(a.arrivalDate, b.arrivalDate)
+      );
+
+      var data = ordersAscending.map((element) => {
         return (
           <tr>
             <td>{element.orderNumber}</td>
@@ -130,6 +117,13 @@ const AddShipments = () => {
               <button onClick={(e) => addOrderItem(element, e)}>
                 {" "}
                 New Item{" "}
+              </button>
+            </td>
+            <td>
+              {" "}
+              <button onClick={(e) => deleteOrder(element, e)}>
+                {" "}
+                Delete Order{" "}
               </button>
             </td>
           </tr>
@@ -146,6 +140,53 @@ const AddShipments = () => {
               Button with the ID of the shipment on the inside to take you to another page where the order items are iterated in a similar way to this page
               For loop to iterate over all the 
         */
+  }
+
+  async function deleteAll() {
+    let filterShip = {
+      orgID: { eq: orgID },
+    };
+    const shipmentsFromID = await API.graphql({
+      query: listOrders,
+      variables: { filter: filterShip },
+    });
+    var order = shipmentsFromID.data.listOrders.items;
+    for (var i = 0; i < order.length; i++) {
+      const item = order[i];
+      await deleteOrder(item);
+    }
+
+    navigate(0);
+  }
+
+  async function deleteOrder(element, e) {
+    let filterShip = {
+      orderID: { eq: element.id },
+    };
+    const shipmentItemsFromID = await API.graphql({
+      query: listOrderItems,
+      variables: { filter: filterShip },
+    });
+
+    console.log("shipment items", shipmentItemsFromID);
+    try {
+      var orderItems = shipmentItemsFromID.data.listOrderItems.items;
+      for (var i = 0; i < orderItems.length; i++) {
+        const item = orderItems[i];
+        console.log("deleted item", item);
+
+        await API.graphql({
+          query: deleteOrderItemMutation,
+          variables: { input: { id: item.id } },
+        });
+      }
+    } catch (error) {}
+
+    await API.graphql({
+      query: deleteOrderMutation,
+      variables: { input: { id: element.id } },
+    });
+    // navigate(0);
   }
 
   function addOrder() {
@@ -225,7 +266,13 @@ const AddShipments = () => {
   return (
     //Holder for the information
     <div className="DisplayShipments">
+      <AppHeader
+        menuProp={<AdminMenu organizationProp={organization} />}
+        organizationProp={organization}
+        imagesProp={images}
+      />
       <button onClick={addOrder}>Add Order</button>
+      <button onClick={deleteAll}>Delete All</button>
       {showNewOrderForm && (
         <>
           <div>
@@ -262,7 +309,13 @@ const AddShipments = () => {
               </div>
             </form>
 
-            <button onClick={handleNewOrderSubmit}>Submit</button>
+            <button
+              onClick={(e) => {
+                handleNewOrderSubmit();
+              }}
+            >
+              Submit
+            </button>
           </div>
         </>
       )}
@@ -274,7 +327,8 @@ const AddShipments = () => {
             <th>Arrival Date</th>
             <th>Supplier</th>
 
-            <th>View More</th>
+            <th>Add Item</th>
+            <th>Delete Order</th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>

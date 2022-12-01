@@ -23,6 +23,12 @@ const SignIn = () => {
     Auth.currentAuthenticatedUser()
       .then(async (user) => {
         console.log("user email", user.username);
+        // var accessToken = user.signInUserSession.accessToken.jwtToken;
+
+        // /* Use the idToken for Logins Map when Federating User Pools with identity pools or when passing through an Authorization Header to an API Gateway Authorizer */
+        // // var idToken = user.idToken.jwtToken;
+        // console.log("accesstoken", accessToken);
+        // console.log("idtoken", idToken);
         let out = false;
         const userName = user.username;
         const sha512Hash = crypto.SHA512(userName).toString();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Form, Navigate, useSearchParams } from "react-router-dom";
-import { a, API } from "aws-amplify";
-import { getOrder, listOrderItems } from "../../graphql/queries";
+import { a, API, graphqlOperation } from "aws-amplify";
+import { getOrder, listOrderItems, listOrderItemsByID } from "../../graphql/queries";
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -96,37 +96,68 @@ const PackingList = () => {
 
   }
   async function fetchShipments() {
+    var param = searchparams.get("id");
    
-    let filter = {
-      orderID: {eq: searchparams.get("id")},
+    let filter ={
+      orderID: {eq: param},
     }
+    let search = {
+      limit: 100000,
+      filter: filter
+
+    }
+    
+    /*
     const apiData = await API.graphql({
       query: listOrderItems,
-      variables: { filter: filter},
+      variables: { filter: filterOrders},
     });
+    */
+   let allData = [];
+   const recursiveGetOrderItems = (currentResults) =>{
+    if(currentResults===null || currentResults.nextToken !=null){
+      if(currentResults !==null && currentResults.nextToken!=null){
+          search.nextToken = currentResults.nextToken
+      }
+      API.graphql(graphqlOperation(listOrderItems, search)).then((result)=>{
+        console.log("result: "+JSON.stringify(result));
+        currentResults = result.data.listOrderItems;
+        console.log("current results: "+JSON.stringify(currentResults));
+        allData = allData.concat(currentResults.items);
+        recursiveGetOrderItems(currentResults);
+      }).catch((error)=>{
+        console.log(error)
+
+      })
+    } else{
+      console.log("id query data: " + JSON.stringify(allData));
+
+      
+      
+      
+      //There should be only 1 organization so
+  
+      //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
+      var data = allData.map((element) => {
+        return (
+          <tr>
+            <td>{element.species}</td>
+            <td>{element.numReceived}</td>
+            <td>{element.emergedInTransit}</td>
+            <td>{element.damagedInTransit}</td>
+            <td>{element.diseased}</td>
+            <td>{element.parasites}</td>
+            <td> <button  onClick={handleEdit.bind(this,element.id,element.species, element.numReceived, element.emergedInTransit, element.damagedInTransit, element.diseased, element.parasites)}> Edit </button></td>
+          </tr>
+        );
+      });
+      setTableRows(data);
+
+    }
+   }
+   recursiveGetOrderItems(null);
     //check what theyre called lol
-    console.log("id query data: " + JSON.stringify(apiData));
-
-    const packingListFromAPI = apiData.data.listOrderItems.items;
-    
-    console.log("packing list query: " + JSON.stringify(packingListFromAPI));
-    //There should be only 1 organization so
-
-    //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
-    var data = packingListFromAPI.map((element) => {
-      return (
-        <tr>
-          <td>{element.species}</td>
-          <td>{element.numReceived}</td>
-          <td>{element.emergedInTransit}</td>
-          <td>{element.damagedInTransit}</td>
-          <td>{element.diseased}</td>
-          <td>{element.parasites}</td>
-          <td> <button  onClick={handleEdit.bind(this,element.id,element.species, element.numReceived, element.emergedInTransit, element.damagedInTransit, element.diseased, element.parasites)}> Edit </button></td>
-        </tr>
-      );
-    });
-    setTableRows(data);
+   
     /*
         Not sure if this will work because the table is nested but
               Ideas:

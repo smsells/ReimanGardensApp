@@ -7,7 +7,7 @@ import "../../css/Sign-In/sign-in.css";
 import { AdminButton } from "../AdminButton/AdminButton";
 import { getOrganization } from "../../graphql/queries";
 import AppHeader from "../Header/AppHeader";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 import {
   initialImages,
   initialOrganizationState,
@@ -19,7 +19,8 @@ import { getPropsID } from "../Header/Props";
 const AdminPanel = () => {
   const navigate = useNavigate();
   const orgID = localStorage.getItem("token");
-  const masterID = "";
+  const masterID =
+    "9478d3c2d6d4f0b3d58ed8c2c1c6b4625520a4522c8246d94a52b6d6532ea706261529c5be5913e829c70205da0c6dace51ac2d677778671b05cd66bc8ed7d12";
 
   const [organization, setOrganization] = useState(initialOrganizationState);
   const [images, setImages] = useState(initialImages);
@@ -41,7 +42,7 @@ const AdminPanel = () => {
   return (
     <Authenticator>
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={images}
       ></AppHeader>
@@ -108,7 +109,7 @@ const AdminPanel = () => {
               <Link to={"/customizeModules"}>
                 <AdminButton>Customize Modules</AdminButton>
               </Link>
-              {orgID !== masterID && true ? (
+              {orgID === masterID ? (
                 <Link to={"/manageOrganizations"}>
                   <AdminButton>Delete Organizations</AdminButton>
                 </Link>

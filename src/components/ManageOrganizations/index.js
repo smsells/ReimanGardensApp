@@ -13,7 +13,7 @@ import AppHeader from "../Header/AppHeader";
 
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 
 const ManageOrganizations = () => {
   const orgID = localStorage.getItem("token");
@@ -139,7 +139,7 @@ const ManageOrganizations = () => {
   return (
     <div className="DeleteOrganizations">
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={images}
       />

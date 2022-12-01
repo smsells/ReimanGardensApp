@@ -2,8 +2,15 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getOrder } from "../../graphql/queries";
 import { API, Auth } from "aws-amplify";
+import AppHeader from "../Header/AppHeader";
+
+import { getPropsID } from "../Header/Props";
+import { initialOrganizationState } from "../utils/initialStates";
+import AdminMenu from "../Header/AdminMenu";
 
 const EditShipments = () => {
+  const orgID = localStorage.getItem("token");
+
   const [searchparams] = useSearchParams();
   console.log(searchparams.get("id") + " in EditShipments");
   const [showForm, setShowForm] = useState(false);
@@ -37,8 +44,17 @@ const EditShipments = () => {
   }
 
   const [tableRows, setTableRows] = useState();
+  const [images, setImages] = useState({});
+  const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    async function fetchProps() {
+      const props = await getPropsID(orgID);
+      console.log("props", props);
+      setOrganization(props.organizationProp);
+      setImages(props.imagesProp);
+    }
+    fetchProps();
     fetchShipments();
   }, []);
 
@@ -79,18 +95,23 @@ const EditShipments = () => {
 
     var data = packingListFromOrder.packingList.map((element) => {
       return (
-        <tr>
-          <td>{element.species}</td>
-          <td>{element.numReceived}</td>
-          <td>{element.emergedInTransit}</td>
-          <td>{element.damagedInTransit}</td>
-          <td>{element.diseased}</td>
-          <td>{element.parasites}</td>
-          <td>
-            {" "}
-            <button onClick={handleEdit.bind(this, element.ID)}> Edit </button>
-          </td>
-        </tr>
+        <>
+          <tr>
+            <td>{element.species}</td>
+            <td>{element.numReceived}</td>
+            <td>{element.emergedInTransit}</td>
+            <td>{element.damagedInTransit}</td>
+            <td>{element.diseased}</td>
+            <td>{element.parasites}</td>
+            <td>
+              {" "}
+              <button onClick={handleEdit.bind(this, element.ID)}>
+                {" "}
+                Edit{" "}
+              </button>
+            </td>
+          </tr>
+        </>
       );
     });
     setTableRows(data);
