@@ -11,7 +11,7 @@ import AppHeader from "../Header/AppHeader";
 
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 
 const CustomizePage = () => {
   const orgID = localStorage.getItem("token");
@@ -51,18 +51,6 @@ const CustomizePage = () => {
     "hex",
     formData.adminIconColor
   );
-
-  const signOut = async () => {
-    console.log("in the signoutFunction");
-    localStorage.removeItem("token");
-    try {
-      await Auth.signOut();
-      navigate("/signin");
-    } catch (error) {
-      console.log("error signing out " + error);
-    }
-    navigate(0);
-  };
 
   /**
    *
@@ -209,7 +197,7 @@ const CustomizePage = () => {
   return (
     <>
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={images}
       />

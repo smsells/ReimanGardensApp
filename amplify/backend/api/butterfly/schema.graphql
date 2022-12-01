@@ -62,7 +62,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
   shipmentDate: String
   arrivalDate: String
   supplier: String
-  orgID: String
+  orgID: String @index
 }
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {
@@ -76,8 +76,9 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
   poorEmerged: Int
   numEmerged: Int
   orgID: String
-  orderID: String
+  orderID: String @index
 }
+
 type Module @model @auth(rules: [{ allow: public }]) {
   title: String
   content: String
