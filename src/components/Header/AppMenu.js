@@ -51,13 +51,6 @@ export default function AppMenu({ organizationProp, admin = false }) {
       </Link>
       <Link
         className="menu-link"
-        to={"/" + organizationProp.orgURL + "/notes"}
-        onClick={() => handleCloseMenu()}
-      >
-        NoteList
-      </Link>
-      <Link
-        className="menu-link"
         to={"/" + organizationProp.orgURL + "/stats"}
         onClick={() => handleCloseMenu()}
       >

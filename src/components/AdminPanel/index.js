@@ -96,9 +96,6 @@ const AdminPanel = () => {
               <Link to={"/editButterfly"}>
                 <AdminButton>Edit Butterfly</AdminButton>
               </Link>
-              <Link to={"/" + organization.orgURL + "/notes"}>
-                <AdminButton>Add/Edit Notes</AdminButton>
-              </Link>
             </div>
           </div>
           <div style={{ gridArea: "4 / 1 / span 1 / span 3" }}>
