@@ -109,10 +109,10 @@ const Parks = () => {
         imagesProp={images}
         menuProp={<AppMenu organizationProp={organization} admin={false} />}
       />
-      <header> Parks Page </header>
+      <h3> Parks Around The World! </h3>
 
       <MapContainer
-        style={{ height: "450px", width: "100%" }}
+        style={{ height: "650px", width: "100%" }}
         center={[42.0, -93.6]}
         zoom={4}
         maxZoom={18}
