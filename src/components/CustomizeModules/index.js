@@ -225,7 +225,7 @@ const CustomizeModules = () => {
           padding: "5px",
         }}
       >
-        <h1>Edit Butterfly</h1> <br />
+        <h1>Edit Modules</h1> <br />
         <Grid
           container
           spacing={2}
