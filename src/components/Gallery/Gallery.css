@@ -1,0 +1,45 @@
+div.gallery {
+    margin: 10px;
+    float: left;
+    width: 25vw;
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+.divtext {
+    font-size: 100%;
+  }
+
+.infoColumn {
+    padding-bottom: 20px;
+    display: block
+}
+
+.panel {
+    margin: 50px;
+    border-width: 2px;
+    border-color: grey;
+    background: white;
+    border-radius: 50px; 
+    padding: 10px;
+}
+
+.panel-heading {
+    border-width: 2px;
+    border-color: grey;
+}
+
+.fact-area {
+    padding: 20px;
+}
+
+.gallery-item{
+    width: 50%;
+    height: auto;
+}
+
+
+

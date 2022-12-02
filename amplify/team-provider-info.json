@@ -14,6 +14,12 @@
     "categories": {
       "auth": {
         "amplifyapp94bc4c28": {}
+      },
+      "api": {
+        "butterfly": {}
+      },
+      "storage": {
+        "Butterfly": {}
       }
     }
   },

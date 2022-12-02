@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { graphqlOperation, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { API } from "aws-amplify";
-import Grid from "@material-ui/core/Grid";
+import Grid from '@mui/material/Grid';
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";

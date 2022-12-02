@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { API } from "aws-amplify";
 import { Storage } from "aws-amplify";
 import { listModules } from "../../graphql/queries";
-import Grid from "@material-ui/core/Grid";
+import Grid from '@mui/material/Grid';
 
 import {
   updateModule as updateModuleMutation,
