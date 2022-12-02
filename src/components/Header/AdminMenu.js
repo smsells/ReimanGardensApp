@@ -43,13 +43,6 @@ export default function AdminMenu({ organizationProp }) {
     >
       <Link
         className="menu-link"
-        to={"/" + organizationProp.orgURL + "/"}
-        onClick={() => handleCloseMenu()}
-      >
-        Home
-      </Link>
-      <Link
-        className="menu-link"
         style={{ color: organizationProp.menuColor }}
         to={"/displayShipments"}
         onClick={() => handleCloseMenu()}
