@@ -9,7 +9,6 @@ import { createOrganization as createOrganizationMutation } from "./graphql/muta
 import { getOrganization, listOrganizations } from ".//graphql/queries";
 
 import { Routes, Route, Link } from "react-router-dom";
-import NoteList from "./components/NoteList";
 import SignIn from "./components/SignIn";
 import Home from "./components/Home";
 import Stats from "./components/Stats";
@@ -48,8 +47,19 @@ function App() {
   }, []);
 
   async function getOrganizationList() {
+    let filter = {
+      and: [
+        {
+          deleted: { eq: false },
+        },
+        {
+          suspended: { eq: false },
+        },
+      ],
+    };
     const apiData = await API.graphql({
       query: listOrganizations,
+      variables: { filter: filter },
     });
     const organizationsFromAPI = apiData.data.listOrganizations.items;
     let orgList = [];
@@ -70,11 +80,6 @@ function App() {
       {organizationList.map((org, index) => (
         <Routes key={org.orgURL}>
           <Route exact path={"/" + org.orgURL + "/"} element={<Home />} />
-          <Route
-            exact
-            path={"/" + org.orgURL + "/notes"}
-            element={<NoteList />}
-          />
           <Route exact path={"/" + org.orgURL + "/stats"} element={<Stats />} />
           <Route
             exact
@@ -82,7 +87,11 @@ function App() {
             element={<Gallery />}
           />
           <Route exact path={"/" + org.orgURL + "/parks"} element={<Parks />} />
-          <Route exact path={"/" + org.orgURL + "/butterfly/:id"} element={<ButterflyDetail/>}/>
+          <Route
+            exact
+            path={"/" + org.orgURL + "/butterfly/:id"}
+            element={<ButterflyDetail />}
+          />
         </Routes>
       ))}
       <Routes>
@@ -96,8 +105,16 @@ function App() {
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route exact path="/addShipments" element={<AddShipments />} />
-        <Route exact path="/manageOrganizations" element={<ManageOrganizations />}/>
-        <Route exact path="/importExportShipments" element={<ImportExportShipments />}/>
+        <Route
+          exact
+          path="/manageOrganizations"
+          element={<ManageOrganizations />}
+        />
+        <Route
+          exact
+          path="/importExportShipments"
+          element={<ImportExportShipments />}
+        />
       </Routes>
     </div>
   );
