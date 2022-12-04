@@ -29,7 +29,7 @@ export default function AppHeader({ menuProp, organizationProp, imagesProp }) {
             fontSize: organizationProp.font + "px" || "50px",
           }}
         >
-          <h1>Welcome to {organizationProp.name || "Reiman Garden"}</h1>
+          <h1>{organizationProp.name || ""}</h1>
         </header>
       </div>
     </>
