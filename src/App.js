@@ -71,7 +71,7 @@ function App() {
         return organization;
       })
     );
-    // console.log("organization list with url", orgList);
+    console.log("organization list with url", orgList);
     setOrganizationList(orgList);
   }
 

@@ -32,7 +32,7 @@ const SignIn = () => {
         let out = false;
         const userName = user.username;
         const sha512Hash = crypto.SHA512(userName).toString();
-        console.log("result1: ", userName);
+        // console.log("result1: ", userName);
 
         const res = await API.graphql({
           query: getOrganization,
@@ -51,10 +51,7 @@ const SignIn = () => {
               },
             },
           });
-          // if (cat === null) {
-
-          // }
-          console.log("catch", cat);
+          // console.log("catch", cat);
         } else {
           if (
             res.data.getOrganization.deleted ||

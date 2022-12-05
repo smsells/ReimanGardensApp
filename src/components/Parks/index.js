@@ -41,8 +41,19 @@ const Parks = () => {
   }, []);
 
   async function fetchOrganizations() {
+    let filter = {
+      and: [
+        {
+          deleted: { eq: false },
+        },
+        {
+          suspended: { eq: false },
+        },
+      ],
+    };
     const apiData = await API.graphql({
       query: listOrganizations,
+      variables: { filter: filter },
     });
 
     const organizationFromAPI = apiData.data.listOrganizations.items;

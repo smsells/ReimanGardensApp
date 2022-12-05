@@ -60,10 +60,11 @@ function ImportExportShipments() {
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
       let filterShip = {
-        orderID: { eq: "21d01a64-a6f3-482b-af08-f3380fc4d168" },
+        // id: { eq: "21d01a64-a6f3-482b-af08-f3380fc4d168" },
+        orgID: { eq: orgID },
       };
       const shipmentItemsFromID = await API.graphql({
-        query: listOrderItems,
+        query: listOrders,
         variables: { filter: filterShip },
       });
       console.log(
