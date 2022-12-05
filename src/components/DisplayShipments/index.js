@@ -82,7 +82,7 @@ const DisplayShipments = () => {
       //There should be only 1 organization so
       //const shipmentsFromAPI = organizationsFromAPI.Shipments;
       let filterShip = {
-        orgID: { eq: organizationID },
+        orgID: { eq: orgID },
       };
       const shipmentsFromID = await API.graphql({
         query: listOrders,
