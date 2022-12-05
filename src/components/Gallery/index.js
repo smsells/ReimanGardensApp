@@ -87,11 +87,22 @@ const Gallery = () => {
     };
 
     function findCommonName(sName) {
+        if(typeof butterflyList !== 'undefined'){
+            console.log("In if statement")
+            return;
+        }
         var cName = butterflyList.find(butterfly => (butterfly.scientificName === sName)).commonName;
         return cName;
     }
 
     function findID(sName) {
+        console.log("Here is the butterfly list before : " +JSON.stringify.butterflyList);
+
+        if(typeof butterflyList !== 'undefined'){
+            console.log("In if statement")
+            return;
+        } 
+        console.log("Here is the butterfly list after : " +JSON.stringify.butterflyList);
         var id = butterflyList.find(butterfly => (butterfly.scientificName === sName)).id;
         return id;
     }
@@ -112,7 +123,7 @@ const Gallery = () => {
                     return (
                         <div className="gallery">
                             {image &&
-                                <Link to={`/butterfly/${findID(image.butterflyName)}`}>
+                                <Link to={`/butterfly/${ findID(image.butterflyName)}`}>
                                     <img src={image.imageAddress} key={"image" + index} style={{ borderRadius: "50px" }} />
                                 </Link>
                             }
