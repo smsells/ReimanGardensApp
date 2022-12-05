@@ -110,7 +110,7 @@ const AdminPanel = () => {
               <Link to={"/customizeModules"}>
                 <AdminButton>Customize Modules</AdminButton>
               </Link>
-              {orgID === orgID ? (
+              {orgID === masterID ? (
                 <Link to={"/manageOrganizations"}>
                   <AdminButton>Manage Organizations</AdminButton>
                 </Link>

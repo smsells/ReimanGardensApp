@@ -107,6 +107,10 @@ export const getOrganization = /* GraphQL */ `
       coverMedia
       deleted
       suspended
+      featuredButterflyDate
+      featuredButterflyID
+      displayFeaturedButterfly
+      displayHomeStats
       id
       createdAt
       updatedAt
@@ -142,6 +146,10 @@ export const listOrganizations = /* GraphQL */ `
         coverMedia
         deleted
         suspended
+        featuredButterflyDate
+        featuredButterflyID
+        displayFeaturedButterfly
+        displayHomeStats
         id
         createdAt
         updatedAt
@@ -303,27 +311,6 @@ export const listOrderItems = /* GraphQL */ `
     }
   }
 `;
-export const listOrderItemsByID = `
-query QueryListOrderItemsByID($orderID: String!) {
-  listOrdersByID(orderID:  $orderID) {
-    listORders {
-      items {
-        species
-        commonName
-        numReceived
-        emergedInTransit
-        damagedInTransit
-        diseased
-        parasites
-        poorEmerged
-        numEmerged
-        id 
-      }
-    }
-  }
-}
-`;
-
 export const getModule = /* GraphQL */ `
   query GetModule($id: ID!) {
     getModule(id: $id) {

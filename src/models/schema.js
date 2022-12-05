@@ -373,6 +373,34 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "featuredButterflyDate": {
+                    "name": "featuredButterflyDate",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "featuredButterflyID": {
+                    "name": "featuredButterflyID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "displayFeaturedButterfly": {
+                    "name": "displayFeaturedButterfly",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "displayHomeStats": {
+                    "name": "displayHomeStats",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -968,5 +996,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "b97ad48a7ef7030bcb7d16544f779e9c"
+    "version": "2fbe963adf3ac2dab3c0825182117e81"
 };

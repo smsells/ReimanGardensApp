@@ -91,6 +91,10 @@ export declare class Organization {
   readonly coverMedia?: string | null;
   readonly deleted?: boolean | null;
   readonly suspended?: boolean | null;
+  readonly featuredButterflyDate?: string | null;
+  readonly featuredButterflyID?: string | null;
+  readonly displayFeaturedButterfly?: boolean | null;
+  readonly displayHomeStats?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Organization, OrganizationMetaData>);

@@ -54,23 +54,24 @@ function ImportExportShipments() {
   const [organization, setOrganization] = useState(initialOrganizationState);
 
   useEffect(() => {
+    // Fetch images and props for page header
     async function fetchProps() {
       const props = await getPropsID(orgID);
       console.log("props", props);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
-      let filterShip = {
-        // id: { eq: "21d01a64-a6f3-482b-af08-f3380fc4d168" },
-        orgID: { eq: orgID },
-      };
-      const shipmentItemsFromID = await API.graphql({
-        query: listOrders,
-        variables: { filter: filterShip },
-      });
-      console.log(
-        "shipment item for id: 21d01a64-a6f3-482b-af08-f3380fc4d168",
-        shipmentItemsFromID
-      );
+      // let filterShip = {
+      //   // id: { eq: "21d01a64-a6f3-482b-af08-f3380fc4d168" },
+      //   orgID: { eq: orgID },
+      // };
+      // const shipmentItemsFromID = await API.graphql({
+      //   query: listOrders,
+      //   variables: { filter: filterShip },
+      // });
+      // console.log(
+      //   "shipment item for id: 21d01a64-a6f3-482b-af08-f3380fc4d168",
+      //   shipmentItemsFromID
+      // );
     }
     fetchProps();
     fetchShipments();
