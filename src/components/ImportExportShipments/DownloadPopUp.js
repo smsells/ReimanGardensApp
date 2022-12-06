@@ -10,7 +10,7 @@ export const DownloadPopUp = ({
   return (
     <div className="popup-container">
       <div className="popup-body">
-        <h1>Are you sure you would like to delete this butterfly?</h1>
+        <h1>Are you sure you would like to do this export?</h1>
         <br />
         <br />
         {fileDataProp?.length && (
@@ -19,6 +19,7 @@ export const DownloadPopUp = ({
             data={fileDataProp}
             filename="Butterfly_report_dynamo.csv"
             target="_blank"
+            style={{ marginRight: "5rem" }}
           >
             Export
           </CSVLink>

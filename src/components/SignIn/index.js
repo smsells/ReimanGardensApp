@@ -50,7 +50,7 @@ const SignIn = () => {
                 username: userName,
                 deleted: false,
                 suspended: false,
-                featuredButterflyDay: dateString,
+                featuredButterflyDate: dateString,
                 displayFeaturedButterfly: true,
                 displayHomeStats: true,
               },

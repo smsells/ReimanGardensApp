@@ -60,24 +60,24 @@ const DisplayShipments = () => {
 
   async function fetchShipments() {
     Auth.currentAuthenticatedUser().then(async (user) => {
-      var usernameToGet = user.username;
-      console.log("Username: " + usernameToGet);
-      let filter = {
-        username: { eq: usernameToGet },
-      };
-      const apiData = await API.graphql({
-        query: listOrganizations,
-        variables: { filter: filter },
-      });
-      //check what theyre called lol
-      console.log("Here's what the query returned: " + JSON.stringify(apiData));
-      if (apiData == null) {
-        console.log("its null");
-      }
+      // var usernameToGet = user.username;
+      // console.log("Username: " + usernameToGet);
+      // let filter = {
+      //   username: { eq: usernameToGet },
+      // };
+      // const apiData = await API.graphql({
+      //   query: listOrganizations,
+      //   variables: { filter: filter },
+      // });
+      // //check what theyre called lol
+      // console.log("Here's what the query returned: " + JSON.stringify(apiData));
+      // if (apiData == null) {
+      //   console.log("its null");
+      // }
 
-      const organizationFromAPI = apiData.data.listOrganizations.items;
-      const organizationID = organizationFromAPI[0].id;
-      console.log("Organization ID: " + organizationID);
+      // const organizationFromAPI = apiData.data.listOrganizations.items;
+      // const organizationID = organizationFromAPI[0].id;
+      // console.log("Organization ID: " + organizationID);
       //console.log("To String?: "+JSON.stringify(organizationsFromAPI));
       //There should be only 1 organization so
       //const shipmentsFromAPI = organizationsFromAPI.Shipments;
@@ -105,7 +105,7 @@ const DisplayShipments = () => {
       var data = ordersAscending.map((element) => {
         return (
           <tr>
-            <td>{element.orderNumber}</td>
+            
             <td>{element.shipmentDate}</td>
             <td>{element.arrivalDate}</td>
             <td>{element.supplier}</td>
@@ -143,7 +143,7 @@ const DisplayShipments = () => {
       <Table hover>
         <thead>
           <tr>
-            <th> Order Number</th>
+            
             <th>Shipment Date</th>
             <th>Arrival Date</th>
             <th>Supplier</th>

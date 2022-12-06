@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Papa from "papaparse";
-import { API } from "aws-amplify";
+import { API, graphqlOperation } from "aws-amplify";
 import {
   createOrderItem as createOrderItemMutation,
   createOrder as createOrderMutation,
@@ -178,7 +178,7 @@ function ImportExportShipments() {
           // console.log("item created", orderItem);
           orderItemList.push(orderItem);
         }
-        // navigate(0);
+        navigate(0);
       },
     });
   }
@@ -304,36 +304,73 @@ function ImportExportShipments() {
     let filterShip = {
       orderID: { eq: order.id },
     };
-    const shipmentItemsFromID = await API.graphql({
+    let search = {
+      limit: 100000,
+      filter: filterShip,
+    };
+
+    /*
+    const apiData = await API.graphql({
       query: listOrderItems,
-      variables: { filter: filterShip },
+      variables: { filter: filterOrders},
     });
+    */
+    let allData = [];
+    const recursiveGetOrderItems = (currentResults) => {
+      if (currentResults === null || currentResults.nextToken != null) {
+        if (currentResults !== null && currentResults.nextToken != null) {
+          search.nextToken = currentResults.nextToken;
+        }
+        API.graphql(graphqlOperation(listOrderItems, search))
+          .then((result) => {
+            console.log("result: " + JSON.stringify(result));
+            currentResults = result.data.listOrderItems;
+            console.log("current results: " + JSON.stringify(currentResults));
+            allData = allData.concat(currentResults.items);
+            recursiveGetOrderItems(currentResults);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      } else {
+        // const shipmentItemsFromID = await API.graphql({
+        //   query: listOrderItems,
+        //   variables: { filter: filterShip },
+        // });
 
-    var orderItems = shipmentItemsFromID.data.listOrderItems.items;
-    // console.log("order items", orderItems);
+        console.log("id query data: " + JSON.stringify(allData));
+        // var orderItems = shipmentItemsFromID.data.listOrderItems.items;
+        var orderItems = allData;
+        // console.log("order items", orderItems);
 
-    let exportJSON = [];
-    let i = 0;
-    for (i = 0; i < orderItems.length; i++) {
-      let itemRow = {};
-      itemRow["species"] = orderItems[i].species;
-      itemRow["commonName"] = orderItems[i].commonName;
-      itemRow["numReceived"] = orderItems[i].numReceived;
-      itemRow["supplier"] = order.supplier;
-      itemRow["shipmentDate"] = order.shipmentDate;
-      itemRow["arrivalDate"] = order.arrivalDate;
-      itemRow["emergedInTransit"] = orderItems[i].emergedInTransit;
-      console.log("Export emergedInTransit", orderItems[i].emergedInTransit);
-      itemRow["damagedInTransit"] = orderItems[i].damagedInTransit;
-      itemRow["diseased"] = orderItems[i].diseased;
-      itemRow["parasites"] = orderItems[i].parasites;
-      itemRow["numEmerged"] = orderItems[i].numEmerged;
-      itemRow["poorEmerged"] = orderItems[i].poorEmerged;
-      exportJSON.push(itemRow);
-    }
+        let exportJSON = [];
+        let i = 0;
+        for (i = 0; i < orderItems.length; i++) {
+          let itemRow = {};
+          itemRow["species"] = orderItems[i].species;
+          itemRow["commonName"] = orderItems[i].commonName;
+          itemRow["numReceived"] = orderItems[i].numReceived;
+          itemRow["supplier"] = order.supplier;
+          itemRow["shipmentDate"] = order.shipmentDate;
+          itemRow["arrivalDate"] = order.arrivalDate;
+          itemRow["emergedInTransit"] = orderItems[i].emergedInTransit;
+          console.log(
+            "Export emergedInTransit",
+            orderItems[i].emergedInTransit
+          );
+          itemRow["damagedInTransit"] = orderItems[i].damagedInTransit;
+          itemRow["diseased"] = orderItems[i].diseased;
+          itemRow["parasites"] = orderItems[i].parasites;
+          itemRow["numEmerged"] = orderItems[i].numEmerged;
+          itemRow["poorEmerged"] = orderItems[i].poorEmerged;
+          exportJSON.push(itemRow);
+        }
 
-    setExportData(exportJSON);
-    setPopupVisibility(true);
+        setExportData(exportJSON);
+        setPopupVisibility(true);
+      }
+    };
+    recursiveGetOrderItems(null);
   }
 
   return (

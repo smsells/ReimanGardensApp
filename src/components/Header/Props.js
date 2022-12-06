@@ -49,6 +49,7 @@ export default async function getProps(orgURL) {
   // console.log("in props images", images);
 
   const organization = {
+    id: org.data.getOrganization.id,
     name: org.data.getOrganization.name,
     orgURL: org.data.getOrganization.orgURL,
     locationAddress: org.data.getOrganization.locationAddress,
@@ -67,6 +68,10 @@ export default async function getProps(orgURL) {
     coverMedia: org.data.getOrganization.coverMedia,
     deleted: org.data.getOrganization.deleted,
     suspended: org.data.getOrganization.suspended,
+    featuredButterflyDate: org.data.getOrganization.featuredButterflyDate,
+    featuredButterflyID: org.data.getOrganization.featuredButterflyID,
+    displayFeaturedButterfly: org.data.getOrganization.displayFeaturedButterfly,
+    displayHomeStats: org.data.getOrganization.displayHomeStats,
   };
   // console.log("in props", organization);
 
@@ -92,6 +97,7 @@ export async function getPropsID(orgID) {
     images = { ...images, coverMedia: image };
   }
 
+  console.log("In prop get org", org);
   const organization = {
     id: org.data.getOrganization.id,
     name: org.data.getOrganization.name,
