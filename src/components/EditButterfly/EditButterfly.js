@@ -55,54 +55,67 @@ const EditButterfly = () => {
   const [queryImages, setQueryImages] = useState([]);
   const [butterflyList, setButterflyList] = useState([]);
   const [popupVisibility, setPopupVisibility] = useState(false);
-  const [isNotSuperuser, setIsNotSuperuser] = useState(true)
-  //const [filesHaveChanged, setFilesHaveChanged] = useState(false);
-  //for species range checklist
-  const [checkedState, setCheckedState] = useState(
+  const [isDisabled, setIsDisabled] = useState(true)
+  const [checkedState, setCheckedState] = useState(  //for species range checklist
     new Array(speciesRangeList.length).fill(false)
   );
   const [organizationImages, setOrganizationImages] = useState({});
   const [organization, setOrganization] = useState(initialOrganizationState);
 
+  const [haveQueriedButterflies, setHaveQueriedButterflies] = useState(false);
+  const [haveFetchedProps, setHaveFetchedProps] = useState(false);
+
   if (orgID === masterID) {
-    setIsNotSuperuser(false);
+    setIsDisabled(false);
   }
 
-  useEffect(() => {
-    async function fetchProps() {
+  async function fetchProps() {
+    if (!haveFetchedProps) {
       const props = await getPropsID(orgID);
       console.log("props", props);
       setOrganization(props.organizationProp);
       setOrganizationImages(props.imagesProp);
+      if (Object.keys(organization).length !== 0 && Object.keys(organizationImages).length !== 0) {
+        setHaveFetchedProps(true);
+      }
     }
+  }
+  useEffect(() => {
+
     fetchProps();
     fetchButterflies();
-  }, []);
+    populateImages();
+  });
 
   //Fetch butterfly objects and images from API
   const fetchButterflies = async () => {
     try {
-      const apiButterflyData = await API.graphql(
-        graphqlOperation(listButterflies)
-      );
-      const butterfliesFromAPI = apiButterflyData.data.listButterflies.items;
-      setButterflyList(butterfliesFromAPI);
+      if (!haveQueriedButterflies) {
+        const apiButterflyData = await API.graphql(
+          graphqlOperation(listButterflies)
+        );
+        const butterfliesFromAPI = apiButterflyData.data.listButterflies.items;
+        setButterflyList(butterfliesFromAPI);
 
-      const apiImagesData = await API.graphql(graphqlOperation(listImages));
-      const imagesFromAPI = apiImagesData.data.listImages.items;
-      await Promise.all(
-        imagesFromAPI.map(async (image) => {
-          const tempImage = await Storage.get(image.imageAddress);
-          image.imageAddress = tempImage;
-          return image;
-        })
-      );
+        if (Object.keys(butterflyList).length !== 0) {
+          setHaveQueriedButterflies(true);
+        }
 
-      setQueryImages(imagesFromAPI);
-      populateImages();
+        const apiImagesData = await API.graphql(graphqlOperation(listImages));
+        const imagesFromAPI = apiImagesData.data.listImages.items;
+        await Promise.all(
+          imagesFromAPI.map(async (image) => {
+            const tempImage = await Storage.get(image.imageAddress);
+            image.imageAddress = tempImage;
+            return image;
+          })
+        );
 
-      console.log("queried butterfly list", butterflyList);
-      console.log("queried images", queryImages);
+        setQueryImages(imagesFromAPI);
+        console.log("queried butterfly list", butterflyList);
+        console.log("queried images", queryImages);
+      }
+
     } catch (error) {
       console.log("error fetching", error);
     }
@@ -139,20 +152,16 @@ const EditButterfly = () => {
         }
       }
     }
-    //filesHaveChanged = false;
     setCheckedState(setRangeValues);
-    populateImages();
   }
 
   //populate images corresponding to selected butterfly
   function populateImages() {
-    // if (!filesHaveChanged) {
     const foundImages = queryImages.filter((img) => {
       return img.butterflyName === scientificName;
     });
     setImages(foundImages);
     console.log("found images state array", images);
-    // }
   }
 
   //holds states of species range checkboxes
@@ -374,7 +383,7 @@ const EditButterfly = () => {
               type="text"
               width={"100%"}
               onChange={(e) => setScientificName(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -394,7 +403,7 @@ const EditButterfly = () => {
             <select
               value={butterflyFamily}
               onChange={(e) => setButterflyFamily(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             >
               {butterflyFamilies.map(({ name, value }, index) => {
                 return (
@@ -413,7 +422,7 @@ const EditButterfly = () => {
               value={butterflySubFamily}
               name="subFamily"
               onChange={(e) => setButterflySubFamily(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             >
               {butterflySubFamilies.map(({ name, value }, index) => {
                 return (
@@ -433,7 +442,7 @@ const EditButterfly = () => {
               type="text"
               name="lifespan"
               onChange={(e) => setLifespan(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -445,7 +454,7 @@ const EditButterfly = () => {
               type="textarea"
               name="hostPlant"
               onChange={(e) => setHostPlant(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
         </Grid>
@@ -474,7 +483,7 @@ const EditButterfly = () => {
                         size="lg"
                         value={value}
                         checked={checkedState[index]}
-                        disabled={isNotSuperuser}
+                        disabled={isDisabled}
                         onChange={() => handleOnRangeChange(index)}
                         id={"checkbox-" + index}
                         sx={{
@@ -507,7 +516,7 @@ const EditButterfly = () => {
               value={etymology}
               name="etymology"
               onChange={(e) => setEtymology(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -518,7 +527,7 @@ const EditButterfly = () => {
               value={habitat}
               name="habitat"
               onChange={(e) => setHabitat(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -529,7 +538,7 @@ const EditButterfly = () => {
               value={lifeHistory}
               name="lifeHistory"
               onChange={(e) => setLifeHistory(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -540,7 +549,7 @@ const EditButterfly = () => {
               value={food}
               name="food"
               onChange={(e) => setFood(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -551,7 +560,7 @@ const EditButterfly = () => {
               value={flightInfo}
               name="flightInfo"
               onChange={(e) => setFlightInfo(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -562,7 +571,7 @@ const EditButterfly = () => {
               value={funFacts}
               name="funFacts"
               onChange={(e) => setFunFacts(e.target.value)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             />
           </Grid>
           <Grid item xs={4}>
@@ -578,7 +587,7 @@ const EditButterfly = () => {
               type="file"
               name="imageUpload"
               onChange={handleFileEvent}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             ></input>
           </Grid>
           {images.map((image, index) => {
@@ -597,7 +606,7 @@ const EditButterfly = () => {
                   value="delete"
                   style={{ margin: "5px" }}
                   onClick={() => deleteImage(index)}
-                  disabled={isNotSuperuser}
+                  disabled={isDisabled}
                 >
                   X
                 </button>
@@ -611,7 +620,7 @@ const EditButterfly = () => {
               type="button"
               value="delete"
               onClick={() => setPopupVisibility(true)}
-              disabled={isNotSuperuser}
+              disabled={isDisabled}
             >
               Delete Butterfly
             </button>
