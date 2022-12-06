@@ -124,8 +124,8 @@ function ImportExportShipments() {
         console.log("New arrival date", arrivalDate);
         console.log("New supplier", supplier);
 
-        // for (i = 1; i < results.data.length; i++) {
-        for (i = 1; i < 300; i++) {
+        for (i = 1; i < results.data.length; i++) {
+          // for (i = 1; i < 300; i++) {
           if (
             shipmentDate !== results.data[i][4] ||
             arrivalDate !== results.data[i][5] ||
