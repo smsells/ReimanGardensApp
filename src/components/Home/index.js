@@ -285,7 +285,7 @@ const Home = () => {
               >
                 <img
                   src={queryImage.imageAddress}
-                  style={{ borderRadius: "50px", width: "50%", height: "100%" }}
+                  style={{ borderRadius: "50px", width: "60%", height: "100%" }}
                 />
               </Link>
             )}
@@ -297,7 +297,7 @@ const Home = () => {
                 textAlign: "center",
                 backgroundColor: "white",
                 height: "10%",
-                width: "25%",
+                width: "50%",
                 borderRadius: "20px",
                 marginTop: "0.5rem",
               }}
@@ -322,7 +322,7 @@ const Home = () => {
               {module.image && (
                 <img
                   src={module.image}
-                  style={{ width: 400, borderRadius: "50px" }}
+                  style={{ width: "60%", borderRadius: "50px" }}
                 />
               )}
               <div
@@ -333,7 +333,7 @@ const Home = () => {
                   textAlign: "center",
                   backgroundColor: "white",
                   height: "10%",
-                  width: "25%",
+                  width: "50%",
                   borderRadius: "20px",
                   marginTop: "0.5rem",
                 }}
