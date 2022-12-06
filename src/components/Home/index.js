@@ -285,7 +285,7 @@ const Home = () => {
               >
                 <img
                   src={queryImage.imageAddress}
-                  style={{ borderRadius: "50px", width: "60%", height: "100%" }}
+                  style={{ borderRadius: "50px", width: "50%", height: "100%" }}
                 />
               </Link>
             )}
@@ -322,7 +322,7 @@ const Home = () => {
               {module.image && (
                 <img
                   src={module.image}
-                  style={{ width: "60%", borderRadius: "50px" }}
+                  style={{ width: "50%", borderRadius: "50px" }}
                 />
               )}
               <div
