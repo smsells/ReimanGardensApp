@@ -105,7 +105,7 @@ const DisplayShipments = () => {
       var data = ordersAscending.map((element) => {
         return (
           <tr>
-            <td>{element.orderNumber}</td>
+            
             <td>{element.shipmentDate}</td>
             <td>{element.arrivalDate}</td>
             <td>{element.supplier}</td>
@@ -143,7 +143,7 @@ const DisplayShipments = () => {
       <Table hover>
         <thead>
           <tr>
-            <th> Order Number</th>
+            
             <th>Shipment Date</th>
             <th>Arrival Date</th>
             <th>Supplier</th>
