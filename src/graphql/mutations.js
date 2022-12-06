@@ -148,6 +148,10 @@ export const createOrganization = /* GraphQL */ `
       coverMedia
       deleted
       suspended
+      featuredButterflyDate
+      featuredButterflyID
+      displayFeaturedButterfly
+      displayHomeStats
       id
       createdAt
       updatedAt
@@ -181,6 +185,10 @@ export const updateOrganization = /* GraphQL */ `
       coverMedia
       deleted
       suspended
+      featuredButterflyDate
+      featuredButterflyID
+      displayFeaturedButterfly
+      displayHomeStats
       id
       createdAt
       updatedAt
@@ -214,6 +222,10 @@ export const deleteOrganization = /* GraphQL */ `
       coverMedia
       deleted
       suspended
+      featuredButterflyDate
+      featuredButterflyID
+      displayFeaturedButterfly
+      displayHomeStats
       id
       createdAt
       updatedAt

@@ -51,6 +51,7 @@ export default function AdminMenu({ organizationProp }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to="/addShipments"
         onClick={() => handleCloseMenu()}
       >
@@ -58,6 +59,7 @@ export default function AdminMenu({ organizationProp }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to="/importExportShipments"
         onClick={() => handleCloseMenu()}
       >
@@ -66,13 +68,6 @@ export default function AdminMenu({ organizationProp }) {
       <Link
         className="menu-link"
         style={{ color: organizationProp.menuColor }}
-        to={"/addButterfly"}
-        onClick={() => handleCloseMenu()}
-      >
-        Add Butterfly
-      </Link>
-      <Link
-        className="menu-link"
         to={"/editButterfly"}
         onClick={() => handleCloseMenu()}
       >
@@ -80,6 +75,7 @@ export default function AdminMenu({ organizationProp }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to={"/customizePage"}
         onClick={() => handleCloseMenu()}
       >
@@ -87,6 +83,7 @@ export default function AdminMenu({ organizationProp }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to={"/customizeModules"}
         onClick={() => handleCloseMenu()}
       >
@@ -94,6 +91,7 @@ export default function AdminMenu({ organizationProp }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to="/adminPanel"
         onClick={() => handleCloseMenu()}
       >
@@ -101,6 +99,7 @@ export default function AdminMenu({ organizationProp }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         onClick={() => {
           signOut();
           handleCloseMenu();

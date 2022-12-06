@@ -40,6 +40,8 @@ const SignIn = () => {
         });
         console.log("try", res.data.getOrganization);
         if (res.data.getOrganization === null) {
+          const date = new Date();
+          const dateString = date.toString();
           const cat = await API.graphql({
             query: createOrganizationMutation,
             variables: {
@@ -48,6 +50,9 @@ const SignIn = () => {
                 username: userName,
                 deleted: false,
                 suspended: false,
+                featuredButterflyDay: dateString,
+                displayFeaturedButterfly: true,
+                displayHomeStats: true,
               },
             },
           });

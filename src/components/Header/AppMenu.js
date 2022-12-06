@@ -51,6 +51,7 @@ export default function AppMenu({ organizationProp, admin = false }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to={"/" + organizationProp.orgURL + "/stats"}
         onClick={() => handleCloseMenu()}
       >
@@ -58,6 +59,7 @@ export default function AppMenu({ organizationProp, admin = false }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to={"/" + organizationProp.orgURL + "/gallery"}
         onClick={() => handleCloseMenu()}
       >
@@ -65,6 +67,7 @@ export default function AppMenu({ organizationProp, admin = false }) {
       </Link>
       <Link
         className="menu-link"
+        style={{ color: organizationProp.menuColor }}
         to={"/" + organizationProp.orgURL + "/parks"}
         onClick={() => handleCloseMenu()}
       >
@@ -73,6 +76,7 @@ export default function AppMenu({ organizationProp, admin = false }) {
       {admin ? (
         <Link
           className="menu-link"
+          style={{ color: organizationProp.menuColor }}
           to="/adminPanel"
           onClick={() => handleCloseMenu()}
         >
@@ -84,6 +88,7 @@ export default function AppMenu({ organizationProp, admin = false }) {
       {admin ? (
         <Link
           className="menu-link"
+          style={{ color: organizationProp.menuColor }}
           onClick={() => {
             signOut();
             handleCloseMenu();

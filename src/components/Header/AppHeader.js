@@ -17,7 +17,9 @@ export default function AppHeader({ menuProp, organizationProp, imagesProp }) {
         >
           <Container>
             <Navbar.Brand href="#home" style={{ color: "#FEFAE0" }}>
-              {imagesProp.logo && <img src={imagesProp.logo} />}
+              {imagesProp.logo && (
+                <img src={imagesProp.logo} style={{ width: 100, height: 50 }} />
+              )}
             </Navbar.Brand>
           </Container>
         </Navbar>

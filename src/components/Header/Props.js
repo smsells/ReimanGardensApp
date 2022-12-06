@@ -112,6 +112,10 @@ export async function getPropsID(orgID) {
     coverMedia: org.data.getOrganization.coverMedia,
     deleted: org.data.getOrganization.deleted,
     suspended: org.data.getOrganization.suspended,
+    featuredButterflyDate: org.data.getOrganization.featuredButterflyDate,
+    featuredButterflyID: org.data.getOrganization.featuredButterflyID,
+    displayFeaturedButterfly: org.data.getOrganization.displayFeaturedButterfly,
+    displayHomeStats: org.data.getOrganization.displayHomeStats,
   };
 
   return {
