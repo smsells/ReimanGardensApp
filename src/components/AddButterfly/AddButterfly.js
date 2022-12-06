@@ -154,7 +154,7 @@ const AddButterfly = () => {
     console.log(butterflyObject);
 
     createButterfly();
-    navigate("/signin");
+    navigate("/adminPanel");
   };
 
   async function createButterfly() {
@@ -164,10 +164,6 @@ const AddButterfly = () => {
         query: createButterflyMutation,
         variables: { input: butterflyObject },
       });
-      if (butterflyObject.image) {
-        const image = await Storage.get(butterflyObject.image);
-        butterflyObject.image = image;
-      }
       console.log("creating butterfly...");
       butterflyObject = initialButterflyObjectState;
     } catch (error) {

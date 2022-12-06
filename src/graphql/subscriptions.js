@@ -2,8 +2,8 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateNote = /* GraphQL */ `
-  subscription OnCreateNote {
-    onCreateNote {
+  subscription OnCreateNote($filter: ModelSubscriptionNoteFilterInput) {
+    onCreateNote(filter: $filter) {
       id
       name
       description
@@ -14,8 +14,8 @@ export const onCreateNote = /* GraphQL */ `
   }
 `;
 export const onUpdateNote = /* GraphQL */ `
-  subscription OnUpdateNote {
-    onUpdateNote {
+  subscription OnUpdateNote($filter: ModelSubscriptionNoteFilterInput) {
+    onUpdateNote(filter: $filter) {
       id
       name
       description
@@ -26,8 +26,8 @@ export const onUpdateNote = /* GraphQL */ `
   }
 `;
 export const onDeleteNote = /* GraphQL */ `
-  subscription OnDeleteNote {
-    onDeleteNote {
+  subscription OnDeleteNote($filter: ModelSubscriptionNoteFilterInput) {
+    onDeleteNote(filter: $filter) {
       id
       name
       description
@@ -38,8 +38,10 @@ export const onDeleteNote = /* GraphQL */ `
   }
 `;
 export const onCreateButterfly = /* GraphQL */ `
-  subscription OnCreateButterfly {
-    onCreateButterfly {
+  subscription OnCreateButterfly(
+    $filter: ModelSubscriptionButterflyFilterInput
+  ) {
+    onCreateButterfly(filter: $filter) {
       id
       scientificName
       commonName
@@ -54,14 +56,17 @@ export const onCreateButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
   }
 `;
 export const onUpdateButterfly = /* GraphQL */ `
-  subscription OnUpdateButterfly {
-    onUpdateButterfly {
+  subscription OnUpdateButterfly(
+    $filter: ModelSubscriptionButterflyFilterInput
+  ) {
+    onUpdateButterfly(filter: $filter) {
       id
       scientificName
       commonName
@@ -76,14 +81,17 @@ export const onUpdateButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
   }
 `;
 export const onDeleteButterfly = /* GraphQL */ `
-  subscription OnDeleteButterfly {
-    onDeleteButterfly {
+  subscription OnDeleteButterfly(
+    $filter: ModelSubscriptionButterflyFilterInput
+  ) {
+    onDeleteButterfly(filter: $filter) {
       id
       scientificName
       commonName
@@ -98,14 +106,17 @@ export const onDeleteButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
   }
 `;
 export const onCreateOrganization = /* GraphQL */ `
-  subscription OnCreateOrganization {
-    onCreateOrganization {
+  subscription OnCreateOrganization(
+    $filter: ModelSubscriptionOrganizationFilterInput
+  ) {
+    onCreateOrganization(filter: $filter) {
       name
       orgURL
       username
@@ -138,8 +149,10 @@ export const onCreateOrganization = /* GraphQL */ `
   }
 `;
 export const onUpdateOrganization = /* GraphQL */ `
-  subscription OnUpdateOrganization {
-    onUpdateOrganization {
+  subscription OnUpdateOrganization(
+    $filter: ModelSubscriptionOrganizationFilterInput
+  ) {
+    onUpdateOrganization(filter: $filter) {
       name
       orgURL
       username
@@ -172,8 +185,10 @@ export const onUpdateOrganization = /* GraphQL */ `
   }
 `;
 export const onDeleteOrganization = /* GraphQL */ `
-  subscription OnDeleteOrganization {
-    onDeleteOrganization {
+  subscription OnDeleteOrganization(
+    $filter: ModelSubscriptionOrganizationFilterInput
+  ) {
+    onDeleteOrganization(filter: $filter) {
       name
       orgURL
       username
@@ -206,8 +221,10 @@ export const onDeleteOrganization = /* GraphQL */ `
   }
 `;
 export const onCreateReplacementCommonName = /* GraphQL */ `
-  subscription OnCreateReplacementCommonName {
-    onCreateReplacementCommonName {
+  subscription OnCreateReplacementCommonName(
+    $filter: ModelSubscriptionReplacementCommonNameFilterInput
+  ) {
+    onCreateReplacementCommonName(filter: $filter) {
       butterfly {
         id
         scientificName
@@ -223,6 +240,7 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -236,8 +254,10 @@ export const onCreateReplacementCommonName = /* GraphQL */ `
   }
 `;
 export const onUpdateReplacementCommonName = /* GraphQL */ `
-  subscription OnUpdateReplacementCommonName {
-    onUpdateReplacementCommonName {
+  subscription OnUpdateReplacementCommonName(
+    $filter: ModelSubscriptionReplacementCommonNameFilterInput
+  ) {
+    onUpdateReplacementCommonName(filter: $filter) {
       butterfly {
         id
         scientificName
@@ -253,6 +273,7 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -266,8 +287,10 @@ export const onUpdateReplacementCommonName = /* GraphQL */ `
   }
 `;
 export const onDeleteReplacementCommonName = /* GraphQL */ `
-  subscription OnDeleteReplacementCommonName {
-    onDeleteReplacementCommonName {
+  subscription OnDeleteReplacementCommonName(
+    $filter: ModelSubscriptionReplacementCommonNameFilterInput
+  ) {
+    onDeleteReplacementCommonName(filter: $filter) {
       butterfly {
         id
         scientificName
@@ -283,6 +306,7 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -296,8 +320,8 @@ export const onDeleteReplacementCommonName = /* GraphQL */ `
   }
 `;
 export const onCreateOrder = /* GraphQL */ `
-  subscription OnCreateOrder {
-    onCreateOrder {
+  subscription OnCreateOrder($filter: ModelSubscriptionOrderFilterInput) {
+    onCreateOrder(filter: $filter) {
       orderNumber
       shipmentDate
       arrivalDate
@@ -310,8 +334,8 @@ export const onCreateOrder = /* GraphQL */ `
   }
 `;
 export const onUpdateOrder = /* GraphQL */ `
-  subscription OnUpdateOrder {
-    onUpdateOrder {
+  subscription OnUpdateOrder($filter: ModelSubscriptionOrderFilterInput) {
+    onUpdateOrder(filter: $filter) {
       orderNumber
       shipmentDate
       arrivalDate
@@ -324,8 +348,8 @@ export const onUpdateOrder = /* GraphQL */ `
   }
 `;
 export const onDeleteOrder = /* GraphQL */ `
-  subscription OnDeleteOrder {
-    onDeleteOrder {
+  subscription OnDeleteOrder($filter: ModelSubscriptionOrderFilterInput) {
+    onDeleteOrder(filter: $filter) {
       orderNumber
       shipmentDate
       arrivalDate
@@ -338,8 +362,10 @@ export const onDeleteOrder = /* GraphQL */ `
   }
 `;
 export const onCreateOrderItem = /* GraphQL */ `
-  subscription OnCreateOrderItem {
-    onCreateOrderItem {
+  subscription OnCreateOrderItem(
+    $filter: ModelSubscriptionOrderItemFilterInput
+  ) {
+    onCreateOrderItem(filter: $filter) {
       species
       commonName
       numReceived
@@ -358,8 +384,10 @@ export const onCreateOrderItem = /* GraphQL */ `
   }
 `;
 export const onUpdateOrderItem = /* GraphQL */ `
-  subscription OnUpdateOrderItem {
-    onUpdateOrderItem {
+  subscription OnUpdateOrderItem(
+    $filter: ModelSubscriptionOrderItemFilterInput
+  ) {
+    onUpdateOrderItem(filter: $filter) {
       species
       commonName
       numReceived
@@ -378,8 +406,10 @@ export const onUpdateOrderItem = /* GraphQL */ `
   }
 `;
 export const onDeleteOrderItem = /* GraphQL */ `
-  subscription OnDeleteOrderItem {
-    onDeleteOrderItem {
+  subscription OnDeleteOrderItem(
+    $filter: ModelSubscriptionOrderItemFilterInput
+  ) {
+    onDeleteOrderItem(filter: $filter) {
       species
       commonName
       numReceived
@@ -398,8 +428,8 @@ export const onDeleteOrderItem = /* GraphQL */ `
   }
 `;
 export const onCreateModule = /* GraphQL */ `
-  subscription OnCreateModule {
-    onCreateModule {
+  subscription OnCreateModule($filter: ModelSubscriptionModuleFilterInput) {
+    onCreateModule(filter: $filter) {
       title
       content
       image
@@ -412,8 +442,8 @@ export const onCreateModule = /* GraphQL */ `
   }
 `;
 export const onUpdateModule = /* GraphQL */ `
-  subscription OnUpdateModule {
-    onUpdateModule {
+  subscription OnUpdateModule($filter: ModelSubscriptionModuleFilterInput) {
+    onUpdateModule(filter: $filter) {
       title
       content
       image
@@ -426,8 +456,8 @@ export const onUpdateModule = /* GraphQL */ `
   }
 `;
 export const onDeleteModule = /* GraphQL */ `
-  subscription OnDeleteModule {
-    onDeleteModule {
+  subscription OnDeleteModule($filter: ModelSubscriptionModuleFilterInput) {
+    onDeleteModule(filter: $filter) {
       title
       content
       image
@@ -440,8 +470,10 @@ export const onDeleteModule = /* GraphQL */ `
   }
 `;
 export const onCreateSpeciesInfo = /* GraphQL */ `
-  subscription OnCreateSpeciesInfo {
-    onCreateSpeciesInfo {
+  subscription OnCreateSpeciesInfo(
+    $filter: ModelSubscriptionSpeciesInfoFilterInput
+  ) {
+    onCreateSpeciesInfo(filter: $filter) {
       name
       numInFlight
       totalReceived
@@ -455,8 +487,10 @@ export const onCreateSpeciesInfo = /* GraphQL */ `
   }
 `;
 export const onUpdateSpeciesInfo = /* GraphQL */ `
-  subscription OnUpdateSpeciesInfo {
-    onUpdateSpeciesInfo {
+  subscription OnUpdateSpeciesInfo(
+    $filter: ModelSubscriptionSpeciesInfoFilterInput
+  ) {
+    onUpdateSpeciesInfo(filter: $filter) {
       name
       numInFlight
       totalReceived
@@ -470,8 +504,10 @@ export const onUpdateSpeciesInfo = /* GraphQL */ `
   }
 `;
 export const onDeleteSpeciesInfo = /* GraphQL */ `
-  subscription OnDeleteSpeciesInfo {
-    onDeleteSpeciesInfo {
+  subscription OnDeleteSpeciesInfo(
+    $filter: ModelSubscriptionSpeciesInfoFilterInput
+  ) {
+    onDeleteSpeciesInfo(filter: $filter) {
       name
       numInFlight
       totalReceived
@@ -485,8 +521,8 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
   }
 `;
 export const onCreateImage = /* GraphQL */ `
-  subscription OnCreateImage {
-    onCreateImage {
+  subscription OnCreateImage($filter: ModelSubscriptionImageFilterInput) {
+    onCreateImage(filter: $filter) {
       id
       butterflyName
       imageAddress
@@ -496,8 +532,8 @@ export const onCreateImage = /* GraphQL */ `
   }
 `;
 export const onUpdateImage = /* GraphQL */ `
-  subscription OnUpdateImage {
-    onUpdateImage {
+  subscription OnUpdateImage($filter: ModelSubscriptionImageFilterInput) {
+    onUpdateImage(filter: $filter) {
       id
       butterflyName
       imageAddress
@@ -507,8 +543,8 @@ export const onUpdateImage = /* GraphQL */ `
   }
 `;
 export const onDeleteImage = /* GraphQL */ `
-  subscription OnDeleteImage {
-    onDeleteImage {
+  subscription OnDeleteImage($filter: ModelSubscriptionImageFilterInput) {
+    onDeleteImage(filter: $filter) {
       id
       butterflyName
       imageAddress

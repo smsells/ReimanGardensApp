@@ -47,6 +47,7 @@ const Gallery = () => {
         const butterfliesFromAPI = apiButterflyData.data.listButterflies.items;
         setButterflyList(butterfliesFromAPI);
 
+
         const apiImagesData = await API.graphql(graphqlOperation(listImages));
         const imagesFromAPI = apiImagesData.data.listImages.items;
         await Promise.all(
@@ -58,7 +59,7 @@ const Gallery = () => {
         );
         setQueryImages(imagesFromAPI);
 
-        if (queryImages.length > 0) {
+        if (queryImages.length > 0 && butterflyList.length > 0) {
           setHaveQueried(true);
           console.log("queried images", queryImages);
           filterImages();
@@ -91,32 +92,23 @@ const Gallery = () => {
   }
 
   function findCommonName(sName) {
-    if (typeof butterflyList !== "undefined") {
-      console.log("In if statement");
-      return;
+
+    if (haveQueried) {
+      var cName = butterflyList.find(
+        (butterfly) => butterfly.scientificName === sName
+      ).commonName;
+      return cName;
     }
-    var cName = butterflyList.find(
-      (butterfly) => butterfly.scientificName === sName
-    ).commonName;
-    return cName;
   }
 
   function findID(sName) {
-    console.log(
-      "Here is the butterfly list before : " + JSON.stringify.butterflyList
-    );
 
-    if (typeof butterflyList !== "undefined") {
-      console.log("In if statement");
-      return;
+    if (haveQueried) {
+      var id = butterflyList.find(
+        (butterfly) => butterfly.scientificName === sName
+      ).id;
+      return id;
     }
-    console.log(
-      "Here is the butterfly list after : " + JSON.stringify.butterflyList
-    );
-    var id = butterflyList.find(
-      (butterfly) => butterfly.scientificName === sName
-    ).id;
-    return id;
   }
 
   return (

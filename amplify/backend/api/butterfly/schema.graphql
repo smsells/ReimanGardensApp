@@ -25,6 +25,7 @@ type Butterfly @model @auth(rules: [{ allow: public }]) {
   flights: String
   history: String
   funFact: String
+  etymology: String
 }
 
 type Organization @model @auth(rules: [{ allow: public }]) {

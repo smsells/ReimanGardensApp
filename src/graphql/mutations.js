@@ -66,6 +66,7 @@ export const createButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
@@ -91,6 +92,7 @@ export const updateButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
@@ -116,6 +118,7 @@ export const deleteButterfly = /* GraphQL */ `
       flights
       history
       funFact
+      etymology
       createdAt
       updatedAt
     }
@@ -253,6 +256,7 @@ export const createReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -286,6 +290,7 @@ export const updateReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
@@ -319,6 +324,7 @@ export const deleteReplacementCommonName = /* GraphQL */ `
         flights
         history
         funFact
+        etymology
         createdAt
         updatedAt
       }
