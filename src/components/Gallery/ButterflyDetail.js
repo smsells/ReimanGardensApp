@@ -154,19 +154,19 @@ const ButterflyDetail = () => {
                 ],
             };
 
-            if (organizationID !== null) {
-                const apiDataInfo = await API.graphql({
-                    query: getSpeciesInfo,
-                    variables: { filter: filter },
-                });
+            // if (organizationID !== null) {
+            //     const apiDataInfo = await API.graphql({
+            //         query: getSpeciesInfo,
+            //         variables: { filter: filter },
+            //     });
 
-                const infoFromAPI = apiDataInfo.data.getSpeciesInfo;
-                setSpeciesInfo(infoFromAPI);
+            //     const infoFromAPI = apiDataInfo.data.getSpeciesInfo;
+            //     setSpeciesInfo(infoFromAPI);
 
-                if (Object.keys(speciesInfo).length !== 0) {
-                    setHaveSpeciesInfo(true);
-                }
-            }
+            //     if (Object.keys(speciesInfo).length !== 0) {
+            //         setHaveSpeciesInfo(true);
+            //     }
+            // }
         }
     };
 
@@ -256,6 +256,10 @@ const ButterflyDetail = () => {
                             <div className="col-md-6 fact-area">
                                 <h3>Fun Facts</h3>
                                 <p>{butterflyObj.funFact}</p>
+                            </div>
+                            <div className="col-md-6 fact-area">
+                                <h3>Etymology</h3>
+                                <p>{butterflyObj.etymology}</p>
                             </div>
                         </div>
                     </div>
