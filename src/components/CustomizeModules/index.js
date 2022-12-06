@@ -2,7 +2,7 @@ import { React, useEffect, useState } from "react";
 import { API } from "aws-amplify";
 import { Storage } from "aws-amplify";
 import { listModules } from "../../graphql/queries";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 
 import {
   updateModule as updateModuleMutation,
@@ -177,10 +177,23 @@ const CustomizeModules = () => {
       //   const image = await Storage.get(newModule.image);
       //   newModule.image = image;
       // }
-      await API.graphql({
-        query: createModuleMutation,
-        variables: { input: newModule },
-      });
+      console.log("new module create", newModule);
+      try {
+        await API.graphql({
+          query: createModuleMutation,
+          variables: {
+            input: {
+              title: newModule.title,
+              content: newModule.content,
+              image: newModule.image,
+              orgID: orgID,
+              active: newModule.active,
+            },
+          },
+        });
+      } catch (error) {
+        console.log("new module error", error);
+      }
       setNewModule(initialModule);
     }
     navigate(0);

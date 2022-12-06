@@ -116,6 +116,7 @@ const Home = () => {
 
   async function fetchData(newButterfly, newDate, organizationProp) {
     try {
+      let orgProp = { ...organizationProp };
       if (!haveQueried) {
         const apiButterflyData = await API.graphql(
           graphqlOperation(listButterflies)
@@ -135,8 +136,13 @@ const Home = () => {
                 console.log("Random featured butterfly", butterfly);
                 setFeaturedButterfly(butterfly);
                 fButterfly = butterfly;
+                orgProp = {
+                  ...orgProp,
+                  featuredButterflyID: butterfly.id,
+                  featuredButterflyDate: newDate,
+                };
                 setOrganization({
-                  ...organizationProp,
+                  ...orgProp,
                   featuredButterflyID: butterfly.id,
                   featuredButterflyDate: newDate,
                 });
@@ -174,13 +180,13 @@ const Home = () => {
           filterImage();
         }
 
-        console.log("Org after get featured", organization);
+        console.log("Org after get featured", orgProp);
         await API.graphql({
           query: updateOrgMutation,
           variables: {
             input: {
-              id: organizationProp.id,
-              ...organizationProp,
+              id: orgProp.id,
+              ...orgProp,
             },
           },
         });
@@ -219,7 +225,10 @@ const Home = () => {
         orgDate.getDate() +
         "/" +
         orgDate.getFullYear();
-      if (dateCompare(orgDate, curDate) !== 0) {
+      if (
+        dateCompare(orgDate, curDate) !== 0 ||
+        organization.featuredButterflyID
+      ) {
         await fetchData(true, curDate.toString(), organization);
       } else {
         await fetchData(false, orgDate.toString(), organization);
@@ -323,6 +332,7 @@ const Home = () => {
                   backgroundColor: "white",
                   height: "50%",
                   borderRadius: "20px",
+                  width: "20%",
                 }}
               >
                 <h1>{module.title}</h1>
