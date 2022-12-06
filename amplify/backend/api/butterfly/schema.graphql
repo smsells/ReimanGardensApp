@@ -49,6 +49,10 @@ type Organization @model @auth(rules: [{ allow: public }]) {
   coverMedia: String
   deleted: Boolean
   suspended: Boolean
+  featuredButterflyDate: String
+  featuredButterflyID: String
+  displayFeaturedButterfly: Boolean
+  displayHomeStats: Boolean
   #status: Int # 0 - active, 1 - suspended, 2 - deleted
 }
 type replacementCommonName @model @auth(rules: [{ allow: public }]) {
@@ -62,7 +66,7 @@ type Order @model @auth(rules: [{ allow: public }]) {
   shipmentDate: String
   arrivalDate: String
   supplier: String
-  orgID: String @index
+  orgID: String
 }
 
 type OrderItem @model @auth(rules: [{ allow: public }]) {
@@ -76,9 +80,8 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
   poorEmerged: Int
   numEmerged: Int
   orgID: String
-  orderID: String @index
+  orderID: String
 }
-
 type Module @model @auth(rules: [{ allow: public }]) {
   title: String
   content: String
