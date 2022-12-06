@@ -147,7 +147,9 @@ const Home = () => {
                   featuredButterflyDate: newDate,
                 });
               }
-            } else if (butterfly.id == organizationProp.featuredButterflyID) {
+            } else if (butterfly.id === organizationProp.featuredButterflyID) {
+              console.log("id butterfly found", butterfly);
+              fButterfly = butterfly;
               setFeaturedButterfly(butterfly);
             }
             i++;
@@ -158,7 +160,7 @@ const Home = () => {
         // }
         // setButterflyList(butterfliesFromAPI);
 
-        console.log("scientific Name", featuredButterfly);
+        // console.log("scientific Name", featuredButterfly);
         const apiImagesData = await API.graphql(graphqlOperation(listImages));
         const imagesFromAPI = apiImagesData.data.listImages.items;
         await Promise.all(
@@ -180,7 +182,7 @@ const Home = () => {
           filterImage();
         }
 
-        console.log("Org after get featured", orgProp);
+        // console.log("Org after get featured", orgProp);
         await API.graphql({
           query: updateOrgMutation,
           variables: {
@@ -209,7 +211,7 @@ const Home = () => {
     }
   }
 
-  async function getFeaturedButterfly(organization) {
+  async function getFeaturedButterfly(organizationProp) {
     const curDate = new Date();
     const curDateObj =
       curDate.getMonth() +
@@ -217,8 +219,8 @@ const Home = () => {
       curDate.getDate() +
       "/" +
       curDate.getFullYear();
-    if (organization.featuredButterflyDate) {
-      const orgDate = new Date(organization.featuredButterflyDate);
+    if (organizationProp.featuredButterflyDate !== null) {
+      const orgDate = new Date(organizationProp.featuredButterflyDate);
       const orgDateObj =
         orgDate.getMonth() +
         "/" +
@@ -226,15 +228,15 @@ const Home = () => {
         "/" +
         orgDate.getFullYear();
       if (
-        dateCompare(orgDate, curDate) !== 0 ||
-        organization.featuredButterflyID
+        dateCompare(orgDateObj, curDateObj) !== 0 ||
+        organizationProp.featuredButterflyID === null
       ) {
-        await fetchData(true, curDate.toString(), organization);
-      } else {
-        await fetchData(false, orgDate.toString(), organization);
+        await fetchData(true, curDate.toString(), organizationProp);
+      } else if (organizationProp.featuredButterflyID !== null) {
+        await fetchData(false, orgDate.toString(), organizationProp);
       }
     } else {
-      await fetchData(true, curDate.toString(), organization);
+      await fetchData(true, curDate.toString(), organizationProp);
     }
   }
 
@@ -267,10 +269,10 @@ const Home = () => {
           <div
             style={{
               display: "flex",
-              flexDirection: "row",
-              justifyContent: "center",
-              alignItems: "left",
-              margin: "0.5rem",
+              flexDirection: "column",
+              justifyContent: "right",
+              alignItems: "center",
+              // margin: "0.5rem",
             }}
           >
             {queryImage && (
@@ -283,18 +285,21 @@ const Home = () => {
               >
                 <img
                   src={queryImage.imageAddress}
-                  style={{ borderRadius: "50px", width: 400 }}
+                  style={{ borderRadius: "50px", width: "50%", height: "100%" }}
                 />
               </Link>
             )}
             <div
               style={{
-                marginLeft: "5rem",
-                justifyContent: "left",
-                textAlign: "left",
+                justifyContent: "center",
+                alignItems: "center",
+                alignContent: "center",
+                textAlign: "center",
                 backgroundColor: "white",
-                height: "50%",
+                height: "10%",
+                width: "25%",
                 borderRadius: "20px",
+                marginTop: "0.5rem",
               }}
             >
               <h1>Featured butterfly</h1>
@@ -308,14 +313,10 @@ const Home = () => {
               key={module.id || module.title}
               style={{
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "left",
-                margin: "0.5rem",
-                marginTop: "5rem",
-                backgroundImage:
-                  images.coverMedia ||
-                  "url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)",
+                flexDirection: "column",
+                justifyContent: "right",
+                alignItems: "center",
+                marginTop: "4rem",
               }}
             >
               {module.image && (
@@ -326,13 +327,15 @@ const Home = () => {
               )}
               <div
                 style={{
-                  marginLeft: "5rem",
-                  justifyContent: "left",
-                  textAlign: "left",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  alignContent: "center",
+                  textAlign: "center",
                   backgroundColor: "white",
-                  height: "50%",
+                  height: "10%",
+                  width: "25%",
                   borderRadius: "20px",
-                  width: "20%",
+                  marginTop: "0.5rem",
                 }}
               >
                 <h1>{module.title}</h1>

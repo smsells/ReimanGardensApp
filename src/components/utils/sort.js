@@ -12,11 +12,18 @@ export function dateCompare(date1, date2) {
     year: parseInt(date2Arr[2], 10),
   };
 
+  console.log("in date sort, date1", date1);
+  console.log("in date sort, date2", date2);
   if (date1Obj.year !== date2Obj.year) {
+    console.log("in date sort, year is different");
     return date1Obj.year - date2Obj.year;
   } else if (date1Obj.month !== date2Obj.month) {
+    console.log("in date sort, year is different");
+
     return date1Obj.month - date2Obj.month;
   } else if (date1Obj.day !== date2Obj.day) {
+    console.log("in date sort, year is different");
+
     return date1Obj.day - date2Obj.day;
   }
   return 0;
