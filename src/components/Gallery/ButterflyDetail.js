@@ -123,9 +123,9 @@ const ButterflyDetail = () => {
         if (haveQueriedButterfly && !haveRangeValues) {
             var tempRange = butterflyObj.range.substring(1, butterflyObj.range.length - 1);
             var tempArr = tempRange.split(", ");
-            for (var i = 0; i < tempArr.length; i++) {
-                tempArr[i] = tempArr[i].slice(1, -1)
-            }
+            // for (var i = 0; i < tempArr.length; i++) {
+            //     tempArr[i] = tempArr[i].slice(1, -1)
+            // }
             setRangeValues(tempArr)
             setHaveRangeValues(true);
         }

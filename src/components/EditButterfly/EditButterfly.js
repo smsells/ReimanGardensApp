@@ -33,6 +33,8 @@ import AdminMenu from "../Header/AdminMenu";
 const EditButterfly = () => {
   var butterflyObject;
   const orgID = localStorage.getItem("token");
+  const masterID =
+    "9478d3c2d6d4f0b3d58ed8c2c1c6b4625520a4522c8246d94a52b6d6532ea706261529c5be5913e829c70205da0c6dace51ac2d677778671b05cd66bc8ed7d12";
 
   const navigate = useNavigate();
 
@@ -53,16 +55,18 @@ const EditButterfly = () => {
   const [queryImages, setQueryImages] = useState([]);
   const [butterflyList, setButterflyList] = useState([]);
   const [popupVisibility, setPopupVisibility] = useState(false);
+  const [isNotSuperuser, setIsNotSuperuser] = useState(true)
   //const [filesHaveChanged, setFilesHaveChanged] = useState(false);
   //for species range checklist
   const [checkedState, setCheckedState] = useState(
     new Array(speciesRangeList.length).fill(false)
   );
-
-  var filesHaveChanged = false;
-
   const [organizationImages, setOrganizationImages] = useState({});
   const [organization, setOrganization] = useState(initialOrganizationState);
+
+  if (orgID === masterID) {
+    setIsNotSuperuser(false);
+  }
 
   useEffect(() => {
     async function fetchProps() {
@@ -184,12 +188,12 @@ const EditButterfly = () => {
       temp.push(tempObj);
     }
 
-    for (var i = 0; i < temp.length; i++) {
+    for (var z = 0; z < temp.length; z++) {
       await API.graphql({
         query: createImageMutation,
-        variables: { input: temp[i] },
+        variables: { input: temp[z] },
       });
-      const image = await Storage.get(temp[i]);
+      const image = await Storage.get(temp[z]);
       temp[i].imageAddress = image;
     }
     // console.log("temp file array", temp);
@@ -370,6 +374,7 @@ const EditButterfly = () => {
               type="text"
               width={"100%"}
               onChange={(e) => setScientificName(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -389,6 +394,7 @@ const EditButterfly = () => {
             <select
               value={butterflyFamily}
               onChange={(e) => setButterflyFamily(e.target.value)}
+              disabled={isNotSuperuser}
             >
               {butterflyFamilies.map(({ name, value }, index) => {
                 return (
@@ -407,6 +413,7 @@ const EditButterfly = () => {
               value={butterflySubFamily}
               name="subFamily"
               onChange={(e) => setButterflySubFamily(e.target.value)}
+              disabled={isNotSuperuser}
             >
               {butterflySubFamilies.map(({ name, value }, index) => {
                 return (
@@ -426,6 +433,7 @@ const EditButterfly = () => {
               type="text"
               name="lifespan"
               onChange={(e) => setLifespan(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -437,6 +445,7 @@ const EditButterfly = () => {
               type="textarea"
               name="hostPlant"
               onChange={(e) => setHostPlant(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
         </Grid>
@@ -465,6 +474,7 @@ const EditButterfly = () => {
                         size="lg"
                         value={value}
                         checked={checkedState[index]}
+                        disabled={isNotSuperuser}
                         onChange={() => handleOnRangeChange(index)}
                         id={"checkbox-" + index}
                         sx={{
@@ -497,6 +507,7 @@ const EditButterfly = () => {
               value={etymology}
               name="etymology"
               onChange={(e) => setEtymology(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -507,6 +518,7 @@ const EditButterfly = () => {
               value={habitat}
               name="habitat"
               onChange={(e) => setHabitat(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -517,6 +529,7 @@ const EditButterfly = () => {
               value={lifeHistory}
               name="lifeHistory"
               onChange={(e) => setLifeHistory(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -527,6 +540,7 @@ const EditButterfly = () => {
               value={food}
               name="food"
               onChange={(e) => setFood(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -537,6 +551,7 @@ const EditButterfly = () => {
               value={flightInfo}
               name="flightInfo"
               onChange={(e) => setFlightInfo(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -547,6 +562,7 @@ const EditButterfly = () => {
               value={funFacts}
               name="funFacts"
               onChange={(e) => setFunFacts(e.target.value)}
+              disabled={isNotSuperuser}
             />
           </Grid>
           <Grid item xs={4}>
@@ -562,6 +578,7 @@ const EditButterfly = () => {
               type="file"
               name="imageUpload"
               onChange={handleFileEvent}
+              disabled={isNotSuperuser}
             ></input>
           </Grid>
           {images.map((image, index) => {
@@ -580,6 +597,7 @@ const EditButterfly = () => {
                   value="delete"
                   style={{ margin: "5px" }}
                   onClick={() => deleteImage(index)}
+                  disabled={isNotSuperuser}
                 >
                   X
                 </button>
@@ -593,6 +611,7 @@ const EditButterfly = () => {
               type="button"
               value="delete"
               onClick={() => setPopupVisibility(true)}
+              disabled={isNotSuperuser}
             >
               Delete Butterfly
             </button>
