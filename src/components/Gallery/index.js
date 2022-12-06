@@ -47,7 +47,6 @@ const Gallery = () => {
         const butterfliesFromAPI = apiButterflyData.data.listButterflies.items;
         setButterflyList(butterfliesFromAPI);
 
-
         const apiImagesData = await API.graphql(graphqlOperation(listImages));
         const imagesFromAPI = apiImagesData.data.listImages.items;
         await Promise.all(
@@ -92,7 +91,6 @@ const Gallery = () => {
   }
 
   function findCommonName(sName) {
-
     if (haveQueried) {
       var cName = butterflyList.find(
         (butterfly) => butterfly.scientificName === sName
@@ -101,10 +99,9 @@ const Gallery = () => {
     }
   }
 
-  function findID(sName) {
-
+  function findID(butterflyListProp, sName) {
     if (haveQueried) {
-      var id = butterflyList.find(
+      var id = butterflyListProp.find(
         (butterfly) => butterfly.scientificName === sName
       ).id;
       return id;
@@ -138,7 +135,7 @@ const Gallery = () => {
                   to={
                     "/" +
                     organization.orgURL +
-                    `/butterfly/${findID(image.butterflyName)}`
+                    `/butterfly/${findID(butterflyList, image.butterflyName)}`
                   }
                 >
                   <img
