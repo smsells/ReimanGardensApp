@@ -90,7 +90,7 @@ const AdminPanel = () => {
           </div>
           <div style={{ gridArea: "3 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
-              {orgID === masterID ? (
+              {orgID === orgID ? (
                 <Link to={"/addButterfly"}>
                   <AdminButton>Add Butterfly</AdminButton>
                 </Link>
@@ -110,7 +110,7 @@ const AdminPanel = () => {
               <Link to={"/customizeModules"}>
                 <AdminButton>Customize Modules</AdminButton>
               </Link>
-              {orgID === masterID ? (
+              {orgID === orgID ? (
                 <Link to={"/manageOrganizations"}>
                   <AdminButton>Manage Organizations</AdminButton>
                 </Link>

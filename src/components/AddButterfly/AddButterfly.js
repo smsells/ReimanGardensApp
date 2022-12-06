@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { graphqlOperation, Storage } from "aws-amplify";
 import { useNavigate } from "react-router-dom";
 import { API } from "aws-amplify";
-import Grid from '@mui/material/Grid';
+import Grid from "@mui/material/Grid";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormGroup from "@mui/material/FormGroup";
@@ -22,7 +22,7 @@ import AppHeader from "../Header/AppHeader";
 
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
-import AppMenu from "../Header/AppMenu";
+import AdminMenu from "../Header/AdminMenu";
 
 const AddButterfly = () => {
   var butterflyObject;
@@ -190,7 +190,7 @@ const AddButterfly = () => {
   return (
     <>
       <AppHeader
-        menuProp={<AppMenu organizationProp={organization} admin={true} />}
+        menuProp={<AdminMenu organizationProp={organization} />}
         organizationProp={organization}
         imagesProp={organizationImages}
       ></AppHeader>

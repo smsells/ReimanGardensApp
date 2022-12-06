@@ -240,8 +240,6 @@ const Home = () => {
         className="Home"
         style={{
           backgroundSize: "cover",
-          // maxHeight: "height",
-          // maxWidth: "width",
           backgroundImage:
             images.coverMedia ||
             "url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)",
@@ -251,7 +249,6 @@ const Home = () => {
           style={{
             height: "100%",
             width: "100%",
-            // display: "grid",
             gap: "100%",
             backgroundColor: "rgba(222, 184, 135, 0.5)",
             padding: "10px",
@@ -268,7 +265,13 @@ const Home = () => {
             }}
           >
             {queryImage && (
-              <Link to={`/butterfly/${featuredButterfly.id}`}>
+              <Link
+                to={
+                  "/" +
+                  organization.orgURL +
+                  `/butterfly/${featuredButterfly.id}`
+                }
+              >
                 <img
                   src={queryImage.imageAddress}
                   style={{ borderRadius: "50px", width: 400 }}
@@ -279,10 +282,14 @@ const Home = () => {
               style={{
                 marginLeft: "5rem",
                 justifyContent: "left",
-                alignItems: "left",
+                textAlign: "left",
+                backgroundColor: "white",
+                height: "50%",
+                borderRadius: "20px",
               }}
             >
               <h1>Featured butterfly</h1>
+              <hr />
               <p>Common Name: {featuredButterfly.commonName}</p>
               <p>Scientific Name: {featuredButterfly.scientificName}</p>
             </div>
@@ -312,10 +319,14 @@ const Home = () => {
                 style={{
                   marginLeft: "5rem",
                   justifyContent: "left",
-                  alignItems: "left",
+                  textAlign: "left",
+                  backgroundColor: "white",
+                  height: "50%",
+                  borderRadius: "20px",
                 }}
               >
                 <h1>{module.title}</h1>
+                <hr />
                 <p>{module.content}</p>
               </div>
             </div>
