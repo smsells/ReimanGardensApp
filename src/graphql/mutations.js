@@ -403,6 +403,7 @@ export const createOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      numReleased
       orgID
       orderID
       id
@@ -426,6 +427,7 @@ export const updateOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      numReleased
       orgID
       orderID
       id
@@ -449,6 +451,7 @@ export const deleteOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      numReleased
       orgID
       orderID
       id

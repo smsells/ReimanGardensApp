@@ -280,6 +280,7 @@ export const getOrderItem = /* GraphQL */ `
       parasites
       poorEmerged
       numEmerged
+      numReleased
       orgID
       orderID
       id
@@ -305,6 +306,7 @@ export const listOrderItems = /* GraphQL */ `
         parasites
         poorEmerged
         numEmerged
+        numReleased
         orgID
         orderID
         id

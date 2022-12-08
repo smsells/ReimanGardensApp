@@ -97,7 +97,7 @@ export async function getPropsID(orgID) {
     images = { ...images, coverMedia: image };
   }
 
-  console.log("In prop get org", org);
+  // console.log("In prop get org", org);
   const organization = {
     id: org.data.getOrganization.id,
     name: org.data.getOrganization.name,

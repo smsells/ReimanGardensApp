@@ -174,6 +174,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "etymology": {
+                    "name": "etymology",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -690,6 +697,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "numReleased": {
+                    "name": "numReleased",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "orgID": {
                     "name": "orgID",
                     "isArray": false,
@@ -996,5 +1010,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "2fbe963adf3ac2dab3c0825182117e81"
+    "version": "05d83c7c2fcc327bf5ef726e46e5da4e"
 };

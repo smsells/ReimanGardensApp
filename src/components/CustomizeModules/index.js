@@ -15,6 +15,7 @@ import AppHeader from "../Header/AppHeader";
 import { getPropsID } from "../Header/Props";
 import { initialOrganizationState } from "../utils/initialStates";
 import AdminMenu from "../Header/AdminMenu";
+// import { getImage } from "../../graphql/queries";
 
 const CustomizeModules = () => {
   const orgID = localStorage.getItem("token");
@@ -129,14 +130,6 @@ const CustomizeModules = () => {
     navigate(0);
   }
 
-  async function getImage(name) {
-    console.log("name", name);
-    const image = await Storage.get(name);
-    console.log("imag " + name + " imag" + image);
-
-    return image;
-  }
-
   async function onChangeModuleImage(e) {
     if (!e.target.files[0]) return;
     const file = e.target.files[0];
@@ -222,6 +215,14 @@ const CustomizeModules = () => {
         active: 1,
       });
     }
+  }
+
+  async function getImage(name) {
+    console.log("name", name);
+    const image = await Storage.get(name);
+    console.log("imag " + name + " imag" + image);
+
+    return image;
   }
 
   return (

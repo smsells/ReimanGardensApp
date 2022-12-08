@@ -62,6 +62,7 @@ export declare class Butterfly {
   readonly flights?: string | null;
   readonly history?: string | null;
   readonly funFact?: string | null;
+  readonly etymology?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Butterfly, ButterflyMetaData>);
@@ -137,6 +138,7 @@ export declare class OrderItem {
   readonly parasites?: number | null;
   readonly poorEmerged?: number | null;
   readonly numEmerged?: number | null;
+  readonly numReleased?: number | null;
   readonly orgID?: string | null;
   readonly orderID?: string | null;
   readonly createdAt?: string | null;

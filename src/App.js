@@ -26,7 +26,6 @@ import AddButterfly from "./components/AddButterfly/AddButterfly";
 import EditButterfly from "./components/EditButterfly/EditButterfly";
 import DisplayShipments from "./components/DisplayShipments";
 import PackingList from "./components/PackingList";
-import EditShipments from "./components/EditShipments";
 import CustomizePage from "./components/CustomizePage";
 import CustomizeModules from "./components/CustomizeModules";
 import ImportExportShipments from "./components/ImportExportShipments";
@@ -101,7 +100,6 @@ function App() {
         <Route exact path="/editButterfly" element={<EditButterfly />} />
         <Route exact path="/displayShipments" element={<DisplayShipments />} />
         <Route exact path="/packingList" element={<PackingList />} />
-        <Route exact path="/editShipment" element={<EditShipments />} />
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route exact path="/addShipments" element={<AddShipments />} />

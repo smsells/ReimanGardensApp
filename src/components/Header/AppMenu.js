@@ -5,9 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { React, useState } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 
-export default function AppMenu({ organizationProp, admin = false }) {
-  const navigate = useNavigate();
-
+export default function AppMenu({ organizationProp }) {
   //used for closing hamburger menu
   const [isMenuOpen, handleMenu] = useState(false);
 
@@ -18,18 +16,6 @@ export default function AppMenu({ organizationProp, admin = false }) {
 
   const handleStateChange = (state) => {
     handleMenu(state.isOpen);
-  };
-
-  const signOut = async () => {
-    console.log("in the signoutFunction");
-    localStorage.removeItem("token");
-    try {
-      await Auth.signOut();
-      navigate("/signin");
-    } catch (error) {
-      console.log("error signing out " + error);
-    }
-    navigate(0);
   };
 
   return (
@@ -73,32 +59,6 @@ export default function AppMenu({ organizationProp, admin = false }) {
       >
         Parks Around the World
       </Link>
-      {admin ? (
-        <Link
-          className="menu-link"
-          style={{ color: organizationProp.menuColor }}
-          to="/adminPanel"
-          onClick={() => handleCloseMenu()}
-        >
-          Admin Panel
-        </Link>
-      ) : (
-        ""
-      )}
-      {admin ? (
-        <Link
-          className="menu-link"
-          style={{ color: organizationProp.menuColor }}
-          onClick={() => {
-            signOut();
-            handleCloseMenu();
-          }}
-        >
-          Sign out
-        </Link>
-      ) : (
-        ""
-      )}
     </Menu>
   );
 }

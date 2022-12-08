@@ -6,6 +6,8 @@ import {
   createOrder as createOrderMutation,
   deleteOrder as deleteOrderMutation,
   deleteOrderItem as deleteOrderItemMutation,
+  createSpeciesInfo as createSpeciesInfoMutation,
+  updateSpeciesInfo as updateSpeciesInfoMutation,
 } from "../../graphql/mutations";
 import {
   listOrganizations,
@@ -13,6 +15,7 @@ import {
   listOrders,
   getOrder,
   listOrderItems,
+  listSpeciesInfos,
 } from "../../graphql/queries";
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
@@ -48,6 +51,7 @@ const AddShipments = () => {
   const [arrivalDate, setArrivalDate] = useState("");
   const [species, setSpecies] = useState("");
   const [numReceived, setNumReceived] = useState("");
+  const [numReleased, setNumReleased] = useState("");
   const [emTransit, setEmTransit] = useState("");
   const [damTransit, setDamTransit] = useState("");
   const [diseased, setDiseased] = useState("");
@@ -108,7 +112,6 @@ const AddShipments = () => {
       var data = ordersAscending.map((element) => {
         return (
           <tr>
-            
             <td>{element.shipmentDate}</td>
             <td>{element.arrivalDate}</td>
             <td>{element.supplier}</td>
@@ -233,6 +236,7 @@ const AddShipments = () => {
     setParasites("");
     setDiseased("");
     setNumReceived("");
+    setNumReleased("");
     setPoorEmerged("");
     setCommonName("");
     setNumEmerged("");
@@ -250,6 +254,7 @@ const AddShipments = () => {
           species: species,
           commonName: commonName,
           numReceived: numReceived,
+          numReleased: numReleased,
           emergedInTransit: emTransit,
           damagedInTransit: damTransit,
           diseased: diseased,
@@ -259,6 +264,54 @@ const AddShipments = () => {
         },
       },
     });
+
+    let filter = {
+      and: [
+        {
+          orgID: { eq: orgID },
+        },
+        {
+          name: { eq: species },
+        },
+      ],
+    };
+    const speciesInfo = await API.graphql({
+      query: listSpeciesInfos,
+      variables: { filter: filter },
+    });
+    const speciesInfoData = speciesInfo.data.listSpeciesInfos.items;
+    if (speciesInfoData === null || speciesInfoData.length === 0) {
+      const date = new Date();
+      await API.graphql({
+        query: createSpeciesInfoMutation,
+        variables: {
+          input: {
+            name: species,
+            numInFlight: numReleased,
+            totalReceived: numReceived,
+            firstFlown: numReleased > 0 ? date.toString() : "",
+            lastFlown: "",
+            orgID: orgID,
+          },
+        },
+      });
+    } else {
+      const date = new Date();
+      await API.graphql({
+        query: updateSpeciesInfoMutation,
+        variables: {
+          input: {
+            id: speciesInfoData[0].id,
+            name: commonName,
+            numInFlight: speciesInfoData[0].numReleased + numReleased,
+            totalReceived: speciesInfoData[0].numReleased + numReceived,
+            firstFlown: speciesInfoData[0],
+            orgID: speciesInfoData[0],
+            lastFlown: speciesInfoData[0],
+          },
+        },
+      });
+    }
     console.log("after query in handleSubmit");
     navigate(0);
   }
@@ -322,7 +375,6 @@ const AddShipments = () => {
       <Table hover>
         <thead>
           <tr>
-            
             <th>Shipment Date</th>
             <th>Arrival Date</th>
             <th>Supplier</th>
@@ -419,6 +471,15 @@ const AddShipments = () => {
                   id="parasites"
                   onChange={(e) => setParasites(e.target.value)}
                   placeholder="Parasites"
+                ></input>
+                <br></br>
+                <label htmlFor="numReleased">Number Released</label>
+                <input
+                  type="text"
+                  name="numReleased"
+                  id="numReleased"
+                  onChange={(e) => setNumReleased(e.target.value)}
+                  placeholder="Number Released"
                 ></input>
               </div>
             </form>

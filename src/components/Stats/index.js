@@ -27,7 +27,7 @@ const Stats = () => {
       <AppHeader
         organizationProp={organization}
         imagesProp={images}
-        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+        menuProp={<AppMenu organizationProp={organization} />}
       />
       <header> Stats Page </header>
     </div>

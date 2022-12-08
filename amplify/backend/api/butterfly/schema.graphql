@@ -80,6 +80,7 @@ type OrderItem @model @auth(rules: [{ allow: public }]) {
   parasites: Int
   poorEmerged: Int
   numEmerged: Int
+  numReleased: Int
   orgID: String
   orderID: String
 }

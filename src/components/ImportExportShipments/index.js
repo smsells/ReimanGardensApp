@@ -4,11 +4,18 @@ import { API, graphqlOperation } from "aws-amplify";
 import {
   createOrderItem as createOrderItemMutation,
   createOrder as createOrderMutation,
+  createSpeciesInfo as createSpeciesInfoMutation,
+  updateSpeciesInfo as updateSpeciesInfoMutation,
 } from "../../graphql/mutations";
 import { Link } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import { useNavigate } from "react-router-dom";
-import { getOrder, listOrders, listOrderItems } from "../../graphql/queries";
+import {
+  getOrder,
+  listOrders,
+  listOrderItems,
+  listSpeciesInfos,
+} from "../../graphql/queries";
 import { DownloadPopUp } from "./DownloadPopUp";
 import AppHeader from "../Header/AppHeader";
 import { getPropsID } from "../Header/Props";
@@ -115,7 +122,6 @@ function ImportExportShipments() {
               shipmentDate: results.data[1][4],
               arrivalDate: results.data[1][5],
               supplier: results.data[1][3],
-              // packingList: orderItemList[0],
             },
           },
         });
@@ -124,8 +130,8 @@ function ImportExportShipments() {
         console.log("New arrival date", arrivalDate);
         console.log("New supplier", supplier);
 
-        for (i = 1; i < results.data.length; i++) {
-          // for (i = 1; i < 300; i++) {
+        // for (i = 1; i < results.data.length; i++) {
+        for (i = 1; i < 300; i++) {
           if (
             shipmentDate !== results.data[i][4] ||
             arrivalDate !== results.data[i][5] ||
@@ -142,7 +148,6 @@ function ImportExportShipments() {
                   shipmentDate: results.data[i][4],
                   arrivalDate: results.data[i][5],
                   supplier: results.data[i][3],
-                  // packingList: orderItemList[0],
                 },
               },
             });
@@ -159,22 +164,79 @@ function ImportExportShipments() {
           let orderItem = {};
           orderItem["orgID"] = orgID;
           orderItem["orderID"] = orderID;
-          orderItem["species"] = results.data[i][0];
-          orderItem["commonName"] = results.data[i][1];
-          orderItem["numReceived"] = results.data[i][2] || 0;
-          orderItem["emergedInTransit"] = results.data[i][6] || 0;
+          orderItem["species"] = results.data[i][0] || "";
+          orderItem["commonName"] = results.data[i][1] || "";
+          orderItem["numReceived"] = parseInt(results.data[i][2], 10) || 0;
+          orderItem["emergedInTransit"] = parseInt(results.data[i][6], 10) || 0;
           console.log("emergedInTransit", results.data[i][6]);
-          orderItem["damagedInTransit"] = results.data[i][7] || 0;
-          orderItem["diseased"] = results.data[i][8] || 0;
-          orderItem["parasites"] = results.data[i][9] || 0;
-          orderItem["numEmerged"] = results.data[i][10] || 0;
-          orderItem["poorEmerged"] = results.data[i][11] || 0;
+          orderItem["damagedInTransit"] = parseInt(results.data[i][7], 10) || 0;
+          orderItem["diseased"] = parseInt(results.data[i][8], 10) || 0;
+          orderItem["parasites"] = parseInt(results.data[i][9], 10) || 0;
+          orderItem["numEmerged"] = parseInt(results.data[i][10], 10) || 0;
+          orderItem["poorEmerged"] = parseInt(results.data[i][11], 10) || 0;
+          orderItem["numReleased"] = 0;
           await API.graphql({
             query: createOrderItemMutation,
             variables: {
               input: orderItem,
             },
           });
+
+          let filter = {
+            and: [
+              {
+                orgID: { eq: orgID },
+              },
+              {
+                name: { eq: orderItem.species },
+              },
+            ],
+          };
+          const speciesInfo = await API.graphql({
+            query: listSpeciesInfos,
+            variables: { filter: filter },
+          });
+          console.log("species info", speciesInfo);
+          const speciesInfoData = speciesInfo.data.listSpeciesInfos.items;
+          console.log("species info", speciesInfoData);
+
+          if (speciesInfoData === null || speciesInfoData.length === 0) {
+            const date = new Date();
+            await API.graphql({
+              query: createSpeciesInfoMutation,
+              variables: {
+                input: {
+                  name: orderItem.species,
+                  numInFlight: orderItem.numReleased,
+                  totalReceived: orderItem.numReceived,
+                  firstFlown: orderItem.numReleased > 0 ? date.toString() : "",
+                  lastFlown: "",
+                  orgID: orgID,
+                },
+              },
+            });
+          } else {
+            await API.graphql({
+              query: updateSpeciesInfoMutation,
+              variables: {
+                input: {
+                  id: speciesInfoData[0].id,
+                  name: orderItem.species,
+                  numInFlight: parseInt(
+                    speciesInfoData[0].numReleased + orderItem.numReleased,
+                    10
+                  ),
+                  totalReceived: parseInt(
+                    speciesInfoData[0].numReleased + orderItem.numReceived,
+                    10
+                  ),
+                  firstFlown: speciesInfoData[0],
+                  orgID: speciesInfoData[0],
+                  lastFlown: speciesInfoData[0],
+                },
+              },
+            });
+          }
           // console.log("item created", orderItem);
           orderItemList.push(orderItem);
         }
@@ -267,37 +329,68 @@ function ImportExportShipments() {
           },
         ],
       };
-      const shipmentItemsFromID = await API.graphql({
-        query: listOrderItems,
-        variables: { filter: filterShip },
-      });
-      // console.log("api items data", shipmentItemsFromID);
+      let search = {
+        limit: 100000,
+        filter: filterShip,
+      };
 
-      var orderItems = shipmentItemsFromID.data.listOrderItems.items;
-      console.log("order items", orderItems);
+      let allData = [];
+      const recursiveGetOrderItems = (currentResults) => {
+        if (currentResults === null || currentResults.nextToken != null) {
+          if (currentResults !== null && currentResults.nextToken != null) {
+            search.nextToken = currentResults.nextToken;
+          }
+          API.graphql(graphqlOperation(listOrderItems, search))
+            .then((result) => {
+              console.log("result: " + JSON.stringify(result));
+              currentResults = result.data.listOrderItems;
+              console.log("current results: " + JSON.stringify(currentResults));
+              allData = allData.concat(currentResults.items);
+              recursiveGetOrderItems(currentResults);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          // const shipmentItemsFromID = await API.graphql({
+          //   query: listOrderItems,
+          //   variables: { filter: filterShip },
+          // });
+          // console.log("api items data", shipmentItemsFromID);
 
-      let i = 0;
-      for (i = 0; i < orderItems.length; i++) {
-        let itemRow = {};
-        itemRow["species"] = orderItems[i].species;
-        itemRow["commonName"] = orderItems[i].commonName;
-        itemRow["numReceived"] = orderItems[i].numReceived;
-        itemRow["supplier"] = shipmentList[j].supplier;
-        itemRow["shipmentDate"] = shipmentList[j].shipmentDate;
-        itemRow["arrivalDate"] = shipmentList[j].arrivalDate;
-        itemRow["emergedInTransit"] = orderItems[i].emergedInTransit;
-        console.log("Export emergedInTransit", orderItems[i].emergedInTransit);
-        itemRow["damagedInTransit"] = orderItems[i].damagedInTransit;
-        itemRow["diseased"] = orderItems[i].diseased;
-        itemRow["parasites"] = orderItems[i].parasites;
-        itemRow["numEmerged"] = orderItems[i].numEmerged;
-        itemRow["poorEmerged"] = orderItems[i].poorEmerged;
-        exportJSON.push(itemRow);
-      }
+          // var orderItems = shipmentItemsFromID.data.listOrderItems.items;
+          console.log("id query data: " + JSON.stringify(allData));
+
+          var orderItems = allData;
+          console.log("order items", orderItems);
+
+          let i = 0;
+          for (i = 0; i < orderItems.length; i++) {
+            let itemRow = {};
+            itemRow["species"] = orderItems[i].species;
+            itemRow["commonName"] = orderItems[i].commonName;
+            itemRow["numReceived"] = orderItems[i].numReceived;
+            itemRow["supplier"] = shipmentList[j].supplier;
+            itemRow["shipmentDate"] = shipmentList[j].shipmentDate;
+            itemRow["arrivalDate"] = shipmentList[j].arrivalDate;
+            itemRow["emergedInTransit"] = orderItems[i].emergedInTransit;
+            console.log(
+              "Export emergedInTransit",
+              orderItems[i].emergedInTransit
+            );
+            itemRow["damagedInTransit"] = orderItems[i].damagedInTransit;
+            itemRow["diseased"] = orderItems[i].diseased;
+            itemRow["parasites"] = orderItems[i].parasites;
+            itemRow["numEmerged"] = orderItems[i].numEmerged;
+            itemRow["poorEmerged"] = orderItems[i].poorEmerged;
+            exportJSON.push(itemRow);
+          }
+          console.log("export json", exportJSON);
+          setExportData(exportJSON);
+          setPopupVisibility(true);
+        }
+      };
     }
-    console.log("export json", exportJSON);
-    setExportData(exportJSON);
-    setPopupVisibility(true);
   }
 
   async function exportShipment(order, e) {
@@ -309,12 +402,6 @@ function ImportExportShipments() {
       filter: filterShip,
     };
 
-    /*
-    const apiData = await API.graphql({
-      query: listOrderItems,
-      variables: { filter: filterOrders},
-    });
-    */
     let allData = [];
     const recursiveGetOrderItems = (currentResults) => {
       if (currentResults === null || currentResults.nextToken != null) {
@@ -333,13 +420,7 @@ function ImportExportShipments() {
             console.log(error);
           });
       } else {
-        // const shipmentItemsFromID = await API.graphql({
-        //   query: listOrderItems,
-        //   variables: { filter: filterShip },
-        // });
-
         console.log("id query data: " + JSON.stringify(allData));
-        // var orderItems = shipmentItemsFromID.data.listOrderItems.items;
         var orderItems = allData;
         // console.log("order items", orderItems);
 

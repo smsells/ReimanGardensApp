@@ -113,7 +113,7 @@ const Gallery = () => {
       <AppHeader
         organizationProp={organization}
         imagesProp={images}
-        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+        menuProp={<AppMenu organizationProp={organization} />}
       />
 
       <Grid

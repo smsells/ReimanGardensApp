@@ -13,7 +13,6 @@ import {
   initialOrganizationState,
 } from "../utils/initialStates";
 import { getPropsID } from "../Header/Props";
-
 // import Grid from '@mui/material/Grid';
 
 const AdminPanel = () => {
@@ -35,6 +34,14 @@ const AdminPanel = () => {
     fetchProps();
   }, []);
 
+  // async function getImage(name) {
+  //   console.log("name", name);
+  //   const image = await Storage.get(name);
+  //   console.log("imag " + name + " imag" + image);
+
+  //   return image;
+  // }
+
   // function testOnload(){
   //     console.log("Hey I loaded");
   // }
@@ -54,9 +61,7 @@ const AdminPanel = () => {
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          backgroundImage:
-            images.coverMedia ||
-            "url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)",
+          backgroundImage: `url(${images.coverMedia})`,
           backgroundSize: "cover",
           maxHeight: "height",
           maxWidth: "width",
@@ -90,13 +95,12 @@ const AdminPanel = () => {
           </div>
           <div style={{ gridArea: "3 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
-              {orgID === orgID ? (
-                <Link to={"/addButterfly"}>
-                  <AdminButton>Add Butterfly</AdminButton>
-                </Link>
-              ) : (
-                ""
-              )}
+              <Link to={"/customizePage"}>
+                <AdminButton>Customize Page</AdminButton>
+              </Link>
+              <Link to={"/customizeModules"}>
+                <AdminButton>Customize Modules</AdminButton>
+              </Link>
               <Link to={"/editButterfly"}>
                 <AdminButton>Edit Butterfly</AdminButton>
               </Link>
@@ -104,16 +108,15 @@ const AdminPanel = () => {
           </div>
           <div style={{ gridArea: "4 / 1 / span 1 / span 3" }}>
             <div className="grid-item">
-              <Link to={"/customizePage"}>
-                <AdminButton>Customize Page</AdminButton>
-              </Link>
-              <Link to={"/customizeModules"}>
-                <AdminButton>Customize Modules</AdminButton>
-              </Link>
               {orgID === orgID ? (
-                <Link to={"/manageOrganizations"}>
-                  <AdminButton>Manage Organizations</AdminButton>
-                </Link>
+                <>
+                  <Link to={"/manageOrganizations"}>
+                    <AdminButton>Manage Organizations</AdminButton>
+                  </Link>
+                  <Link to={"/addButterfly"}>
+                    <AdminButton>Add Butterfly</AdminButton>
+                  </Link>
+                </>
               ) : (
                 ""
               )}

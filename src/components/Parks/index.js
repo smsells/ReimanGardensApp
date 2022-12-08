@@ -118,7 +118,7 @@ const Parks = () => {
       <AppHeader
         organizationProp={organization}
         imagesProp={images}
-        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+        menuProp={<AppMenu organizationProp={organization} />}
       />
       <h3> Parks Around The World! </h3>
 

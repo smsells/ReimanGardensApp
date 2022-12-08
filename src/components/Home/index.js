@@ -17,6 +17,7 @@ import {
 } from "../utils/initialStates";
 import { Link } from "react-router-dom";
 import { dateCompare } from "../utils/sort";
+// import { getImage } from "../../graphql/queries";
 
 const Home = () => {
   // const [orgID, setOrgID] = useState("");
@@ -240,20 +241,26 @@ const Home = () => {
     }
   }
 
+  async function getImage(name) {
+    console.log("name", name);
+    const image = await Storage.get(name);
+    console.log("imag " + name + " imag" + image);
+
+    return image;
+  }
+
   return (
     <>
       <AppHeader
         organizationProp={organization}
         imagesProp={images}
-        menuProp={<AppMenu organizationProp={organization} admin={false} />}
+        menuProp={<AppMenu organizationProp={organization} />}
       />
       <div
         className="Home"
         style={{
+          backgroundImage: `url(${images.coverMedia})`,
           backgroundSize: "cover",
-          backgroundImage:
-            images.coverMedia ||
-            "url(https://www.reimangardens.com/wp-content/uploads/2018/01/53-Reiman-Gardens-Entrance-summer.jpg)",
         }}
       >
         <div
