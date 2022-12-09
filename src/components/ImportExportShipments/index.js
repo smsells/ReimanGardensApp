@@ -7,11 +7,9 @@ import {
   createSpeciesInfo as createSpeciesInfoMutation,
   updateSpeciesInfo as updateSpeciesInfoMutation,
 } from "../../graphql/mutations";
-import { Link } from "react-router-dom";
 import Table from "react-bootstrap/Table";
 import { useNavigate } from "react-router-dom";
 import {
-  getOrder,
   listOrders,
   listOrderItems,
   listSpeciesInfos,
@@ -67,18 +65,6 @@ function ImportExportShipments() {
       console.log("props", props);
       setOrganization(props.organizationProp);
       setImages(props.imagesProp);
-      // let filterShip = {
-      //   // id: { eq: "21d01a64-a6f3-482b-af08-f3380fc4d168" },
-      //   orgID: { eq: orgID },
-      // };
-      // const shipmentItemsFromID = await API.graphql({
-      //   query: listOrders,
-      //   variables: { filter: filterShip },
-      // });
-      // console.log(
-      //   "shipment item for id: 21d01a64-a6f3-482b-af08-f3380fc4d168",
-      //   shipmentItemsFromID
-      // );
     }
     fetchProps();
     fetchShipments();
@@ -126,9 +112,6 @@ function ImportExportShipments() {
           },
         });
         let orderID = order.data.createOrder.id;
-        console.log("New shipment date", shipmentDate);
-        console.log("New arrival date", arrivalDate);
-        console.log("New supplier", supplier);
 
         // for (i = 1; i < results.data.length; i++) {
         for (i = 1; i < 300; i++) {
@@ -155,7 +138,6 @@ function ImportExportShipments() {
             // console.log("New arrival date", arrivalDate);
             // console.log("New supplier", supplier);
             orderID = order.data.createOrder.id;
-            console.log("New order", order);
           }
 
           // orderID = order.data.createOrder.id;
@@ -207,7 +189,7 @@ function ImportExportShipments() {
               variables: {
                 input: {
                   name: orderItem.species,
-                  numInFlight: orderItem.numReleased,
+                  numInFlight: 0,
                   totalReceived: orderItem.numReceived,
                   firstFlown: orderItem.numReleased > 0 ? date.toString() : "",
                   lastFlown: "",
@@ -222,17 +204,15 @@ function ImportExportShipments() {
                 input: {
                   id: speciesInfoData[0].id,
                   name: orderItem.species,
-                  numInFlight: parseInt(
-                    speciesInfoData[0].numReleased + orderItem.numReleased,
-                    10
-                  ),
-                  totalReceived: parseInt(
-                    speciesInfoData[0].numReleased + orderItem.numReceived,
-                    10
-                  ),
-                  firstFlown: speciesInfoData[0],
-                  orgID: speciesInfoData[0],
-                  lastFlown: speciesInfoData[0],
+                  numInFlight:
+                    parseInt(speciesInfoData[0].numInFlight, 10) +
+                    orderItem.numReleased,
+                  totalReceived:
+                    parseInt(speciesInfoData[0].totalReceived, 10) +
+                    orderItem.numReceived,
+                  firstFlown: speciesInfoData[0].firstFlown,
+                  orgID: speciesInfoData[0].orgID,
+                  lastFlown: speciesInfoData[0].lastFlown,
                 },
               },
             });
@@ -266,7 +246,6 @@ function ImportExportShipments() {
     var data = ordersAscending.map((element) => {
       return (
         <tr>
-          <td>{element.orderNumber}</td>
           <td>{element.shipmentDate}</td>
           <td>{element.arrivalDate}</td>
           <td>{element.supplier}</td>
@@ -486,7 +465,6 @@ function ImportExportShipments() {
       <Table hover>
         <thead>
           <tr>
-            <th> Order Number</th>
             <th>Shipment Date</th>
             <th>Arrival Date</th>
             <th>Supplier</th>

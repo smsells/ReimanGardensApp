@@ -60,7 +60,7 @@ const PackingList = () => {
     fetchProps();
   }, []);
 
-  async function handleSubmit() {
+  async function handleSubmit(defaultNumReceivedProp, defaultNumReleasedProp) {
     console.log("In handle Submit");
     var diseasedInternal = document.getElementById("diseased").value;
     var speciesInternal = document.getElementById("species").value;
@@ -76,6 +76,8 @@ const PackingList = () => {
       document.getElementById("numReleased").value,
       10
     );
+    console.log("num received internal", numReceivedInternal);
+    console.log("default received", defaultNumReceivedProp);
     /*
     species: String
     numReceived: Int
@@ -120,52 +122,59 @@ const PackingList = () => {
       variables: { filter: filter },
     });
     const speciesInfoData = speciesInfo.data.listSpeciesInfos.items;
+    console.log("species info before", speciesInfoData);
     if (speciesInfoData === null || speciesInfoData.length === 0) {
       const date = new Date();
-      await API.graphql({
+      const create = await API.graphql({
         query: createSpeciesInfoMutation,
         variables: {
           input: {
             name: speciesInternal,
             numInFlight: numReleasedInternal,
-            totalReceived: numReleasedInternal,
+            totalReceived: numReceivedInternal,
             firstFlown: numReleasedInternal > 0 ? date.toString() : "",
             lastFlown: "",
             orgID: orgID,
           },
         },
       });
+      console.log("create species info", create);
     } else {
-      console.log("default num released", defaultNumReleased);
+      console.log("default num released", defaultNumReleasedProp);
       let date = new Date();
       let lastFlownDate = date.toString();
-      const numInFlightInt = parseInt(
-        parseInt(speciesInfoData[0].numReleased, 10) -
-          parseInt(defaultNumReleased, 10) +
-          parseInt(numReleasedInternal, 10),
-        10
-      );
+      const numInFlightInt =
+        speciesInfoData[0].numInFlight -
+        defaultNumReleasedProp +
+        numReleasedInternal;
       if (numInFlightInt > 0) {
         lastFlownDate = "";
       }
-      await API.graphql({
+      console.log("num in flight int", numInFlightInt);
+      const update = await API.graphql({
         query: updateSpeciesInfoMutation,
         variables: {
           input: {
             id: speciesInfoData[0].id,
             name: speciesInternal,
             numInFlight: numInFlightInt,
-            totalReceived: parseInt(
-              parseInt(speciesInfoData[0].numReceived, 10) -
-                parseInt(defaultNumReceived, 10) +
-                parseInt(numReceivedInternal, 10),
-              10
-            ),
-            lastFlown: lastFlownDate,
-            ...speciesInfoData[0],
+            totalReceived:
+              speciesInfoData[0].totalReceived -
+              defaultNumReceivedProp +
+              numReceivedInternal,
+            lastFlown:
+              numInFlightInt === 0
+                ? date.toDateString()
+                : speciesInfoData[0].lastFlown,
+            firstFlown:
+              speciesInfoData[0].numInFlight > 0
+                ? speciesInfoData[0].firstFlown
+                : date.toDateString(),
+            orgID: speciesInfoData[0].orgID,
           },
         },
       });
+      console.log("update species info", update);
     }
     console.log("after query in handleSubmit");
     navigate(0);
@@ -378,7 +387,13 @@ const PackingList = () => {
               </div>
             </form>
 
-            <button onClick={handleSubmit}>Submit</button>
+            <button
+              onClick={(e) =>
+                handleSubmit(defaultNumReceived, defaultNumReleased)
+              }
+            >
+              Submit
+            </button>
           </div>
         </>
       )}

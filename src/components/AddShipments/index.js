@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "../../App.css";
-import { API, Auth } from "aws-amplify";
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import {
   createOrderItem as createOrderItemMutation,
   createOrder as createOrderMutation,
@@ -173,16 +173,43 @@ const AddShipments = () => {
 
     console.log("shipment items", shipmentItemsFromID);
     try {
-      var orderItems = shipmentItemsFromID.data.listOrderItems.items;
-      for (var i = 0; i < orderItems.length; i++) {
-        const item = orderItems[i];
-        console.log("deleted item", item);
+      let filterShip = {
+        orderID: { eq: element.id },
+      };
+      let search = {
+        limit: 100000,
+        filter: filterShip,
+      };
+      let allData = [];
+      const recursiveGetOrderItems = async (currentResults) => {
+        if (currentResults === null || currentResults.nextToken != null) {
+          if (currentResults !== null && currentResults.nextToken != null) {
+            search.nextToken = currentResults.nextToken;
+          }
+          API.graphql(graphqlOperation(listOrderItems, search))
+            .then((result) => {
+              console.log("result: " + JSON.stringify(result));
+              currentResults = result.data.listOrderItems;
+              console.log("current results: " + JSON.stringify(currentResults));
+              allData = allData.concat(currentResults.items);
+              recursiveGetOrderItems(currentResults);
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          var orderItems = allData;
+          for (var i = 0; i < orderItems.length; i++) {
+            const item = orderItems[i];
+            console.log("deleted item", item);
 
-        await API.graphql({
-          query: deleteOrderItemMutation,
-          variables: { input: { id: item.id } },
-        });
-      }
+            await API.graphql({
+              query: deleteOrderItemMutation,
+              variables: { input: { id: item.id } },
+            });
+          }
+        }
+      };
     } catch (error) {}
 
     await API.graphql({
@@ -303,11 +330,11 @@ const AddShipments = () => {
           input: {
             id: speciesInfoData[0].id,
             name: commonName,
-            numInFlight: speciesInfoData[0].numReleased + numReleased,
-            totalReceived: speciesInfoData[0].numReleased + numReceived,
-            firstFlown: speciesInfoData[0],
-            orgID: speciesInfoData[0],
-            lastFlown: speciesInfoData[0],
+            numInFlight: speciesInfoData[0].numInFlight + numReleased,
+            totalReceived: speciesInfoData[0].totalReceived + numReceived,
+            firstFlown: speciesInfoData[0].firstFlown,
+            orgID: speciesInfoData[0].orgID,
+            lastFlown: speciesInfoData[0].lastFlown,
           },
         },
       });
