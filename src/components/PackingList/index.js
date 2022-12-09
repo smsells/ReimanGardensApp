@@ -303,6 +303,7 @@ const PackingList = () => {
         <thead>
           <tr>
             <th> Species</th>
+            <th> Common Name</th>
             <th>Number Received</th>
             <th>Emerged in Transit</th>
             <th>Damaged in Transit</th>

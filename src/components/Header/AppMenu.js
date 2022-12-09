@@ -57,7 +57,7 @@ export default function AppMenu({ organizationProp }) {
         to={"/" + organizationProp.orgURL + "/parks"}
         onClick={() => handleCloseMenu()}
       >
-        Parks Around the World
+        Butterfly Houses around the world
       </Link>
     </Menu>
   );
