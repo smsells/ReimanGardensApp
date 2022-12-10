@@ -42,6 +42,8 @@ const PackingList = () => {
   const [defaultNumReleased, setDefaultNumReleased] = useState();
 
   const [defaultEmTransit, setDefaultEmTransit] = useState();
+  const [defaultPoorTransit, setDefaultPoorTransit] = useState();
+
   const [defaultDamTransit, setDefaultDamTransit] = useState();
   const [defaultDiseased, setDefaultDiseased] = useState();
   const [defaultParasites, setDefaultParasites] = useState();
@@ -68,6 +70,7 @@ const PackingList = () => {
     var numEmergedInternal = document.getElementById("emTransit").value;
     var numDamagedInternal = document.getElementById("damTransit").value;
     var parasitesInternal = document.getElementById("parasites").value;
+    var poorEmergedInternal = document.getElementById("poor").value;
     var numReceivedInternal = parseInt(
       document.getElementById("numReceived").value,
       10
@@ -99,6 +102,7 @@ const PackingList = () => {
           commonName: commonNameInternal,
           numReceived: numReceivedInternal,
           emergedInTransit: numEmergedInternal,
+          poorEmerged: poorEmergedInternal,
           damagedInTransit: numDamagedInternal,
           diseased: diseasedInternal,
           parasites: parasitesInternal,
@@ -185,6 +189,7 @@ const PackingList = () => {
     commonName,
     numReceived,
     emergedInTransit,
+    poorReceived,
     damagedInTransit,
     diseased,
     parasites,
@@ -200,6 +205,7 @@ const PackingList = () => {
     setDefaultNumReceived(numReceived);
     setDefaultNumReleased(numReleased || 0);
     setDefaultID(id);
+    setDefaultPoorTransit(poorReceived);
     console.log("ID from handle Edit: " + id);
   }
   async function fetchShipments() {
@@ -250,6 +256,7 @@ const PackingList = () => {
               <td>{element.commonName}</td>
               <td>{element.numReceived}</td>
               <td>{element.emergedInTransit}</td>
+              <td>{element.poorEmerged}</td>
               <td>{element.damagedInTransit}</td>
               <td>{element.diseased}</td>
               <td>{element.parasites}</td>
@@ -263,7 +270,9 @@ const PackingList = () => {
                     element.species,
                     element.commonName,
                     element.numReceived,
+                    
                     element.emergedInTransit,
+                    element.poorEmerged,
                     element.damagedInTransit,
                     element.diseased,
                     element.parasites,
@@ -306,6 +315,7 @@ const PackingList = () => {
             <th> Common Name</th>
             <th>Number Received</th>
             <th>Emerged in Transit</th>
+            <th>Poorly Emerged</th>
             <th>Damaged in Transit</th>
             <th>Diseased </th>
 
@@ -352,6 +362,14 @@ const PackingList = () => {
                   name="emTransit"
                   id="emTransit"
                   defaultValue={defaultEmTransit}
+                ></input>
+                <br></br>
+                <label htmlFor="poor">Poorly Emerged</label>
+                <input
+                  type="text"
+                  name="poor"
+                  id="poor"
+                  defaultValue={defaultPoorTransit}
                 ></input>
                 <br></br>
                 <label htmlFor="damTransit">Damaged In Transit</label>
