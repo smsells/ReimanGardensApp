@@ -34,6 +34,7 @@ import AddShipments from "./components/AddShipments";
 import AdminPanel from "./components/AdminPanel";
 import crypto from "crypto-js";
 import ButterflyDetail from "./components/Gallery/ButterflyDetail";
+import Release from "./components/Release"
 
 function App() {
   const [organizationList, setOrganizationList] = useState([]);
@@ -103,6 +104,7 @@ function App() {
         <Route exact path="/customizePage" element={<CustomizePage />} />
         <Route exact path="/customizeModules" element={<CustomizeModules />} />
         <Route exact path="/addShipments" element={<AddShipments />} />
+        <Route exact path="/release" element={<Release />} />
         <Route
           exact
           path="/manageOrganizations"

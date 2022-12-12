@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Navigate, useSearchParams, createSearchParams } from "react-router-dom";
+import { Form, Navigate, useSearchParams } from "react-router-dom";
 import { a, API, graphqlOperation } from "aws-amplify";
 import {
   createSpeciesInfo as createSpeciesInfoMutation,
@@ -62,14 +62,14 @@ const PackingList = () => {
     fetchProps();
   }, []);
   function handleRelease(){
-    var idFromSearch = searchparams.get("id");
-    console.log()
+    var id = searchparams.get("id");
     navigate({
       pathname: "/release",
       search: createSearchParams({
-        id: idFromSearch,
+        id: id,
       }).toString(),
     });
+
   }
 
   async function handleSubmit(defaultNumReceivedProp, defaultNumReleasedProp) {
@@ -318,7 +318,7 @@ const PackingList = () => {
         organizationProp={organization}
         imagesProp={images}
       />
-      <button id="release" onClick={handleRelease.bind(this)}>Release Butterflies</button>
+      <button id="release" onClick={handleRelease()}>Release Butterflies</button>
       <Table hover>
         <thead>
           <tr>

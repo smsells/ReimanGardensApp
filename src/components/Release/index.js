@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Form, Navigate, useSearchParams, createSearchParams } from "react-router-dom";
+import { Form, Navigate, useSearchParams } from "react-router-dom";
 import { a, API, graphqlOperation } from "aws-amplify";
 import {
   createSpeciesInfo as createSpeciesInfoMutation,
@@ -21,7 +21,7 @@ import { initialOrganizationState } from "../utils/initialStates";
 import AdminMenu from "../Header/AdminMenu";
 import { dateCompare } from "../utils/sort";
 
-const PackingList = () => {
+const Release = () => {
   //Doing something similar to before except with the PackingList Object
   const [searchparams] = useSearchParams();
   console.log(searchparams.get("id") + " in packingList");
@@ -61,17 +61,35 @@ const PackingList = () => {
     }
     fetchProps();
   }, []);
-  function handleRelease(){
-    var idFromSearch = searchparams.get("id");
-    console.log()
-    navigate({
-      pathname: "/release",
-      search: createSearchParams({
-        id: idFromSearch,
-      }).toString(),
-    });
+
+  function handleUp(id){
+    
+    var thisText = document.getElementById(id);
+    thisText.value++;
+
+  }
+  function handleDown(id){
+    var thisText = document.getElementById(id);
+    thisText.value--;
   }
 
+  async function handleSubmit2(
+    idFromTable,
+   
+    ){
+    var numReleasedText = document.getElementById(idFromTable).value;
+    await API.graphql({
+        query: updateOrderItem,
+        variables: {
+          input: {
+            id: idFromTable,
+            numReleased: numReleasedText,
+          },
+        },
+      });
+
+
+  }
   async function handleSubmit(defaultNumReceivedProp, defaultNumReleasedProp) {
     console.log("In handle Submit");
     var diseasedInternal = document.getElementById("diseased").value;
@@ -260,37 +278,31 @@ const PackingList = () => {
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
         var data = allData.map((element) => {
           console.log("num released", element.numReleased);
+            var allTogether =element.emergedInTransit+element.poorEmerged+element.damagedInTransit+element.diseased+element.parasites+element.numReleased;
           return (
             <tr>
               <td>{element.species}</td>
               <td>{element.commonName}</td>
               <td>{element.numReceived}</td>
-              <td>{element.emergedInTransit}</td>
-              <td>{element.poorEmerged}</td>
-              <td>{element.damagedInTransit}</td>
-              <td>{element.diseased}</td>
-              <td>{element.parasites}</td>
-              <td>{element.numReleased || 0}</td>
+              <td>{allTogether}</td>
+              <td>{element.numReceived-allTogether}</td>
+              <td>
+                <input type="text" id={element.id} value='0'></input>
+                <button onClick={handleUp.bind(this, element.id)}>Up</button>
+                <button onClick={handleDown.bind(this, element.id)}>Down</button>
+              </td>
               <td>
                 {" "}
                 <button
-                  onClick={handleEdit.bind(
+                  onClick={handleSubmit2.bind(
                     this,
                     element.id,
-                    element.species,
-                    element.commonName,
-                    element.numReceived,
                     
-                    element.emergedInTransit,
-                    element.poorEmerged,
-                    element.damagedInTransit,
-                    element.diseased,
-                    element.parasites,
-                    element.numReleased || 0
+
                   )}
                 >
                   {" "}
-                  Edit{" "}
+                  Submit{" "}
                 </button>
               </td>
             </tr>
@@ -318,21 +330,17 @@ const PackingList = () => {
         organizationProp={organization}
         imagesProp={images}
       />
-      <button id="release" onClick={handleRelease.bind(this)}>Release Butterflies</button>
+      <h1>Releases</h1>
       <Table hover>
         <thead>
           <tr>
             <th> Species</th>
             <th> Common Name</th>
             <th>Number Received</th>
-            <th>Emerged in Transit</th>
-            <th>Poorly Emerged</th>
-            <th>Damaged in Transit</th>
-            <th>Diseased </th>
-
-            <th>Parasites</th>
-            <th>Released</th>
-            <th>Edit</th>
+            <th>Accounted For</th>
+            <th>Remaining</th>
+            <th>Enter Released</th>
+            <th>Submit</th>
           </tr>
         </thead>
         <tbody>{tableRows}</tbody>
@@ -431,4 +439,4 @@ const PackingList = () => {
   );
 };
 //TODO edit orderItem with submit
-export default PackingList;
+export default Release;
