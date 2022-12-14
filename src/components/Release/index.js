@@ -71,17 +71,24 @@ const Release = () => {
     thisText.value--;
   }
 
-  async function handleSubmit2(idFromTable) {
+  async function handleSubmit2(idFromTable, numReleasedCurrent) {
+    console.log("in handle submit 2");
+    console.log("ID in handle submit: " + idFromTable);
+    console.log("NUM R: " + numReleasedCurrent);
+
     var numReleasedText = document.getElementById(idFromTable).value;
-    await API.graphql({
+    console.log("num released in submit2: " + numReleasedText);
+
+    const update = await API.graphql({
       query: updateOrderItem,
       variables: {
         input: {
           id: idFromTable,
-          numReleased: numReleasedText,
+          numReleased: +numReleasedCurrent + +numReleasedText,
         },
       },
     });
+    console.log("Submit 2 update: " + JSON.stringify(update));
   }
   async function handleSubmit(defaultNumReceivedProp, defaultNumReleasedProp) {
     console.log("In handle Submit");
@@ -270,7 +277,6 @@ const Release = () => {
 
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
         var data = allData.map((element) => {
-          console.log("num released", element.numReleased);
           var allTogether =
             element.emergedInTransit +
             element.poorEmerged +
@@ -278,6 +284,7 @@ const Release = () => {
             element.diseased +
             element.parasites +
             element.numReleased;
+
           return (
             <tr>
               <td>{element.species}</td>
@@ -294,7 +301,19 @@ const Release = () => {
               </td>
               <td>
                 {" "}
-                <button onClick={handleSubmit2.bind(this, element.id)}>
+                {console.log(
+                  "This is the ID currently for " +
+                    element.species +
+                    " ID: " +
+                    element.id
+                )}
+                <button
+                  onClick={handleSubmit2.bind(
+                    this,
+                    element.id,
+                    element.numReleased
+                  )}
+                >
                   {" "}
                   Submit{" "}
                 </button>
