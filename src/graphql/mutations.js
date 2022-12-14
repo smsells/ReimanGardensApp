@@ -522,6 +522,7 @@ export const createSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -540,6 +541,7 @@ export const updateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -558,6 +560,7 @@ export const deleteSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -602,6 +605,54 @@ export const deleteImage = /* GraphQL */ `
       id
       butterflyName
       imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createButterflyInFlight = /* GraphQL */ `
+  mutation CreateButterflyInFlight(
+    $input: CreateButterflyInFlightInput!
+    $condition: ModelButterflyInFlightConditionInput
+  ) {
+    createButterflyInFlight(input: $input, condition: $condition) {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateButterflyInFlight = /* GraphQL */ `
+  mutation UpdateButterflyInFlight(
+    $input: UpdateButterflyInFlightInput!
+    $condition: ModelButterflyInFlightConditionInput
+  ) {
+    updateButterflyInFlight(input: $input, condition: $condition) {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteButterflyInFlight = /* GraphQL */ `
+  mutation DeleteButterflyInFlight(
+    $input: DeleteButterflyInFlightInput!
+    $condition: ModelButterflyInFlightConditionInput
+  ) {
+    deleteButterflyInFlight(input: $input, condition: $condition) {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
       createdAt
       updatedAt
     }

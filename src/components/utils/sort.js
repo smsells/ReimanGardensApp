@@ -12,19 +12,9 @@ export function dateCompare(date1, date2) {
     year: parseInt(date2Arr[2], 10),
   };
 
-  // console.log("in date sort, date1", date1);
-  // console.log("in date sort, date2", date2);
-  if (date1Obj.year !== date2Obj.year) {
-    // console.log("in date sort, year is different");
-    return date1Obj.year - date2Obj.year;
-  } else if (date1Obj.month !== date2Obj.month) {
-    // console.log("in date sort, year is different");
+  const totalDays1 = date1Obj.year * 365 + date1Obj.month * 30 + date1Obj.day;
+  const totalDays2 = date2Obj.year * 365 + date2Obj.month * 30 + date2Obj.day;
+  var difference = totalDays1 - totalDays2;
 
-    return date1Obj.month - date2Obj.month;
-  } else if (date1Obj.day !== date2Obj.day) {
-    // console.log("in date sort, year is different");
-
-    return date1Obj.day - date2Obj.day;
-  }
-  return 0;
+  return difference;
 }

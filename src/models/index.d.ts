@@ -36,6 +36,10 @@ type ImageMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type ButterflyInFlightMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 export declare class Note {
   readonly id: string;
   readonly name: string;
@@ -167,6 +171,7 @@ export declare class SpeciesInfo {
   readonly totalReceived?: number | null;
   readonly firstFlown?: string | null;
   readonly lastFlown?: string | null;
+  readonly lastUpdated?: string | null;
   readonly orgID?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -182,4 +187,16 @@ export declare class Image {
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<Image, ImageMetaData>);
   static copyOf(source: Image, mutator: (draft: MutableModel<Image, ImageMetaData>) => MutableModel<Image, ImageMetaData> | void): Image;
+}
+
+export declare class ButterflyInFlight {
+  readonly id: string;
+  readonly scientificName?: string | null;
+  readonly dateReleased?: string | null;
+  readonly lifeSpan?: number | null;
+  readonly OrgID?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+  constructor(init: ModelInit<ButterflyInFlight, ButterflyInFlightMetaData>);
+  static copyOf(source: ButterflyInFlight, mutator: (draft: MutableModel<ButterflyInFlight, ButterflyInFlightMetaData>) => MutableModel<ButterflyInFlight, ButterflyInFlightMetaData> | void): ButterflyInFlight;
 }

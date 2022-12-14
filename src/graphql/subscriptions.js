@@ -456,6 +456,7 @@ export const onCreateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -471,6 +472,7 @@ export const onUpdateSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -486,6 +488,7 @@ export const onDeleteSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -521,6 +524,45 @@ export const onDeleteImage = /* GraphQL */ `
       id
       butterflyName
       imageAddress
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateButterflyInFlight = /* GraphQL */ `
+  subscription OnCreateButterflyInFlight {
+    onCreateButterflyInFlight {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateButterflyInFlight = /* GraphQL */ `
+  subscription OnUpdateButterflyInFlight {
+    onUpdateButterflyInFlight {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteButterflyInFlight = /* GraphQL */ `
+  subscription OnDeleteButterflyInFlight {
+    onDeleteButterflyInFlight {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
       createdAt
       updatedAt
     }

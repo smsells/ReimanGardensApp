@@ -97,10 +97,19 @@ type SpeciesInfo @model @auth(rules: [{ allow: public }]) {
   totalReceived: Int
   firstFlown: String
   lastFlown: String
+  lastUpdated: String
   orgID: String
 }
 type Image @model @auth(rules: [{ allow: public }]) {
   id: ID!
   butterflyName: String
   imageAddress: String
+}
+type ButterflyInFlight @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  scientificName: String
+  dateReleased: String
+  lifeSpan: Int
+  OrgID: String
+  inFlight: Int
 }

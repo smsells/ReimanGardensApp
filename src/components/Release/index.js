@@ -62,33 +62,26 @@ const Release = () => {
     fetchProps();
   }, []);
 
-  function handleUp(id){
-    
+  function handleUp(id) {
     var thisText = document.getElementById(id);
     thisText.value++;
-
   }
-  function handleDown(id){
+  function handleDown(id) {
     var thisText = document.getElementById(id);
     thisText.value--;
   }
 
-  async function handleSubmit2(
-    idFromTable,
-   
-    ){
+  async function handleSubmit2(idFromTable) {
     var numReleasedText = document.getElementById(idFromTable).value;
     await API.graphql({
-        query: updateOrderItem,
-        variables: {
-          input: {
-            id: idFromTable,
-            numReleased: numReleasedText,
-          },
+      query: updateOrderItem,
+      variables: {
+        input: {
+          id: idFromTable,
+          numReleased: numReleasedText,
         },
-      });
-
-
+      },
+    });
   }
   async function handleSubmit(defaultNumReceivedProp, defaultNumReleasedProp) {
     console.log("In handle Submit");
@@ -278,29 +271,30 @@ const Release = () => {
         //or shipmentsFromAPI = organizationsFromAPI[0].Shipments;
         var data = allData.map((element) => {
           console.log("num released", element.numReleased);
-            var allTogether =element.emergedInTransit+element.poorEmerged+element.damagedInTransit+element.diseased+element.parasites+element.numReleased;
+          var allTogether =
+            element.emergedInTransit +
+            element.poorEmerged +
+            element.damagedInTransit +
+            element.diseased +
+            element.parasites +
+            element.numReleased;
           return (
             <tr>
               <td>{element.species}</td>
               <td>{element.commonName}</td>
               <td>{element.numReceived}</td>
               <td>{allTogether}</td>
-              <td>{element.numReceived-allTogether}</td>
+              <td>{element.numReceived - allTogether}</td>
               <td>
-                <input type="text" id={element.id} value='0'></input>
+                <input type="text" id={element.id} value="0"></input>
                 <button onClick={handleUp.bind(this, element.id)}>Up</button>
-                <button onClick={handleDown.bind(this, element.id)}>Down</button>
+                <button onClick={handleDown.bind(this, element.id)}>
+                  Down
+                </button>
               </td>
               <td>
                 {" "}
-                <button
-                  onClick={handleSubmit2.bind(
-                    this,
-                    element.id,
-                    
-
-                  )}
-                >
+                <button onClick={handleSubmit2.bind(this, element.id)}>
                   {" "}
                   Submit{" "}
                 </button>

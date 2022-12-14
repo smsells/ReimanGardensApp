@@ -6,7 +6,12 @@ import {
   getSpeciesInfo,
   listOrganizations,
   listSpeciesInfos,
+  listButterflyInFlights,
 } from "../../graphql/queries";
+import {
+  deleteButterflyInFlight as deleteButterflyInFlightMutation,
+  updateSpeciesInfo as updateSpeciesInfoMutation,
+} from "../../graphql/mutations";
 import { useParams } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import AppHeader from "../Header/AppHeader";
@@ -16,6 +21,7 @@ import { useLocation } from "react-router-dom";
 import { initialOrganizationState } from "../utils/initialStates";
 import Carousel from "react-bootstrap/Carousel";
 import "./Gallery.css";
+import { dateCompare } from "../utils/sort";
 
 const ButterflyDetail = () => {
   const [butterflyImages, setButterflyImages] = useState([]);
@@ -176,6 +182,13 @@ const ButterflyDetail = () => {
 
         const infoFromAPI = apiDataInfo.data.listSpeciesInfos.items;
         console.log("species info", infoFromAPI);
+        const currentDate = new Date();
+        const currentDateString =
+          currentDate.getMonth() +
+          "/" +
+          currentDate.getDate() +
+          "/" +
+          currentDate.getFullYear();
         if (infoFromAPI.length > 0) {
           if (infoFromAPI[0].firstFlown !== "") {
             const firstFlownDate = new Date(infoFromAPI[0].firstFlown);
@@ -187,6 +200,78 @@ const ButterflyDetail = () => {
             setHaveFirstFlown(true);
           }
 
+          // update species info
+          if (infoFromAPI[0].lastUpdated !== "") {
+            const lastUpdated = new Date(infoFromAPI[0].lastUpdated);
+            const lastUpdatedString =
+              lastUpdated.getMonth() +
+              "/" +
+              lastUpdated.getDate() +
+              "/" +
+              lastUpdated.getFullYear();
+            const interval = dateCompare(lastUpdatedString, currentDateString);
+            if (interval !== 0) {
+              let filterInFlight = {
+                and: [
+                  {
+                    orgID: { eq: organizationID },
+                  },
+                  {
+                    name: { eq: butterflyObj.scientificName },
+                  },
+                ],
+              };
+              const intervalAbs = Math.abs(interval);
+              const apiFlightDataInfo = await API.graphql({
+                query: listButterflyInFlights,
+                variables: { filter: filterInFlight },
+              });
+
+              let totalInFlight = 0;
+              const flightInfoFromAPI =
+                apiFlightDataInfo.data.listButterflyInFlights.items;
+              await Promise.all(
+                flightInfoFromAPI.map(async (flightInfo) => {
+                  const flightInfoDate = new Date(flightInfo.dateReleased);
+                  const flightInfoDateString =
+                    flightInfoDate.getMonth() +
+                    "/" +
+                    flightInfoDate.getDate() +
+                    "/" +
+                    flightInfoDate.getFullYear();
+                  const timeSpent = Math.abs(
+                    dateCompare(flightInfoDateString, currentDateString)
+                  );
+                  const lifespan = parseInt(flightInfo.lifespan, 10);
+                  if (timeSpent > lifespan) {
+                    await API.graphql({
+                      query: deleteButterflyInFlightMutation,
+                      variables: { input: { id: flightInfo.id } },
+                    });
+                  } else {
+                    totalInFlight =
+                      totalInFlight + parseInt(flightInfo.inFlight, 10);
+                  }
+                  return flightInfo;
+                })
+              );
+              await API.graphql({
+                query: updateSpeciesInfoMutation,
+                variables: {
+                  input: {
+                    id: infoFromAPI[0].id,
+                    lastUpdated: currentDate,
+                    numInFlight: totalInFlight,
+                    lastFlown:
+                      totalInFlight === 0
+                        ? currentDate
+                        : infoFromAPI[0].lastFlown,
+                    ...infoFromAPI[0],
+                  },
+                },
+              });
+            }
+          }
           if (infoFromAPI[0].lastFlown !== "") {
             const lastFlownDate = new Date(infoFromAPI[0].lastFlown);
             setLastFlown({

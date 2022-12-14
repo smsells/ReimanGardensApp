@@ -360,6 +360,7 @@ export const getSpeciesInfo = /* GraphQL */ `
       totalReceived
       firstFlown
       lastFlown
+      lastUpdated
       orgID
       id
       createdAt
@@ -380,6 +381,7 @@ export const listSpeciesInfos = /* GraphQL */ `
         totalReceived
         firstFlown
         lastFlown
+        lastUpdated
         orgID
         id
         createdAt
@@ -411,6 +413,43 @@ export const listImages = /* GraphQL */ `
         id
         butterflyName
         imageAddress
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getButterflyInFlight = /* GraphQL */ `
+  query GetButterflyInFlight($id: ID!) {
+    getButterflyInFlight(id: $id) {
+      id
+      scientificName
+      dateReleased
+      lifeSpan
+      OrgID
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listButterflyInFlights = /* GraphQL */ `
+  query ListButterflyInFlights(
+    $filter: ModelButterflyInFlightFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listButterflyInFlights(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        scientificName
+        dateReleased
+        lifeSpan
+        OrgID
         createdAt
         updatedAt
       }
