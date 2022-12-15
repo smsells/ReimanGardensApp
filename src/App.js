@@ -80,7 +80,7 @@ function App() {
       {organizationList.map((org, index) => (
         <Routes key={org.orgURL}>
           <Route exact path={"/" + org.orgURL + "/"} element={<Home />} />
-          <Route exact path={"/" + org.orgURL + "/stats"} element={<Stats />} />
+          
           <Route
             exact
             path={"/" + org.orgURL + "/gallery"}

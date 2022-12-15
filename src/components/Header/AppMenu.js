@@ -35,14 +35,7 @@ export default function AppMenu({ organizationProp }) {
       >
         Home
       </Link>
-      <Link
-        className="menu-link"
-        style={{ color: organizationProp.menuColor }}
-        to={"/" + organizationProp.orgURL + "/stats"}
-        onClick={() => handleCloseMenu()}
-      >
-        Stats
-      </Link>
+      
       <Link
         className="menu-link"
         style={{ color: organizationProp.menuColor }}
