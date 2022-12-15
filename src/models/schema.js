@@ -1045,10 +1045,17 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "OrgID": {
-                    "name": "OrgID",
+                "orgID": {
+                    "name": "orgID",
                     "isArray": false,
                     "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "inFlight": {
+                    "name": "inFlight",
+                    "isArray": false,
+                    "type": "Int",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -1097,5 +1104,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "dbdaf038f354a8fb7891d5cd1fbf68b5"
+    "version": "e7705f15d05d2e7927282b341be8c5d3"
 };

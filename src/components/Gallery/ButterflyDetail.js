@@ -36,16 +36,8 @@ const ButterflyDetail = () => {
   const [imageAddresses, setImageAddresses] = useState([]);
   const [rangeValues, setRangeValues] = useState([]);
   const [speciesInfo, setSpeciesInfo] = useState({});
-  const [firstFlown, setFirstFlown] = useState({
-    month: "",
-    day: "",
-    year: "",
-  });
-  const [lastFlown, setLastFlown] = useState({
-    month: "",
-    day: "",
-    year: "",
-  });
+  const [firstFlown, setFirstFlown] = useState("");
+  const [lastFlown, setLastFlown] = useState("");
 
   const location = useLocation();
   const pathName = location.pathname.split("/");
@@ -160,6 +152,7 @@ const ButterflyDetail = () => {
         variables: { filter: filterOrg },
       });
 
+      let needUpdate = false;
       const organizationFromAPI = apiDataOrg.data.listOrganizations.items;
       const organizationID = organizationFromAPI[0].id;
 
@@ -190,26 +183,30 @@ const ButterflyDetail = () => {
           "/" +
           currentDate.getFullYear();
         if (infoFromAPI.length > 0) {
+          let speciesInfoFinal;
           if (infoFromAPI[0].firstFlown !== "") {
-            const firstFlownDate = new Date(infoFromAPI[0].firstFlown);
-            setFirstFlown({
-              month: firstFlownDate.getMonth(),
-              day: firstFlownDate.getDate(),
-              year: firstFlownDate.getFullYear(),
-            });
+            // const firstFlownDate = new Date(infoFromAPI[0].firstFlown);
+            setFirstFlown(infoFromAPI[0].firstFlown);
             setHaveFirstFlown(true);
           }
 
           // update species info
-          if (infoFromAPI[0].lastUpdated !== "") {
-            const lastUpdated = new Date(infoFromAPI[0].lastUpdated);
-            const lastUpdatedString =
-              lastUpdated.getMonth() +
-              "/" +
-              lastUpdated.getDate() +
-              "/" +
-              lastUpdated.getFullYear();
-            const interval = dateCompare(lastUpdatedString, currentDateString);
+          if (
+            infoFromAPI[0].lastUpdated === "" ||
+            infoFromAPI[0].lastUpdated === null ||
+            dateCompare(infoFromAPI[0].lastUpdated, currentDateString) !== 0
+          ) {
+            needUpdate = true;
+            // const lastUpdated = new Date(infoFromAPI[0].lastUpdated);
+            const lastUpdatedString = infoFromAPI[0].lastUpdated;
+            let interval = dateCompare(lastUpdatedString, currentDateString);
+
+            if (lastUpdatedString === null || lastUpdatedString === "") {
+              interval = 1000;
+            } else {
+              interval = dateCompare(lastUpdatedString, currentDateString);
+            }
+            console.log("interval", interval);
             if (interval !== 0) {
               let filterInFlight = {
                 and: [
@@ -217,7 +214,7 @@ const ButterflyDetail = () => {
                     orgID: { eq: organizationID },
                   },
                   {
-                    name: { eq: butterflyObj.scientificName },
+                    scientificName: { eq: butterflyObj.scientificName },
                   },
                 ],
               };
@@ -232,15 +229,9 @@ const ButterflyDetail = () => {
                 apiFlightDataInfo.data.listButterflyInFlights.items;
               await Promise.all(
                 flightInfoFromAPI.map(async (flightInfo) => {
-                  const flightInfoDate = new Date(flightInfo.dateReleased);
-                  const flightInfoDateString =
-                    flightInfoDate.getMonth() +
-                    "/" +
-                    flightInfoDate.getDate() +
-                    "/" +
-                    flightInfoDate.getFullYear();
+                  const flightInfoDate = flightInfo.dateReleased;
                   const timeSpent = Math.abs(
-                    dateCompare(flightInfoDateString, currentDateString)
+                    dateCompare(flightInfoDate, currentDateString)
                   );
                   const lifespan = parseInt(flightInfo.lifespan, 10);
                   if (timeSpent > lifespan) {
@@ -255,6 +246,18 @@ const ButterflyDetail = () => {
                   return flightInfo;
                 })
               );
+              speciesInfoFinal = {
+                id: infoFromAPI[0].id,
+                lastUpdated: currentDate,
+                numInFlight: totalInFlight,
+                lastFlown:
+                  totalInFlight === 0 ? currentDate : infoFromAPI[0].lastFlown,
+                name: infoFromAPI[0].name,
+                totalReceived: infoFromAPI[0].totalReceived,
+                orgID: infoFromAPI[0].orgID,
+              };
+              setSpeciesInfo(speciesInfoFinal);
+
               await API.graphql({
                 query: updateSpeciesInfoMutation,
                 variables: {
@@ -264,25 +267,28 @@ const ButterflyDetail = () => {
                     numInFlight: totalInFlight,
                     lastFlown:
                       totalInFlight === 0
-                        ? currentDate
-                        : infoFromAPI[0].lastFlown,
-                    ...infoFromAPI[0],
+                        ? infoFromAPI[0].firstFlown !== "" ||
+                          infoFromAPI[0].firstFlown !== null
+                          ? ""
+                          : currentDate
+                        : "",
+                    name: infoFromAPI[0].name,
+                    totalReceived: infoFromAPI[0].totalReceived,
+                    orgID: infoFromAPI[0].orgID,
                   },
                 },
               });
             }
           }
           if (infoFromAPI[0].lastFlown !== "") {
-            const lastFlownDate = new Date(infoFromAPI[0].lastFlown);
-            setLastFlown({
-              month: lastFlownDate.getMonth(),
-              day: lastFlownDate.getDate(),
-              year: lastFlownDate.getFullYear(),
-            });
+            // const lastFlownDate = new Date(infoFromAPI[0].lastFlown);
+            setLastFlown(speciesInfoFinal.lastFlown);
             setHaveLastFlown(true);
           }
 
-          setSpeciesInfo(infoFromAPI[0]);
+          if (!needUpdate) {
+            setSpeciesInfo(infoFromAPI[0]);
+          }
 
           if (Object.keys(speciesInfo).length !== 0) {
             setHaveSpeciesInfo(true);
@@ -370,21 +376,11 @@ const ButterflyDetail = () => {
                   {speciesInfo.totalReceived}
                   <br></br>
                   <strong>First Flown On: </strong>{" "}
-                  {haveFirstFlown
-                    ? firstFlown.month +
-                      "/" +
-                      firstFlown.day +
-                      "/" +
-                      firstFlown.year
-                    : "not in flight"}
+                  {haveFirstFlown ? firstFlown : "not in flight"}
                   <br></br>
                   <strong>Last Flown On: </strong>{" "}
                   {haveLastFlown
-                    ? lastFlown.month +
-                      "/" +
-                      lastFlown.day +
-                      "/" +
-                      lastFlown.year
+                    ? lastFlown
                     : haveFirstFlown
                     ? "still in flight"
                     : "not in flight"}

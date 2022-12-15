@@ -536,7 +536,8 @@ export const onCreateButterflyInFlight = /* GraphQL */ `
       scientificName
       dateReleased
       lifeSpan
-      OrgID
+      orgID
+      inFlight
       createdAt
       updatedAt
     }
@@ -549,7 +550,8 @@ export const onUpdateButterflyInFlight = /* GraphQL */ `
       scientificName
       dateReleased
       lifeSpan
-      OrgID
+      orgID
+      inFlight
       createdAt
       updatedAt
     }
@@ -562,7 +564,8 @@ export const onDeleteButterflyInFlight = /* GraphQL */ `
       scientificName
       dateReleased
       lifeSpan
-      OrgID
+      orgID
+      inFlight
       createdAt
       updatedAt
     }

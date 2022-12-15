@@ -427,7 +427,8 @@ export const getButterflyInFlight = /* GraphQL */ `
       scientificName
       dateReleased
       lifeSpan
-      OrgID
+      orgID
+      inFlight
       createdAt
       updatedAt
     }
@@ -449,7 +450,8 @@ export const listButterflyInFlights = /* GraphQL */ `
         scientificName
         dateReleased
         lifeSpan
-        OrgID
+        orgID
+        inFlight
         createdAt
         updatedAt
       }

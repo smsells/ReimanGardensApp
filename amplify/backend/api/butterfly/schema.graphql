@@ -110,6 +110,6 @@ type ButterflyInFlight @model @auth(rules: [{ allow: public }]) {
   scientificName: String
   dateReleased: String
   lifeSpan: Int
-  OrgID: String
+  orgID: String
   inFlight: Int
 }

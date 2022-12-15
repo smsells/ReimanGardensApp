@@ -4,11 +4,15 @@ import { a, API, graphqlOperation } from "aws-amplify";
 import {
   createSpeciesInfo as createSpeciesInfoMutation,
   updateSpeciesInfo as updateSpeciesInfoMutation,
+  updateButterflyInFlight as updateButterflyInFlightMutation,
+  createButterflyInFlight as createButterflyInFlightMutation,
 } from "../../graphql/mutations";
 import {
   listOrderItems,
   getSpeciesInfo,
   listSpeciesInfos,
+  listButterflyInFlights,
+  listButterflies,
 } from "../../graphql/queries";
 //import { Storage} from 'aws-amplify';
 import Table from "react-bootstrap/Table";
@@ -71,7 +75,11 @@ const Release = () => {
     thisText.value--;
   }
 
-  async function handleSubmit2(idFromTable, numReleasedCurrent) {
+  async function handleSubmit2(
+    idFromTable,
+    numReleasedCurrent,
+    scientificName
+  ) {
     console.log("in handle submit 2");
     console.log("ID in handle submit: " + idFromTable);
     console.log("NUM R: " + numReleasedCurrent);
@@ -89,6 +97,158 @@ const Release = () => {
       },
     });
     console.log("Submit 2 update: " + JSON.stringify(update));
+    const currentDate = new Date();
+    const currentDateString =
+      currentDate.getMonth() +
+      "/" +
+      currentDate.getDate() +
+      "/" +
+      currentDate.getFullYear();
+
+    // update spcies info first flown
+    let filter = {
+      and: [
+        {
+          orgID: { eq: orgID },
+        },
+        {
+          scientificName: { eq: scientificName },
+        },
+        {
+          dateReleased: { eq: currentDateString },
+        },
+      ],
+    };
+    let filter3 = {
+      and: [
+        {
+          orgID: { eq: orgID },
+        },
+        {
+          name: { eq: scientificName },
+        },
+      ],
+    };
+    const speciesInfo = await API.graphql({
+      query: listSpeciesInfos,
+      variables: { filter: filter3 },
+    });
+    const speciesInfoData = speciesInfo.data.listSpeciesInfos.items;
+    console.log("species info", speciesInfoData);
+    let updateInFlight2;
+    try {
+      updateInFlight2 = await API.graphql({
+        query: listButterflyInFlights,
+        variables: { filter: filter },
+      });
+      const updateInFlightData =
+        updateInFlight2.data.listButterflyInFlights.items;
+      if (
+        updateInFlightData.length === 0 ||
+        speciesInfoData[0].firstFlown === "" ||
+        speciesInfoData[0].firstFlown === null
+      ) {
+        const infoUpdated = await API.graphql({
+          query: updateSpeciesInfoMutation,
+          variables: {
+            input: {
+              id: speciesInfoData[0].id,
+              firstFlown: currentDateString,
+            },
+          },
+        });
+        console.log("species info firstflown", infoUpdated);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    // update/create release object
+    console.log("call butterfly in flights api");
+    let updateInFlight;
+    try {
+      updateInFlight = await API.graphql({
+        query: listButterflyInFlights,
+        variables: { filter: filter },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    console.log("Butterfly in flight api", updateInFlight);
+    const updateInFlightData = updateInFlight.data.listButterflyInFlights.items;
+    if (updateInFlightData.length > 0) {
+      // updateInFlightData[0].inFlight =
+      //   +updateInFlightData[0].inFlight + +numReleasedCurrent;
+      console.log("in update");
+
+      const done = await API.graphql({
+        query: updateButterflyInFlightMutation,
+        variables: {
+          input: {
+            id: updateInFlightData[0].id,
+            inFlight: +updateInFlightData[0].inFlight + +numReleasedText,
+            dateReleased: updateInFlightData[0].dateReleased,
+            scientificName: updateInFlightData[0].scientificName,
+            lifeSpan: updateInFlightData[0].lifeSpan,
+            orgID: orgID,
+          },
+        },
+      });
+      console.log("update", done);
+    } else {
+      console.log("in create in flight");
+
+      let create;
+      try {
+        let filter = {
+          and: [
+            {
+              scientificName: { eq: scientificName },
+            },
+          ],
+        };
+        console.log("in create: get butterlfies");
+        const butterlfies = await API.graphql({
+          query: listButterflies,
+          variables: { filter: filter },
+        });
+        console.log("in create: butterfly data", butterlfies);
+
+        const butterfliesData = butterlfies.data.listButterflies.items;
+        if (butterfliesData.length < 1) return;
+
+        console.log("in create: create");
+        create = await API.graphql({
+          query: createButterflyInFlightMutation,
+          variables: {
+            input: {
+              inFlight: +numReleasedText,
+              dateReleased: currentDateString,
+              scientificName: scientificName,
+              lifeSpan: butterfliesData[0].lifespan,
+              orgID: orgID,
+            },
+          },
+        });
+      } catch (error) {
+        console.log("in create error", error);
+      }
+
+      console.log("create", create);
+    }
+
+    //update species info
+    let filter2 = {
+      and: [
+        {
+          orgID: { eq: orgID },
+        },
+        {
+          scientificName: { eq: scientificName },
+        },
+      ],
+    };
   }
   async function handleSubmit(defaultNumReceivedProp, defaultNumReleasedProp) {
     console.log("In handle Submit");
@@ -157,6 +317,8 @@ const Release = () => {
     console.log("species info before", speciesInfoData);
     if (speciesInfoData === null || speciesInfoData.length === 0) {
       const date = new Date();
+      const dateString =
+        date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear;
       const create = await API.graphql({
         query: createSpeciesInfoMutation,
         variables: {
@@ -164,7 +326,7 @@ const Release = () => {
             name: speciesInternal,
             numInFlight: numReleasedInternal,
             totalReceived: numReceivedInternal,
-            firstFlown: numReleasedInternal > 0 ? date.toString() : "",
+            firstFlown: numReleasedInternal > 0 ? dateString : "",
             lastFlown: "",
             orgID: orgID,
           },
@@ -174,7 +336,9 @@ const Release = () => {
     } else {
       console.log("default num released", defaultNumReleasedProp);
       let date = new Date();
-      let lastFlownDate = date.toString();
+      const dateString =
+        date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear;
+      let lastFlownDate = dateString;
       const numInFlightInt =
         speciesInfoData[0].numInFlight -
         defaultNumReleasedProp +
@@ -195,13 +359,11 @@ const Release = () => {
               defaultNumReceivedProp +
               numReceivedInternal,
             lastFlown:
-              numInFlightInt === 0
-                ? date.toDateString()
-                : speciesInfoData[0].lastFlown,
+              numInFlightInt === 0 ? dateString : speciesInfoData[0].lastFlown,
             firstFlown:
               speciesInfoData[0].numInFlight > 0
                 ? speciesInfoData[0].firstFlown
-                : date.toDateString(),
+                : dateString,
             orgID: speciesInfoData[0].orgID,
           },
         },
@@ -311,7 +473,8 @@ const Release = () => {
                   onClick={handleSubmit2.bind(
                     this,
                     element.id,
-                    element.numReleased
+                    element.numReleased,
+                    element.species
                   )}
                 >
                   {" "}

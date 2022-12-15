@@ -194,7 +194,8 @@ export declare class ButterflyInFlight {
   readonly scientificName?: string | null;
   readonly dateReleased?: string | null;
   readonly lifeSpan?: number | null;
-  readonly OrgID?: string | null;
+  readonly orgID?: string | null;
+  readonly inFlight?: number | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
   constructor(init: ModelInit<ButterflyInFlight, ButterflyInFlightMetaData>);
